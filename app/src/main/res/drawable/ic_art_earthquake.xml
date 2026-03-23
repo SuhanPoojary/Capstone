@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="86dp"
+    android:height="86dp"
+    android:viewportWidth="86"
+    android:viewportHeight="86">
+
+    <!-- Sky background -->
+    <path android:fillColor="#D4C5A9" android:pathData="M0,0 L86,0 L86,86 L0,86 Z"/>
+
+    <!-- Ground base -->
+    <path android:fillColor="#8B7355" android:pathData="M0,55 L86,55 L86,86 L0,86 Z"/>
+
+    <!-- Cracked ground lines -->
+    <path
+        android:fillColor="#6B5A3E"
+        android:strokeWidth="2"
+        android:pathData="M10,55 L20,65 L30,58 L45,70 L60,60 L75,68 L86,62"/>
+    <path
+        android:fillColor="#6B5A3E"
+        android:strokeWidth="1.5"
+        android:pathData="M5,60 L15,55 M40,75 L50,65 M65,72 L70,58"/>
+
+    <!-- Mountain/hill -->
+    <path android:fillColor="#7A8C6E" android:pathData="M15,55 Q30,20 50,30 Q65,15 75,55 Z"/>
+    <path android:fillColor="#6B7A5F" android:pathData="M30,55 Q40,35 50,30 Q58,28 65,55 Z"/>
+
+    <!-- Snow cap -->
+    <path android:fillColor="#FFFFFF" android:pathData="M46,22 Q50,15 54,22 Q52,28 50,30 Q48,28 46,22 Z"/>
+
+    <!-- Crack/fault line on mountain -->
+    <path
+        android:fillColor="#5A4A35"
+        android:strokeWidth="2.5"
+        android:pathData="M35,45 L42,38 L38,32 M55,48 L60,40 L57,35"/>
+
+    <!-- Dust clouds -->
+    <path android:fillColor="#C4B49A" android:pathData="M5,45 Q10,38 18,42 Q22,36 28,40 Q24,48 15,50 Q8,50 5,45 Z"/>
+    <path android:fillColor="#BCA88A" android:pathData="M60,42 Q66,35 74,39 Q78,34 82,38 Q80,46 72,48 Q64,49 60,42 Z"/>
+
+    <!-- Seismic wave lines -->
+    <path
+        android:fillColor="#A0826A"
+        android:strokeWidth="1.5"
+        android:pathData="M8,52 Q15,48 22,52 Q29,56 36,52 Q43,48 50,52 Q57,56 64,52 Q71,48 78,52"/>
+
+</vector>

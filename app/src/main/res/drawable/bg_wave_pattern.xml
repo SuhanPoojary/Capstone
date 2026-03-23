@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="240dp"
+    android:viewportWidth="240"
+    android:viewportHeight="240">
+
+    <!-- Very subtle wave lines; tint/alpha applied by ImageView -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M0,60 C30,40 60,80 90,60 C120,40 150,80 180,60 C210,40 240,80 270,60" />
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M-30,120 C0,100 30,140 60,120 C90,100 120,140 150,120 C180,100 210,140 240,120" />
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M0,180 C30,160 60,200 90,180 C120,160 150,200 180,180 C210,160 240,200 270,180" />
+
+</vector>
+

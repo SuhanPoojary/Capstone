@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="86dp"
+    android:height="86dp"
+    android:viewportWidth="86"
+    android:viewportHeight="86">
+
+    <!-- Sky -->
+    <path android:fillColor="#B8D4E8" android:pathData="M0,0 L86,0 L86,86 L0,86 Z"/>
+
+    <!-- Dark storm clouds -->
+    <path
+        android:fillColor="#5A6B7A"
+        android:pathData="M8,22 Q12,14 20,16 Q24,10 32,14 Q38,8 46,13 Q52,9 58,14 Q64,10 70,16 Q76,13 80,20 Q82,26 78,28 Q72,32 60,30 Q50,34 38,30 Q26,34 16,30 Q8,28 8,22 Z"/>
+    <path
+        android:fillColor="#4A5A68"
+        android:pathData="M18,28 Q24,22 34,24 Q40,18 50,22 Q58,18 66,23 Q72,20 78,26 Q80,32 74,34 Q64,38 52,35 Q40,39 28,35 Q18,34 18,28 Z"/>
+
+    <!-- Rain drops -->
+    <path
+        android:fillColor="#6B9AB8"
+        android:strokeWidth="1.5"
+        android:pathData="M20,36 L18,44 M30,38 L28,46 M40,34 L38,42 M50,37 L48,45 M60,35 L58,43 M70,38 L68,46 M25,42 L23,50 M45,40 L43,48 M65,42 L63,50"/>
+
+    <!-- Flood water -->
+    <path
+        android:fillColor="#2E7DAA"
+        android:pathData="M0,52 Q10,46 20,52 Q30,58 40,52 Q50,46 60,52 Q70,58 86,52 L86,86 L0,86 Z"/>
+
+    <!-- Water waves -->
+    <path
+        android:fillColor="#3A8FBD"
+        android:pathData="M0,58 Q10,54 20,58 Q30,62 40,58 Q50,54 60,58 Q70,62 86,58 L86,65 Q70,69 60,65 Q50,61 40,65 Q30,69 20,65 Q10,61 0,65 Z"/>
+
+    <!-- Floating debris - wooden plank -->
+    <path android:fillColor="#8B6340" android:pathData="M15,55 L45,53 L45,57 L15,59 Z"/>
+
+    <!-- Water ripple circles -->
+    <path
+        android:fillColor="#5AAED0"
+        android:strokeWidth="1"
+        android:pathData="M55,60 Q60,57 65,60 Q60,63 55,60 Z"/>
+    <path
+        android:fillColor="#5AAED0"
+        android:strokeWidth="1"
+        android:pathData="M25,63 Q32,60 38,63 Q32,66 25,63 Z"/>
+
+    <!-- Wave highlight -->
+    <path
+        android:fillColor="#4DA8D0"
+        android:pathData="M0,70 Q15,66 30,70 Q45,74 60,70 Q72,67 86,70 L86,75 Q72,78 60,75 Q45,71 30,75 Q15,79 0,75 Z"/>
+
+</vector>

@@ -50,6 +50,18 @@
             android:name=".CrashViewerActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".StartLearningActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DisasterDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".FullscreenPlayerActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

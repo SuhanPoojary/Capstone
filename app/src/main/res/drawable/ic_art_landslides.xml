@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="86dp"
+    android:height="86dp"
+    android:viewportWidth="86"
+    android:viewportHeight="86">
+
+    <!-- Sky -->
+    <path android:fillColor="#C8D8A8" android:pathData="M0,0 L86,0 L86,86 L0,86 Z"/>
+
+    <!-- Background hill green -->
+    <path
+        android:fillColor="#7A9A5A"
+        android:pathData="M0,40 Q20,20 40,30 Q60,15 86,35 L86,86 L0,86 Z"/>
+
+    <!-- Main sliding mass - brown/earth -->
+    <path
+        android:fillColor="#8B6840"
+        android:pathData="M10,30 Q30,22 50,28 Q65,24 75,32 Q80,45 72,55 Q58,65 40,62 Q22,68 10,58 Q4,48 10,30 Z"/>
+
+    <!-- Sliding earth - darker layer -->
+    <path
+        android:fillColor="#7A5A30"
+        android:pathData="M15,50 Q35,45 55,50 Q70,52 78,60 Q72,70 55,72 Q35,75 18,68 Q8,62 15,50 Z"/>
+
+    <!-- Rock debris -->
+    <path
+        android:fillColor="#6B5535"
+        android:pathData="M20,55 Q26,50 32,55 Q28,62 20,60 Z"/>
+    <path
+        android:fillColor="#7A6045"
+        android:pathData="M45,58 Q52,53 58,58 Q54,65 45,63 Z"/>
+    <path
+        android:fillColor="#5A4525"
+        android:pathData="M30,65 Q36,61 40,65 Q37,70 30,68 Z"/>
+
+    <!-- Boulders -->
+    <path
+        android:fillColor="#5A5045"
+        android:pathData="M60,55 Q68,50 74,56 Q72,64 63,64 Q57,62 60,55 Z"/>
+    <path
+        android:fillColor="#6A6050"
+        android:pathData="M25,38 Q32,33 38,38 Q36,45 27,45 Q22,43 25,38 Z"/>
+
+    <!-- Dust cloud at base -->
+    <path
+        android:fillColor="#C4A87A"
+        android:pathData="M5,65 Q12,58 20,62 Q26,56 34,60 Q30,70 20,72 Q10,72 5,65 Z"/>
+    <path
+        android:fillColor="#BCAA80"
+        android:pathData="M55,68 Q62,62 70,66 Q74,60 80,64 Q78,72 70,74 Q60,75 55,68 Z"/>
+
+    <!-- Trees (being swept) -->
+    <path
+        android:fillColor="#4A6A30"
+        android:pathData="M12,28 L14,42 M10,30 Q14,24 18,30 Q14,34 10,30 Z M10,25 Q14,19 18,25 Q14,29 10,25 Z"/>
+    <path
+        android:fillColor="#4A6A30"
+        android:pathData="M68,22 L70,36 M66,24 Q70,18 74,24 Q70,28 66,24 Z M66,20 Q70,14 74,20 Q70,24 66,20 Z"/>
+
+    <!-- Direction arrows showing movement -->
+    <path
+        android:fillColor="#5A3A15"
+        android:strokeWidth="2"
+        android:pathData="M35,42 L50,55 M42,38 L55,50"/>
+
+</vector>

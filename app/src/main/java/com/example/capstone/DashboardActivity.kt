@@ -1,23 +1,13 @@
 package com.example.capstone
 
-import android.Manifest
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.example.capstone.location.LocationHelper
 import java.util.Calendar
 
 class DashboardActivity : AppCompatActivity() {
-
-    private val requestLocationPermission = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) {
-        updateLocation()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,45 +23,11 @@ class DashboardActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.userName).text = name
         findViewById<TextView>(R.id.profileBadge).text = initials(name)
 
-        ensureLocationPermissionAndUpdate()
-    }
+        // Location: keep a stable default for now
+        findViewById<TextView>(R.id.location).text = "📍 Maharashtra"
 
-    private fun ensureLocationPermissionAndUpdate() {
-        try {
-            val fine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            val coarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-            val granted = fine == PackageManager.PERMISSION_GRANTED || coarse == PackageManager.PERMISSION_GRANTED
-
-            if (granted) {
-                updateLocation()
-                return
-            }
-
-            requestLocationPermission.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
-        } catch (_: Throwable) {
-            findViewById<TextView>(R.id.location).text = "📍 Location unavailable"
-        }
-    }
-
-    private fun updateLocation() {
-        val locationTv = findViewById<TextView>(R.id.location)
-        try {
-            LocationHelper.fetchCity(this) { city ->
-                runOnUiThread {
-                    locationTv.text = if (city.isNullOrBlank()) {
-                        "📍 Location unavailable"
-                    } else {
-                        "📍 $city"
-                    }
-                }
-            }
-        } catch (_: Throwable) {
-            locationTv.text = "📍 Location unavailable"
+        findViewById<android.view.View>(R.id.navTraining)?.setOnClickListener {
+            startActivity(Intent(this, StartLearningActivity::class.java))
         }
     }
 

@@ -207,7 +207,7 @@
                 app:alignmentMode="alignMargins"
                 app:columnCount="2"
                 app:rowCount="2"
-                android:useDefaultMargins="true"
+                app:useDefaultMargins="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/quickActionsTitle">
@@ -284,9 +284,12 @@
         android:layout_height="72dp"
         android:background="@color/white"
         android:gravity="center"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -295,31 +298,31 @@
         <include
             layout="@layout/item_bottom_nav_home_selected"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <include
             layout="@layout/item_bottom_nav_training"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <include
             layout="@layout/item_bottom_nav_progress"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <include
             layout="@layout/item_bottom_nav_assistant"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <include
             layout="@layout/item_bottom_nav_profile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
     </LinearLayout>
