@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer stroke (light outline) -->
+    <path
+        android:pathData="M12,2L4,5v6c0,5 3.4,9.7 8,11 4.6,-1.3 8,-6 8,-11V5L12,2z"
+        android:fillColor="#00000000"
+        android:strokeColor="#D6E6FF"
+        android:strokeWidth="1.25"
+        android:strokeLineJoin="round" />
+
+    <!-- Inner fill with vertical gradient -->
+    <path android:pathData="M12,3.4L5.5,5.9v5.3c0,4.3 2.9,8.3 6.5,9.5 3.6,-1.2 6.5,-5.2 6.5,-9.5V5.9L12,3.4z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="12"
+                android:startY="3"
+                android:endX="12"
+                android:endY="22"
+                android:startColor="#4FA3FF"
+                android:endColor="#1E7BD6" />
+        </aapt:attr>
+    </path>
+
+    <!-- Simple highlight panel -->
+    <path
+        android:pathData="M12,6.2c-1.6,0 -3.1,0.5 -4.3,1.5v3.6c0,3 2,5.8 4.3,6.6V6.2z"
+        android:fillColor="#66FFFFFF" />
+</vector>
+

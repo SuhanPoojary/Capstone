@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/onboardingRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Top section (55%) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topSection"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/onboarding_top_bg"
+        app:layout_constraintDimensionRatio="H,100:55"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/illustration"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:contentDescription="@string/onboarding_illustration"
+            android:src="@drawable/ic_tornado"
+            app:layout_constraintBottom_toTopOf="@+id/topDots"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.55" />
+
+        <LinearLayout
+            android:id="@+id/topDots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_onboarding_active" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/dot_onboarding_inactive" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/dot_onboarding_inactive" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Bottom section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomSection"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topSection">
+
+        <TextView
+            android:id="@+id/stepPill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_step_pill"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="@string/onboarding_step_1"
+            android:textColor="@color/onboarding_step_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/onboarding_title"
+            android:textColor="@color/onboarding_title"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stepPill" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/poppins_regular"
+            android:lineSpacingExtra="8dp"
+            android:text="@string/onboarding_desc"
+            android:textColor="@color/onboarding_desc"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGetStarted"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/onboarding_primary"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/safeready_navy"
+            app:cornerRadius="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSkip"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/onboarding_skip"
+            android:textAllCaps="false"
+            android:textColor="@color/safeready_navy"
+            app:cornerRadius="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnGetStarted"
+            app:strokeColor="@color/safeready_navy"
+            app:strokeWidth="2dp" />
+
+        <!-- Keep buttons pinned toward bottom when possible -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

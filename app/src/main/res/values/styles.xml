@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.SafeReady.ProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/progress_dashboard</item>
+        <item name="android:minHeight">8dp</item>
+        <item name="android:maxHeight">8dp</item>
+    </style>
+</resources>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- SafeReady splash palette -->
+    <color name="safeready_navy">#22355B</color>
+    <color name="safeready_subtitle">#D1D5DB</color>
+    <color name="safeready_powered_by">#C7CDD9</color>
+
+    <!-- Onboarding palette -->
+    <color name="onboarding_top_bg">#D9CBB1</color>
+    <color name="onboarding_step_text">#C17A2C</color>
+    <color name="onboarding_title">#24344F</color>
+    <color name="onboarding_desc">#6B7280</color>
+
+    <!-- Signup palette -->
+    <color name="signup_bg">#F7F2EA</color>
+    <color name="signup_label">#6B7280</color>
+    <color name="signup_input">#374151</color>
+    <color name="signup_hint">#9CA3AF</color>
+
+    <!-- Dashboard palette -->
+    <color name="dashboard_bg">#FAF9F6</color>
+    <color name="dashboard_greeting">#6B7280</color>
+    <color name="dashboard_name">#1F2937</color>
+    <color name="dashboard_nav_selected">#1E3A5F</color>
+    <color name="dashboard_nav_unselected">#9CA3AF</color>
+    <color name="dashboard_progress_bg">#E5E7EB</color>
+    <color name="dashboard_primary">#22355B</color>
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Capstone" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+    <!-- Splash theme (launcher) -->
+    <style name="Theme.Capstone.Splash" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/safeready_navy</item>
+        <item name="android:statusBarColor">@color/safeready_navy</item>
+        <item name="android:navigationBarColor">@color/safeready_navy</item>
+    </style>
+</resources>

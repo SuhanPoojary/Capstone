@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">SafeReady</string>
+
+    <string name="safeready_title">SafeReady</string>
+    <string name="safeready_subtitle">Disaster Preparedness Platform</string>
+    <string name="safeready_powered_by">Powered by AI Risk Intelligence</string>
+    <string name="safeready_logo">SafeReady logo</string>
+
+    <!-- Onboarding (Step 1) -->
+    <string name="onboarding_step_1">Step 1 of 3</string>
+    <string name="onboarding_title">Be Prepared. Stay Safe.</string>
+    <string name="onboarding_desc">Learn how to prepare for, respond to, and recover from natural disasters in your region — through interactive lessons and simulations.</string>
+    <string name="onboarding_primary">Get Started →</string>
+    <string name="onboarding_skip">Skip Intro</string>
+    <string name="onboarding_illustration">Cyclone illustration</string>
+
+    <!-- Signup -->
+    <string name="signup_title">Create Account</string>
+    <string name="signup_subtitle">Join thousands learning disaster preparedness</string>
+
+    <string name="signup_fullname">Full Name</string>
+    <string name="signup_fullname_hint">Arjun Sharma</string>
+
+    <string name="signup_institution">Institution</string>
+    <string name="signup_institution_hint">IIT Bombay</string>
+
+    <string name="signup_email">Email</string>
+    <string name="signup_email_hint">arjun@iitb.ac.in</string>
+
+    <string name="signup_password">Password</string>
+    <string name="signup_password_hint">••••••••</string>
+
+    <string name="signup_primary">Create Account</string>
+    <string name="signup_footer_prefix">Already have an account? </string>
+    <string name="signup_footer_action">Sign In</string>
+
+    <!-- Login -->
+    <string name="login_title">Sign In</string>
+    <string name="login_subtitle">Welcome back to SafeReady</string>
+    <string name="login_primary">Sign In</string>
+    <string name="login_email_hint">arjun@iitb.ac.in</string>
+    <string name="login_password_hint">••••••••</string>
+    <string name="login_footer_prefix">Don’t have an account? </string>
+    <string name="login_footer_action">Create Account</string>
+</resources>

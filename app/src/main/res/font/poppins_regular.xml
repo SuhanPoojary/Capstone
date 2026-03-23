@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Temporary safe fallback: avoids downloadable fonts (cert/provider).
+         Replace with actual Poppins TTF font resources later. -->
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@null" />
+</font-family>

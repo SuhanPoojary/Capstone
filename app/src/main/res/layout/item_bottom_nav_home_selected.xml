@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="🏠 Home"
+        android:textColor="@color/dashboard_nav_selected"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/dot_nav_selected" />
+
+</LinearLayout>
