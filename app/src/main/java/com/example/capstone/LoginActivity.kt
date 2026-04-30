@@ -37,17 +37,13 @@ class LoginActivity : AppCompatActivity() {
 
             try {
                 startActivity(
-                    Intent(this, DashboardActivity::class.java)
-                        .putExtra(DashboardActivity.EXTRA_NAME, fallbackName)
+                    Intent(this, MainActivity::class.java)
+                        .putExtra(MainActivity.EXTRA_NAME, fallbackName)
+                        .putExtra(MainActivity.EXTRA_EMAIL, email)
                 )
                 finish()
             } catch (_: Throwable) {
-                try {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } catch (_: Throwable) {
-                    Toast.makeText(this, "Could not continue. Please restart app.", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(this, "Could not continue. Please restart app.", Toast.LENGTH_SHORT).show()
             }
         }
     }

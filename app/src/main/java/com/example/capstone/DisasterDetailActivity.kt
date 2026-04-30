@@ -6,23 +6,30 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.media3.common.Player
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.example.capstone.model.LanguageOption
+import com.example.capstone.presentation.ProgressViewModel
+import com.example.capstone.presentation.QuizBottomSheetDialogFragment
 
 class DisasterDetailActivity : AppCompatActivity() {
 
     private var player: ExoPlayer? = null
     private var currentVideoUri: String? = null
+    private lateinit var progressViewModel: ProgressViewModel
 
     private var selectedChapterIndex: Int? = null
     private var selectedLanguageCode: String = "en"
+    private var quizShownForChapter: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_disaster_detail)
+        progressViewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[ProgressViewModel::class.java]
 
         val disasterKey = intent.getStringExtra(EXTRA_DISASTER_KEY) ?: "earthquake"
 
@@ -54,6 +61,8 @@ class DisasterDetailActivity : AppCompatActivity() {
             val uri = currentVideoUri ?: return@setOnClickListener
             startActivity(Intent(this, FullscreenPlayerActivity::class.java).apply {
                 putExtra(FullscreenPlayerActivity.EXTRA_URI, uri)
+                putExtra(FullscreenPlayerActivity.EXTRA_DISASTER_KEY, disasterKey)
+                putExtra(FullscreenPlayerActivity.EXTRA_CHAPTER_INDEX, selectedChapterIndex ?: 0)
             })
         }
     }
@@ -105,6 +114,9 @@ class DisasterDetailActivity : AppCompatActivity() {
 
         val exo = (player ?: ExoPlayer.Builder(this).build().also { player = it })
         playerView.player = exo
+        exo.clearMediaItems()
+        exo.removeListener(playbackListener)
+        exo.addListener(playbackListener)
 
         val mediaItem = MediaItem.fromUri(uri)
         exo.setMediaItem(mediaItem)
@@ -117,6 +129,25 @@ class DisasterDetailActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.chapter1).isSelected = idx == 0
         findViewById<TextView>(R.id.chapter2).isSelected = idx == 1
         findViewById<TextView>(R.id.chapter3).isSelected = idx == 2
+        quizShownForChapter = null
+    }
+
+    private fun onPlaybackCompleted(disasterKey: String, chapterIndex: Int) {
+        if (quizShownForChapter == chapterIndex) return
+        quizShownForChapter = chapterIndex
+        progressViewModel.markChapterCompleted(disasterKey, chapterIndex)
+        QuizBottomSheetDialogFragment.newInstance(disasterKey, chapterIndex)
+            .show(supportFragmentManager, "quiz_bottom_sheet")
+    }
+
+    private val playbackListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            super.onPlaybackStateChanged(playbackState)
+            if (playbackState == Player.STATE_ENDED) {
+                val chapterIndex = selectedChapterIndex ?: return
+                onPlaybackCompleted(intent.getStringExtra(EXTRA_DISASTER_KEY) ?: "earthquake", chapterIndex)
+            }
+        }
     }
 
     private fun bindDescription(disasterKey: String) {
@@ -125,24 +156,24 @@ class DisasterDetailActivity : AppCompatActivity() {
 
         when (disasterKey.lowercase()) {
             "earthquake" -> {
-                title.text = "Earthquake basics"
-                body.text = "Earthquakes are sudden ground shaking caused by movement in the Earth's crust.\n\nStay safer by securing heavy items, knowing safe spots indoors, and practicing Drop–Cover–Hold On."
+                title.setText(R.string.lesson_earthquake_title)
+                body.setText(R.string.lesson_earthquake_body)
             }
             "flood", "floods" -> {
-                title.text = "Flood basics"
-                body.text = "Floods happen when water overflows onto land due to heavy rainfall, storm surges, or dam/river overflow.\n\nMove to higher ground, avoid walking/driving through water, and keep emergency supplies ready."
+                title.setText(R.string.lesson_flood_title)
+                body.setText(R.string.lesson_flood_body)
             }
             "cyclone" -> {
-                title.text = "Cyclone basics"
-                body.text = "Cyclones bring strong winds, heavy rain, and storm surges.\n\nFollow official alerts, secure windows/roof items, and evacuate early if advised."
+                title.setText(R.string.lesson_cyclone_title)
+                body.setText(R.string.lesson_cyclone_body)
             }
             "landslide", "landslides" -> {
-                title.text = "Landslide basics"
-                body.text = "Landslides occur when soil/rock moves downhill, often after heavy rain or earthquakes.\n\nAvoid steep slopes during intense rain, watch for cracks, and move away from slide paths."
+                title.setText(R.string.lesson_landslide_title)
+                body.setText(R.string.lesson_landslide_body)
             }
             else -> {
-                title.text = "Disaster basics"
-                body.text = "Select a chapter below to start the lesson."
+                title.setText(R.string.lesson_default_title)
+                body.setText(R.string.lesson_default_body)
             }
         }
     }
@@ -160,25 +191,27 @@ class DisasterDetailActivity : AppCompatActivity() {
 
     private fun showMissingVideoDialog(disasterKey: String, chapterIndex: Int) {
         AlertDialog.Builder(this)
-            .setTitle("Video not found")
-            .setMessage(
-                "This chapter video isn't available on the device yet.\n\n" +
-                    "Expected naming: {disaster}_ch{n}_{phase}_{lang}.mp4 in res/raw/\n" +
-                    "Example: flood_ch2_during_en.mp4"
-            )
-            .setPositiveButton("OK", null)
+            .setTitle(R.string.missing_video_title)
+            .setMessage(getString(R.string.missing_video_message, disasterKey, chapterIndex + 1, chapterPhase(chapterIndex), selectedLanguageCode))
+            .setPositiveButton(R.string.missing_video_ok, null)
             .show()
     }
 
     private fun showSubtitleInfo() {
         AlertDialog.Builder(this)
-            .setTitle("Subtitles")
-            .setMessage(
-                "Since you have separate videos per language (different audio), we don't need subtitles to switch languages.\n\n" +
-                    "If you still want captions, we can add VTT/SRT later."
-            )
-            .setPositiveButton("OK", null)
+            .setTitle(R.string.subtitles_title)
+            .setMessage(R.string.subtitles_message)
+            .setPositiveButton(R.string.missing_video_ok, null)
             .show()
+    }
+
+    private fun chapterPhase(chapterIndex: Int): String {
+        return when (chapterIndex) {
+            0 -> "general"
+            1 -> "during"
+            2 -> "after"
+            else -> "general"
+        }
     }
 
     override fun onStop() {
@@ -188,6 +221,7 @@ class DisasterDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        player?.removeListener(playbackListener)
         player?.release()
         player = null
     }

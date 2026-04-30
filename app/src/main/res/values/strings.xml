@@ -42,4 +42,27 @@
     <string name="login_password_hint">••••••••</string>
     <string name="login_footer_prefix">Don’t have an account? </string>
     <string name="login_footer_action">Create Account</string>
+
+    <!-- Lesson content -->
+    <string name="lesson_earthquake_title">Earthquake basics</string>
+    <string name="lesson_earthquake_body">Earthquakes are sudden ground shaking caused by movement in the Earth’s crust.\n\nStay safer by securing heavy items, knowing safe spots indoors, and practicing Drop–Cover–Hold On.</string>
+
+    <string name="lesson_flood_title">Flood basics</string>
+    <string name="lesson_flood_body">Floods happen when water overflows onto land due to heavy rainfall, storm surges, or dam or river overflow.\n\nMove to higher ground, avoid walking or driving through water, and keep emergency supplies ready.</string>
+
+    <string name="lesson_cyclone_title">Cyclone basics</string>
+    <string name="lesson_cyclone_body">Cyclones bring strong winds, heavy rain, and storm surges.\n\nFollow official alerts, secure windows and roof items, and evacuate early if advised.</string>
+
+    <string name="lesson_landslide_title">Landslide basics</string>
+    <string name="lesson_landslide_body">Landslides occur when soil or rock moves downhill, often after heavy rain or earthquakes.\n\nAvoid steep slopes during intense rain, watch for cracks, and move away from slide paths.</string>
+
+    <string name="lesson_default_title">Disaster basics</string>
+    <string name="lesson_default_body">Select a chapter below to start the lesson.</string>
+
+    <string name="missing_video_title">Video not found</string>
+    <string name="missing_video_message">This chapter video is not available on the device yet.\n\nExpected naming: %1$s_ch%2$d_%3$s_%4$s.mp4 in res/raw\nExample: flood_ch2_during_en.mp4</string>
+    <string name="missing_video_ok">OK</string>
+
+    <string name="subtitles_title">Subtitles</string>
+    <string name="subtitles_message">Since you have separate videos per language, subtitles are not required for language switching.\n\nIf you still want captions, they can be added later with VTT or SRT files.</string>
 </resources>

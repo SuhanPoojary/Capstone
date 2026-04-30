@@ -3,6 +3,8 @@ package com.example.capstone
 import android.app.Application
 import android.os.Looper
 import android.util.Log
+import com.example.capstone.service.NotificationHelper
+import com.google.firebase.FirebaseApp
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -11,6 +13,12 @@ import java.util.Locale
 class SafeReadyApp : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this)
+
+        // Initialize notification channels
+        NotificationHelper(this)
 
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { t, e ->

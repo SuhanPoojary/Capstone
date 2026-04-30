@@ -26,20 +26,19 @@ class SignupActivity : AppCompatActivity() {
 
         findViewById<MaterialButton>(R.id.btnCreate).setOnClickListener {
             val name = findViewById<EditText>(R.id.inputName).text?.toString().orEmpty()
+            val institution = findViewById<EditText>(R.id.inputInstitution).text?.toString().orEmpty()
+            val email = findViewById<EditText>(R.id.inputEmail).text?.toString().orEmpty()
 
             try {
                 startActivity(
-                    Intent(this, DashboardActivity::class.java)
-                        .putExtra(DashboardActivity.EXTRA_NAME, name)
+                    Intent(this, MainActivity::class.java)
+                        .putExtra(MainActivity.EXTRA_NAME, name)
+                        .putExtra(MainActivity.EXTRA_EMAIL, email)
+                        .putExtra(MainActivity.EXTRA_INSTITUTION, institution)
                 )
                 finish()
             } catch (_: Throwable) {
-                try {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } catch (_: Throwable) {
-                    Toast.makeText(this, "Could not continue. Please restart app.", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(this, "Could not continue. Please restart app.", Toast.LENGTH_SHORT).show()
             }
         }
     }
