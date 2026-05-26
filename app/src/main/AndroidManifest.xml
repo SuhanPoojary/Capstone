@@ -5,7 +5,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Background location may be required for long-running mesh discovery when the app is not foregrounded. Request at runtime with clear rationale. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Bluetooth permissions for Nearby / Mesh (request at runtime for Android 12+ as well) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- Android 12+ runtime bluetooth permissions. Request these at runtime when starting Nearby/mesh features. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <!-- Foreground service permission (use when running MeshService as a foreground service for reliable background operation) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".SafeReadyApp"
@@ -50,7 +61,29 @@
             android:exported="false" />
 
         <activity
+            android:name=".MeshDebugActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".CrashViewerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Phase4HubActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Phase4LeaderboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Phase4FriendsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Phase4FeedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmergencyActivity"
             android:exported="false" />
 
         <activity
@@ -68,6 +101,15 @@
         <service
             android:name=".service.AlertNotificationService"
             android:exported="false" />
+
+        <!-- Phase 4: Firebase Cloud Messaging Service -->
+        <service
+            android:name=".service.SafeReadyMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
     </application>
 

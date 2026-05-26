@@ -11,7 +11,7 @@
         android:id="@+id/quizTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="sans-serif"
         android:text="Quick Quiz"
         android:textColor="@color/dashboard_name"
         android:textSize="20sp" />
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="sans-serif"
         android:text="Question will appear here."
         android:textColor="@color/dashboard_name"
         android:textSize="15sp" />
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="sans-serif-medium"
         android:textColor="@color/dashboard_greeting"
         android:textSize="13sp" />
 

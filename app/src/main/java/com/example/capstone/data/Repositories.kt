@@ -122,6 +122,12 @@ class SafeReadyPreferences(context: Context) {
         }
     }
 
+    fun getEmergencyModeEnabled(): Boolean = prefs.getBoolean(KEY_EMERGENCY_MODE_ENABLED, false)
+
+    fun setEmergencyModeEnabled(enabled: Boolean) {
+        prefs.edit { putBoolean(KEY_EMERGENCY_MODE_ENABLED, enabled) }
+    }
+
     private fun completedKey(disasterKey: String) = "$KEY_PROGRESS_PREFIX$disasterKey"
     private fun quizKey(disasterKey: String, chapterIndex: Int) = "$KEY_QUIZ_PREFIX${disasterKey}_$chapterIndex"
 
@@ -138,6 +144,21 @@ class SafeReadyPreferences(context: Context) {
         private const val KEY_CURRENT_STREAK = "gamification_current_streak"
         private const val KEY_BEST_STREAK = "gamification_best_streak"
         private const val KEY_LAST_COMPLETION_DAY = "gamification_last_completion_day"
+        private const val KEY_EMERGENCY_MODE_ENABLED = "emergency_mode_enabled"
+    }
+}
+
+class EmergencyRepository(private val prefs: SafeReadyPreferences) {
+    fun isEmergencyModeEnabled(): Boolean = prefs.getEmergencyModeEnabled()
+
+    fun setEmergencyModeEnabled(enabled: Boolean) {
+        prefs.setEmergencyModeEnabled(enabled)
+    }
+
+    fun toggleEmergencyMode(): Boolean {
+        val updated = !isEmergencyModeEnabled()
+        setEmergencyModeEnabled(updated)
+        return updated
     }
 }
 

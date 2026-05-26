@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <size
+        android:width="80dp"
+        android:height="80dp" />
+
+    <!-- Subtle premium red glow matching requested SOS red (#D62C3B) at 35% opacity -->
+    <gradient
+        android:type="radial"
+        android:useLevel="false"
+        android:centerColor="#59D62C3B"
+        android:startColor="#59D62C3B"
+        android:endColor="#00D62C3B"
+        android:gradientRadius="40dp" />
+
+</shape>
+

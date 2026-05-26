@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.55"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="sans-serif-medium"
         android:text="METEOROLOGICAL"
         android:textAllCaps="true"
         android:textColor="@color/dashboard_name"
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:fontFamily="@font/poppins_semibold"
+        android:fontFamily="sans-serif-medium"
         android:text="Cyclone"
         android:textColor="@color/dashboard_name"
         android:textSize="18sp"
@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="sans-serif"
             android:text="📍 Your Region"
             android:textColor="#6B7280"
             android:textSize="11sp" />
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="sans-serif"
             android:text="5 lessons"
             android:textColor="#6B7280"
             android:textSize="11sp" />

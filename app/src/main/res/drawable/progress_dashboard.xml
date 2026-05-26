@@ -3,7 +3,8 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="999dp" />
-            <solid android:color="@color/dashboard_progress_bg" />
+            <!-- Empty track: soft bluish tone to sit on navy hero -->
+            <solid android:color="#334A6EA9" />
         </shape>
     </item>
 
@@ -11,7 +12,10 @@
         <clip>
             <shape>
                 <corners android:radius="999dp" />
-                <solid android:color="#1E3A5F" />
+                <gradient
+                    android:angle="0"
+                    android:startColor="#3F9D8D"
+                    android:endColor="#74A087" />
             </shape>
         </clip>
     </item>

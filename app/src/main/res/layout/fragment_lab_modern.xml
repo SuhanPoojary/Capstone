@@ -1,0 +1,977 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_app"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:paddingStart="@dimen/screen_padding_horizontal"
+    android:paddingTop="@dimen/screen_padding_vertical"
+    android:paddingEnd="@dimen/screen_padding_horizontal"
+    android:paddingBottom="@dimen/fragment_bottom_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/labTitle"
+            style="@style/TextStyle.Heading.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_lg"
+            android:text="Survival Lab"
+            android:textColor="@color/color_navy_900" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/labHeroCard"
+            style="@style/Card.Lab.Hero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_2xl"
+            app:cardBackgroundColor="@android:color/transparent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_lab_hero_gradient"
+                android:padding="@dimen/spacing_2xl">
+
+                <View
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_gravity="end|top"
+                    android:alpha="0.35"
+                    android:background="@drawable/bg_lab_hero_glow" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextStyle.Label.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Preparedness Progress"
+                        android:textColor="@color/color_orange_200" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_lg"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_lab_stat_card"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_md">
+
+                            <TextView
+                                style="@style/TextStyle.Display.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="28"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                style="@style/TextStyle.Label.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Level"
+                                android:textColor="@color/color_gray_300" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_lab_stat_card"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_md">
+
+                            <TextView
+                                style="@style/TextStyle.Display.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3.2K"
+                                android:textColor="@color/color_orange_200" />
+
+                            <TextView
+                                style="@style/TextStyle.Label.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="XP"
+                                android:textColor="@color/color_gray_300" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_lab_stat_card"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_md">
+
+                            <TextView
+                                style="@style/TextStyle.Display.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                style="@style/TextStyle.Label.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Streak"
+                                android:textColor="@color/color_gray_300" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_lab_stat_card"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_md">
+
+                            <TextView
+                                style="@style/TextStyle.Display.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="#45"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                style="@style/TextStyle.Label.Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rank"
+                                android:textColor="@color/color_gray_300" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_lg"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/TextStyle.Body.Small"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Next level in 800 XP"
+                            android:textColor="@color/color_gray_200" />
+
+                        <TextView
+                            style="@style/TextStyle.Body.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="80%"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/progress_bar_height"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:max="100"
+                        android:progress="80"
+                        android:progressDrawable="@drawable/bg_lab_progress_warm"
+                        android:progressTint="@color/color_orange_500" />
+                </LinearLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/dailyChallengeCard"
+            style="@style/Card.Lab.Premium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_2xl"
+            app:cardBackgroundColor="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_lab_daily_gradient"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_2xl">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_lab_challenge_pill"
+                    android:paddingStart="@dimen/spacing_md"
+                    android:paddingTop="@dimen/spacing_xs"
+                    android:paddingEnd="@dimen/spacing_md"
+                    android:paddingBottom="@dimen/spacing_xs"
+                    android:text="DAILY CHALLENGE"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    style="@style/TextStyle.Heading.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="Earthquake Response Drill"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    style="@style/TextStyle.Body.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="Complete the challenge within 24 hours to earn 500 bonus XP"
+                    android:textColor="@color/color_red_100" />
+
+                <TextView
+                    style="@style/TextStyle.Body.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="15 min   •   500 XP   •   Hard"
+                    android:textColor="@color/color_red_100" />
+
+                <TextView
+                    android:id="@+id/startDailyChallengeButton"
+                    style="@style/Button.Lab.Pill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="Start Challenge" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextStyle.Heading.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Disaster Simulations"
+                android:textColor="@color/color_navy_900" />
+
+            <TextView
+                style="@style/TextStyle.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textColor="@color/color_navy_800" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:layout_marginBottom="@dimen/spacing_2xl"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="@dimen/lab_simulation_card_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_md"
+                    android:background="@drawable/bg_lab_simulation_blue"
+                    android:clickable="true"
+                    android:focusable="true"
+                    style="@style/Card.Lab.Premium"
+                    app:cardBackgroundColor="@android:color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_lg"
+                        android:background="@drawable/bg_home_hero_gradient">
+
+                        <TextView
+                            style="@style/TextStyle.Label.Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medium • 12 min"
+                            android:textColor="@color/color_navy_100" />
+
+                        <TextView
+                            style="@style/TextStyle.Heading.Medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_sm"
+                            android:text="Tsunami Escape"
+                            android:textColor="@color/white" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_md"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextStyle.Body.Small"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="60% Complete"
+                                android:textColor="@color/color_navy_100" />
+
+                            <TextView
+                                style="@style/TextStyle.Body.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+350 XP"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+
+                        <ProgressBar
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/progress_bar_height"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:max="100"
+                            android:progress="60"
+                            android:progressDrawable="@drawable/bg_lab_progress_soft" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="@dimen/lab_simulation_card_width"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_lab_simulation_orange"
+                    android:clickable="true"
+                    android:focusable="true"
+                    style="@style/Card.Lab.Premium"
+                    app:cardBackgroundColor="@android:color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_lg"
+                        android:background="@drawable/bg_home_hero_gradient">
+
+                        <TextView
+                            style="@style/TextStyle.Label.Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hard • 15 min"
+                            android:textColor="@color/color_orange_100" />
+
+                        <TextView
+                            style="@style/TextStyle.Heading.Medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_sm"
+                            android:text="Wildfire Evacuation"
+                            android:textColor="@color/white" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_md"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextStyle.Body.Small"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="35% Complete"
+                                android:textColor="@color/color_orange_100" />
+
+                            <TextView
+                                style="@style/TextStyle.Body.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+420 XP"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+
+                        <ProgressBar
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/progress_bar_height"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:max="100"
+                            android:progress="35"
+                            android:progressDrawable="@drawable/bg_lab_progress_soft" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextStyle.Heading.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Quick Drills"
+                android:textColor="@color/color_navy_900" />
+
+            <TextView
+                style="@style/TextStyle.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textColor="@color/color_navy_800" />
+        </LinearLayout>
+
+        <androidx.gridlayout.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:layout_marginBottom="@dimen/spacing_2xl"
+            app:alignmentMode="alignMargins"
+            app:columnCount="2"
+            app:useDefaultMargins="false">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/drill_cpr"
+                style="@style/Card.Lab.Surface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_sm"
+                android:layout_marginBottom="@dimen/spacing_sm"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_lab_icon_shell_teal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_play_teal" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Heading.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="CPR Practice"
+                        android:textColor="@color/color_gray_900" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="5 min    •    +150 XP" />
+
+                    <TextView
+                        style="@style/Button.Lab.GridCta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:text="Start Drill" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/drill_first_aid"
+                style="@style/Card.Lab.Surface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_sm"
+                android:layout_marginBottom="@dimen/spacing_sm"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_lab_icon_shell_blue">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_quick_quiz" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Heading.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="First Aid Quiz"
+                        android:textColor="@color/color_gray_900" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="3 min    •    +100 XP" />
+
+                    <TextView
+                        style="@style/Button.Lab.GridCta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:text="Start Drill" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/drill_supply_check"
+                style="@style/Card.Lab.Surface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_sm"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_lab_icon_shell_peach">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_quick_books" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Heading.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Supply Check"
+                        android:textColor="@color/color_gray_900" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="4 min    •    +120 XP" />
+
+                    <TextView
+                        style="@style/Button.Lab.GridCta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:text="Start Drill" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/drill_route_planning"
+                style="@style/Card.Lab.Surface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_sm"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_lab_icon_shell_orange">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_quick_game" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Heading.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Route Planning"
+                        android:textColor="@color/color_gray_900" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="6 min    •    +180 XP" />
+
+                    <TextView
+                        style="@style/Button.Lab.GridCta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:text="Start Drill" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.gridlayout.widget.GridLayout>
+
+        <TextView
+            android:id="@+id/interactiveTitle"
+            style="@style/TextStyle.Heading.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Interactive Learning"
+            android:textColor="@color/color_navy_900" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/interactive_card_earthquake"
+            style="@style/Card.Lab.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle.Heading.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Understanding Earthquakes"
+                            android:textColor="@color/color_gray_900" />
+
+                        <TextView
+                            style="@style/TextStyle.Body.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:text="6/8 modules • +200 XP" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_lab_icon_shell_blue">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_quick_books" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/progress_bar_height"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:max="100"
+                    android:progress="72"
+                    android:progressDrawable="@drawable/bg_lab_progress_learning" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/interactive_card_floods"
+            style="@style/Card.Lab.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle.Heading.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Flood Preparedness Guide"
+                            android:textColor="@color/color_gray_900" />
+
+                        <TextView
+                            style="@style/TextStyle.Body.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:text="4/10 modules • +250 XP" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_lab_icon_shell_blue">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_quick_books" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/progress_bar_height"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:max="100"
+                    android:progress="40"
+                    android:progressDrawable="@drawable/bg_lab_progress_learning" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_2xl"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextStyle.Heading.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Leaderboard"
+                android:textColor="@color/color_navy_900" />
+
+            <TextView
+                style="@style/TextStyle.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textColor="@color/color_navy_800" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Card.Lab.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:layout_marginBottom="@dimen/spacing_2xl">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <TextView
+                    style="@style/TextStyle.Body.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1   Sarah Chen              5,240 XP   🏆" />
+
+                <TextView
+                    style="@style/TextStyle.Body.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="2   Mike Johnson            4,890 XP   🏅" />
+
+                <TextView
+                    style="@style/TextStyle.Body.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="3   Emma Wilson             4,520 XP   🏅" />
+
+                <TextView
+                    style="@style/TextStyle.Body.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:background="@drawable/bg_lab_rank_row"
+                    android:padding="@dimen/spacing_md"
+                    android:text="45   You (Alex)             3,200 XP" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            style="@style/TextStyle.Heading.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recent Achievements"
+            android:textColor="@color/color_navy_900" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="@dimen/lab_achievement_card_width"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_lab_achievement_gold"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🏆"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="First Responder"
+                        android:textColor="@color/color_gray_900" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/lab_achievement_card_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_md"
+                    android:background="@drawable/bg_lab_achievement_fire"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔥"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Fire Master"
+                        android:textColor="@color/color_gray_900" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/lab_achievement_card_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_md"
+                    android:background="@drawable/bg_lab_achievement_water"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💧"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Flood Expert"
+                        android:textColor="@color/color_gray_900" />
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

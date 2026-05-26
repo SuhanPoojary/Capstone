@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gradient circular background for the SOS FAB with subtle outer glow -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <gradient
+        android:type="radial"
+        android:useLevel="false"
+        android:startColor="#D62C3B"
+        android:centerColor="#D62C3B"
+        android:endColor="#B9232A"
+        android:gradientRadius="40dp" />
+
+    <size android:width="64dp" android:height="64dp" />
+
+    <!-- inner padding keeps icon centered nicely -->
+    <padding android:left="8dp" android:top="8dp" android:right="8dp" android:bottom="8dp" />
+
+    <!-- thin white stroke to separate the fab from the nav background -->
+    <stroke android:width="2dp" android:color="#33FFFFFF" />
+</shape>

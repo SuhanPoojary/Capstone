@@ -3,20 +3,29 @@ package com.example.capstone
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import android.content.Intent
 import com.example.capstone.data.SafeReadyPreferences
 import com.example.capstone.data.UserRepository
-import com.example.capstone.presentation.AssistantFragment
 import com.example.capstone.presentation.HomeFragment
+import com.example.capstone.presentation.LabFragment
+import com.example.capstone.presentation.MedReadyFragment
 import com.example.capstone.presentation.ProfileFragment
-import com.example.capstone.presentation.ProgressFragment
-import com.example.capstone.presentation.TrainingFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
+import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var navHome: FrameLayout
+    private lateinit var navLab: FrameLayout
+    private lateinit var navMedReady: FrameLayout
+    private lateinit var navProfile: FrameLayout
+    private lateinit var sosButton: View
     private var currentTabId: Int = R.id.nav_home
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,23 +46,31 @@ class MainActivity : AppCompatActivity() {
             currentTabId = savedInstanceState.getInt(KEY_CURRENT_TAB, R.id.nav_home)
         }
 
-        bottomNav = findViewById(R.id.bottomNav)
-        bottomNav.setOnItemSelectedListener { item ->
-            if (item.itemId != currentTabId) {
-                currentTabId = item.itemId
-                showTab(item.itemId)
-            }
-            true
-        }
+        navHome = findViewById(R.id.navHome)
+        navLab = findViewById(R.id.navLab)
+        navMedReady = findViewById(R.id.navMedReady)
+        navProfile = findViewById(R.id.navProfile)
+        sosButton = findViewById(R.id.sosEmergencyButton)
 
-        bottomNav.selectedItemId = currentTabId
+        bindNavClicks()
+
+        // Emergency button opens the EmergencyActivity (center floating button)
+        sosButton.setOnClickListener {
+            startActivity(Intent(this, EmergencyActivity::class.java))
+        }
+        // start subtle pulse animation to indicate importance/dock into navbar
+        sosButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.sos_pulse))
+
+        updateSelectedTabUi(currentTabId)
         if (savedInstanceState == null) {
             showTab(currentTabId)
         }
     }
 
     fun selectTab(itemId: Int) {
-        bottomNav.selectedItemId = itemId
+        currentTabId = itemId
+        updateSelectedTabUi(itemId)
+        showTab(itemId)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -63,9 +80,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun showTab(itemId: Int) {
         val fragment: Fragment = when (itemId) {
-            R.id.nav_training -> TrainingFragment()
-            R.id.nav_progress -> ProgressFragment()
-            R.id.nav_assistant -> AssistantFragment()
+            R.id.nav_home -> HomeFragment()
+            R.id.nav_lab -> LabFragment()
+            R.id.nav_medready -> MedReadyFragment()
             R.id.nav_profile -> ProfileFragment()
             else -> HomeFragment()
         }
@@ -75,6 +92,36 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.mainFragmentContainer, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .commit()
+    }
+
+    private fun bindNavClicks() {
+        navHome.setOnClickListener { selectTab(R.id.nav_home) }
+        navLab.setOnClickListener { selectTab(R.id.nav_lab) }
+        navMedReady.setOnClickListener { selectTab(R.id.nav_medready) }
+        navProfile.setOnClickListener { selectTab(R.id.nav_profile) }
+    }
+
+    private fun updateSelectedTabUi(selected: Int) {
+        updateTab(navHome, selected == R.id.nav_home)
+        updateTab(navLab, selected == R.id.nav_lab)
+        updateTab(navMedReady, selected == R.id.nav_medready)
+        updateTab(navProfile, selected == R.id.nav_profile)
+    }
+
+    private fun updateTab(container: FrameLayout, selected: Boolean) {
+        val (iconId, labelId) = when (container.id) {
+            R.id.navHome -> R.id.navHomeIcon to R.id.navHomeLabel
+            R.id.navLab -> R.id.navLabIcon to R.id.navLabLabel
+            R.id.navMedReady -> R.id.navMedReadyIcon to R.id.navMedReadyLabel
+            R.id.navProfile -> R.id.navProfileIcon to R.id.navProfileLabel
+            else -> return
+        }
+        val icon = container.findViewById<ImageView>(iconId)
+        val label = container.findViewById<TextView>(labelId)
+        val tint = if (selected) R.color.color_navy_900 else R.color.text_secondary
+        container.setBackgroundResource(if (selected) R.drawable.bg_nav_selected_pill else android.R.color.transparent)
+        icon?.setColorFilter(ContextCompat.getColor(this, tint))
+        label?.setTextColor(ContextCompat.getColor(this, tint))
     }
 
     companion object {

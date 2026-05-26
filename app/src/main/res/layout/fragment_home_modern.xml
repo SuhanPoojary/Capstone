@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sr_bg_main"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:paddingBottom="@dimen/fragment_bottom_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/screen_padding_horizontal"
+        android:paddingEnd="@dimen/screen_padding_horizontal"
+        android:paddingTop="@dimen/spacing_2xl">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/weatherChip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/homeGreeting"
+                    style="@style/TextStyle.Body.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_greeting_morning" />
+
+                <TextView
+                    android:id="@+id/homeUserName"
+                    style="@style/TextStyle.Display.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xxs"
+                    android:text="@string/text_user" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:contentDescription="@string/text_location"
+                        android:src="@drawable/ic_location"
+                        android:tint="@color/text_tertiary" />
+
+                    <TextView
+                        android:id="@+id/homeLocation"
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        android:text="@string/text_location" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/homeEmergencyBadge"
+                    style="@style/TextStyle.Label.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:background="@drawable/bg_risk_badge"
+                    android:paddingStart="@dimen/spacing_md"
+                    android:paddingTop="@dimen/spacing_xs"
+                    android:paddingEnd="@dimen/spacing_md"
+                    android:paddingBottom="@dimen/spacing_xs"
+                    android:text="@string/home_emergency_mode_off"
+                    android:textColor="@color/text_inverse" />
+            </LinearLayout>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/weatherChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_temperature"
+                android:textColor="@color/sr_text_primary"
+                android:textSize="@dimen/text_body_sm"
+                app:chipBackgroundColor="@color/sr_bg_card"
+                app:chipCornerRadius="@dimen/corner_full"
+                app:chipIcon="@drawable/ic_weather_sunny"
+                app:chipIconTint="@color/color_orange_500"
+                app:chipStrokeColor="@color/border_light"
+                app:chipStrokeWidth="1dp"
+                app:iconEndPadding="@dimen/spacing_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/preparednessCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_2xl"
+            app:cardCornerRadius="@dimen/corner_2xl"
+            app:cardElevation="@dimen/elevation_high">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_home_hero_gradient"
+                android:padding="@dimen/spacing_2xl">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.08"
+                    android:contentDescription="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_wave_pattern" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/prepTitle"
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_preparedness_title"
+                        android:textColor="#D8E7FF"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/prepInfoIcon" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/prepInfoIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:cardBackgroundColor="#1AFFFFFF"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/text_info"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_info_outlined"
+                            android:tint="@color/text_inverse" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/homeProgressPercent"
+                        style="@style/StatNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="@string/text_preparedness_percentage"
+                        android:textColor="@color/text_inverse"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/prepTitle" />
+
+                    <ProgressBar
+                        android:id="@+id/homeProgressBar"
+                        style="@style/Widget.SafeReady.ProgressBar.Large"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_lg"
+                        android:max="100"
+                        android:progress="78"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/homeProgressPercent" />
+
+                    <TextView
+                        android:id="@+id/homeRecommendationBody"
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_lg"
+                        android:text="@string/home_preparedness_desc"
+                        android:textColor="#E4EEFF"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/homeProgressBar" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/riskAlertCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                app:cardBackgroundColor="@color/sr_bg_card"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="@dimen/elevation_light"
+                app:strokeColor="@color/color_orange_100"
+                app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_lg">
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_quick_icon_peach"
+                    android:padding="8dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/text_warning"
+                        android:src="@drawable/ic_alert_circle"
+                        android:tint="@color/status_warning" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_md"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_risk_heading"
+                        android:textColor="@color/sr_text_primary" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="@string/home_risk_body"
+                        android:textColor="@color/sr_text_secondary" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/riskViewButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_risk_view"
+                    android:textAllCaps="false"
+                    android:textColor="@color/sr_primary_navy"
+                    app:backgroundTint="@android:color/transparent"
+                    app:iconTint="@color/sr_primary_navy"
+                    app:rippleColor="#1A22355B"
+                    style="@style/Widget.Material3.Button.TextButton" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_3xl"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextStyle.Heading.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/home_disaster_map"
+                android:textColor="@color/sr_text_primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/liveToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_live"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/sr_primary_navy"
+                app:chipCornerRadius="@dimen/corner_full"
+                app:chipStrokeColor="@color/sr_primary_navy"
+                app:chipStrokeWidth="0dp" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_sm"
+                android:text="@string/text_24h"
+                android:textColor="@color/sr_text_secondary"
+                app:chipBackgroundColor="@color/sr_bg_card"
+                app:chipCornerRadius="@dimen/corner_full"
+                app:chipStrokeColor="@color/border_light"
+                app:chipStrokeWidth="1dp" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/disasterMapCard"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="@dimen/spacing_lg"
+            app:cardCornerRadius="@dimen/corner_2xl"
+            app:cardElevation="@dimen/elevation_medium">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_disaster_map_surface">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.08"
+                    android:contentDescription="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_wave_pattern" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/spacing_lg"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EEFFFFFF"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/spacing_lg"
+                        android:paddingTop="@dimen/spacing_md"
+                        android:paddingEnd="@dimen/spacing_lg"
+                        android:paddingBottom="@dimen/spacing_md"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            style="@style/TextStyle.Label.Large"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_active_alerts"
+                            android:textColor="@color/sr_text_primary" />
+
+                        <TextView
+                            style="@style/TextStyle.Body.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xxs"
+                            android:text="@string/home_map_alert_body"
+                            android:textColor="@color/sr_text_secondary" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <FrameLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_quick_icon_blue"
+                            android:padding="8dp">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:contentDescription="@string/home_map_nav"
+                                android:src="@drawable/ic_location"
+                                android:tint="@color/sr_primary_navy" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/expandMapButton"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:background="@drawable/bg_quick_icon_blue"
+                            android:padding="8dp"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:contentDescription="@string/home_map_target"
+                                android:src="@drawable/ic_expand"
+                                android:tint="@color/sr_primary_navy" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            style="@style/TextStyle.Heading.Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_active_alerts"
+                            android:textColor="@color/sr_text_primary" />
+
+                        <TextView
+                            style="@style/TextStyle.Body.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:text="@string/home_map_alert_body"
+                            android:textColor="@color/sr_text_secondary" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <GridLayout
+            android:id="@+id/quickActionsGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_3xl"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:useDefaultMargins="true">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeStartTrainingButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                app:cardBackgroundColor="@color/sr_bg_card"
+                app:cardCornerRadius="@dimen/corner_2xl"
+                app:cardElevation="@dimen/elevation_light"
+                app:strokeColor="@color/border_light"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_quick_icon_blue"
+                        android:padding="8dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/home_continue_mission"
+                            android:src="@drawable/ic_play_circle"
+                            android:tint="@color/color_navy_800" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Start Training"
+                        android:textColor="@color/sr_text_primary" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Training drills"
+                        android:textColor="@color/sr_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeViewProgressButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                app:cardBackgroundColor="@color/sr_bg_card"
+                app:cardCornerRadius="@dimen/corner_2xl"
+                app:cardElevation="@dimen/elevation_light"
+                app:strokeColor="@color/border_light"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_quick_icon_purple"
+                        android:padding="8dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/text_your_progress"
+                            android:src="@drawable/ic_quick_quiz"
+                            android:tint="@color/color_navy_800" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="View Progress"
+                        android:textColor="@color/sr_text_primary" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Readiness summary"
+                        android:textColor="@color/sr_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeSendSosButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                app:cardBackgroundColor="@color/sr_bg_card"
+                app:cardCornerRadius="@dimen/corner_2xl"
+                app:cardElevation="@dimen/elevation_light"
+                app:strokeColor="@color/border_light"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_quick_icon_green"
+                        android:padding="8dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                                android:contentDescription="@string/home_emergency_sos"
+                                android:src="@drawable/ic_sos"
+                                android:tint="@color/status_danger" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Send SOS"
+                        android:textColor="@color/sr_text_primary" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Broadcast alert"
+                        android:textColor="@color/sr_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/actionContinue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                app:cardBackgroundColor="@color/sr_bg_card"
+                app:cardCornerRadius="@dimen/corner_2xl"
+                app:cardElevation="@dimen/elevation_light"
+                app:strokeColor="@color/border_light"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_quick_icon_peach"
+                        android:padding="8dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/text_continue"
+                            android:src="@drawable/ic_play_circle"
+                            android:tint="@color/color_navy_800" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Continue Mission"
+                        android:textColor="@color/sr_text_primary" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Resume learning"
+                        android:textColor="@color/sr_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </GridLayout>
+
+        <LinearLayout
+            android:id="@+id/progressSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_3xl"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextStyle.Heading.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_your_progress"
+                android:textColor="@color/sr_text_primary" />
+
+            <TextView
+                android:id="@+id/homeStatusBadge"
+                style="@style/TextStyle.Label.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="@string/home_status_start_here"
+                android:textColor="@color/sr_text_secondary" />
+
+            <TextView
+                android:id="@+id/homeGamificationText"
+                style="@style/TextStyle.Body.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="Level 1 • 0-day streak • 0 XP"
+                android:textColor="@color/sr_text_secondary" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+
+
+

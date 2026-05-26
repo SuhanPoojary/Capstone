@@ -1,10 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ====== TYPOGRAPHY STYLES ====== -->
+
+    <!-- Base TextStyle -->
+    <style name="TextStyle">
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <!-- Display Text Base -->
+    <style name="TextStyle.Display" parent="TextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Heading Text Base -->
+    <style name="TextStyle.Heading" parent="TextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Body Text Base -->
+    <style name="TextStyle.Body" parent="TextStyle" />
+
+    <!-- Label/Caption Base -->
+    <style name="TextStyle.Label" parent="TextStyle">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextStyle.Display.Large" parent="TextStyle.Display">
+        <item name="android:textSize">@dimen/text_display_lg</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextStyle.Display.Medium" parent="TextStyle.Display">
+        <item name="android:textSize">@dimen/text_display_md</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextStyle.Heading.Large" parent="TextStyle.Heading">
+        <item name="android:textSize">@dimen/text_heading_lg</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextStyle.Heading.Medium" parent="TextStyle.Heading">
+        <item name="android:textSize">@dimen/text_heading_md</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextStyle.Heading.Small" parent="TextStyle.Heading">
+        <item name="android:textSize">@dimen/text_heading_sm</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextStyle.Body.Large" parent="TextStyle.Body">
+        <item name="android:textSize">@dimen/text_body_lg</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextStyle.Body.Medium" parent="TextStyle.Body">
+        <item name="android:textSize">@dimen/text_body_md</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextStyle.Body.Small" parent="TextStyle.Body">
+        <item name="android:textSize">@dimen/text_body_sm</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextStyle.Label.Large" parent="TextStyle.Label">
+        <item name="android:textSize">@dimen/text_label_lg</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextStyle.Label.Medium" parent="TextStyle.Label">
+        <item name="android:textSize">@dimen/text_label_md</item>
+        <item name="android:textColor">@color/text_tertiary</item>
+    </style>
+
+    <!-- Compatibility base style for profile layouts (some XML may reference @style/Profile) -->
+    <style name="Profile">
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+        <item name="android:textColor">@color/sr_text_primary</item>
+    </style>
+
+    <!-- ====== BUTTON STYLES ====== -->
+    <style name="Button.Primary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/color_navy_800</item>
+        <item name="android:textColor">@color/text_inverse</item>
+        <item name="android:minHeight">@dimen/button_height_large</item>
+        <item name="cornerRadius">@dimen/corner_lg</item>
+        <item name="android:textSize">@dimen/text_body_md</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/border_light</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:minHeight">@dimen/button_height_large</item>
+        <item name="cornerRadius">@dimen/corner_lg</item>
+        <item name="android:textSize">@dimen/text_body_md</item>
+    </style>
+
+    <style name="Button.Alert" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/status_danger</item>
+        <item name="android:textColor">@color/text_inverse</item>
+        <item name="android:minHeight">@dimen/button_height_large</item>
+        <item name="cornerRadius">@dimen/corner_lg</item>
+    </style>
+
+    <!-- ====== CARD STYLES ====== -->
+    <style name="Card.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardElevation">@dimen/elevation_light</item>
+        <item name="cardBackgroundColor">@color/bg_card</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="contentPadding">@dimen/spacing_lg</item>
+    </style>
+
+    <style name="Card.Hero" parent="Card.Elevated">
+        <item name="cardBackgroundColor">@color/color_navy_800</item>
+        <item name="cardElevation">@dimen/elevation_medium</item>
+    </style>
+
+    <style name="Card.Alert" parent="Widget.Material3.CardView.Filled">
+        <item name="cardElevation">@dimen/elevation_light</item>
+        <item name="cardBackgroundColor">@color/color_orange_50</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="contentPadding">@dimen/spacing_lg</item>
+        <item name="strokeColor">@color/color_orange_200</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Card.Emergency" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardElevation">@dimen/elevation_medium</item>
+        <item name="cardBackgroundColor">@color/color_red_50</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="strokeColor">@color/color_red_500</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
+    <!-- ====== PROGRESS BAR STYLES ====== -->
     <style name="Widget.SafeReady.ProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/progress_dashboard</item>
-        <item name="android:minHeight">8dp</item>
-        <item name="android:maxHeight">8dp</item>
+        <item name="android:minHeight">@dimen/progress_bar_height</item>
+        <item name="android:maxHeight">@dimen/progress_bar_height</item>
+    </style>
+
+    <style name="Widget.SafeReady.ProgressBar.Large" parent="Widget.SafeReady.ProgressBar">
+        <item name="android:minHeight">@dimen/progress_bar_height_large</item>
+        <item name="android:maxHeight">@dimen/progress_bar_height_large</item>
+    </style>
+
+    <!-- ====== INPUT FIELD STYLES ====== -->
+    <style name="InputField.Primary" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:minHeight">@dimen/input_field_height</item>
+        <item name="boxStrokeColor">@color/border_light</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/corner_md</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/corner_md</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/corner_md</item>
+        <item name="boxCornerRadiusTopStart">@dimen/corner_md</item>
+        <item name="hintTextColor">@color/text_tertiary</item>
+    </style>
+
+    <!-- ====== CHIP STYLES ====== -->
+    <style name="Chip">
+        <item name="android:textColor">@color/color_navy_800</item>
+    </style>
+
+    <style name="Chip.Filter" parent="Chip">
+        <item name="chipCornerRadius">@dimen/corner_full</item>
+        <item name="chipBackgroundColor">@color/color_navy_100</item>
+        <item name="android:textColor">@color/color_navy_800</item>
+        <item name="chipMinHeight">32dp</item>
+    </style>
+
+    <!-- ====== DIVIDER STYLES ====== -->
+    <style name="Divider">
+        <item name="android:background">@color/border_light</item>
+    </style>
+
+    <style name="Divider.Light" parent="Divider">
+        <item name="android:layout_height">@dimen/divider_height</item>
+    </style>
+
+    <!-- ====== LIST ITEM STYLES ====== -->
+    <style name="ListItem">
+        <item name="android:paddingStart">@dimen/spacing_lg</item>
+        <item name="android:paddingEnd">@dimen/spacing_lg</item>
+    </style>
+
+    <style name="ListItem.SingleLine" parent="ListItem">
+        <item name="android:paddingTop">@dimen/spacing_md</item>
+        <item name="android:paddingBottom">@dimen/spacing_md</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="ListItem.TwoLine" parent="ListItem">
+        <item name="android:paddingTop">@dimen/spacing_md</item>
+        <item name="android:paddingBottom">@dimen/spacing_md</item>
+        <item name="android:minHeight">72dp</item>
+    </style>
+
+    <!-- ====== CUSTOM COMPONENT STYLES ====== -->
+    <style name="StatusBadge">
+        <item name="android:paddingStart">@dimen/spacing_md</item>
+        <item name="android:paddingEnd">@dimen/spacing_md</item>
+        <item name="android:paddingTop">@dimen/spacing_xs</item>
+        <item name="android:paddingBottom">@dimen/spacing_xs</item>
+        <item name="android:textSize">@dimen/text_label_md</item>
+        <item name="android:textColor">@color/text_inverse</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="StatNumber">
+        <item name="android:textSize">@dimen/text_display_md</item>
+        <item name="android:textColor">@color/color_navy_800</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="StatLabel">
+        <item name="android:textSize">@dimen/text_label_md</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- ====== LAB DASHBOARD STYLES ====== -->
+    <style name="Card.Lab.Hero" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/lab_corner_xxl</item>
+        <item name="cardElevation">@dimen/elevation_high</item>
+        <item name="strokeColor">#14FFFFFF</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Card.Lab.Premium" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/lab_corner_xxl</item>
+        <item name="cardElevation">@dimen/elevation_medium</item>
+    </style>
+
+    <style name="Card.Lab.Surface" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/lab_corner_xl</item>
+        <item name="cardBackgroundColor">@color/bg_card</item>
+        <item name="cardElevation">@dimen/elevation_light</item>
+        <item name="strokeColor">@color/border_light</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Button.Lab.Pill" parent="TextStyle.Body.Medium">
+        <item name="android:background">@drawable/bg_lab_button_primary</item>
+        <item name="android:textColor">@color/color_red_600</item>
+        <item name="android:paddingStart">@dimen/spacing_2xl</item>
+        <item name="android:paddingTop">@dimen/spacing_md</item>
+        <item name="android:paddingEnd">@dimen/spacing_2xl</item>
+        <item name="android:paddingBottom">@dimen/spacing_md</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Button.Lab.GridCta" parent="TextStyle.Body.Small">
+        <item name="android:background">@drawable/bg_lab_button_gradient</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingStart">@dimen/spacing_lg</item>
+        <item name="android:paddingTop">@dimen/spacing_sm</item>
+        <item name="android:paddingEnd">@dimen/spacing_lg</item>
+        <item name="android:paddingBottom">@dimen/spacing_sm</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>
-

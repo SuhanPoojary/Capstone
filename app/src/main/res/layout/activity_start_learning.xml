@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/poppins_semibold"
+            android:fontFamily="sans-serif-medium"
             android:text="Start Learning"
             android:textColor="@color/dashboard_name"
             android:textSize="16sp" />
@@ -71,7 +71,7 @@
                     android:id="@+id/searchHint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
+                    android:fontFamily="sans-serif"
                     android:text="Explore Disasters..."
                     android:textColor="#9CA3AF"
                     android:textSize="13sp"
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:fontFamily="@font/poppins_semibold"
+                android:fontFamily="sans-serif-medium"
                 android:text="Choose Disaster Type"
                 android:textColor="@color/dashboard_name"
                 android:textSize="16sp" />

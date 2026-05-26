@@ -177,7 +177,7 @@ com.example.capstone
 ---
 
 ## Phase 3 — Advanced Features
-**Status:** Completed
+**Status:** ✅ COMPLETED (Verified 2026-05-05, Firebase intentionally disabled)
 **Goal:** add backend sync and alerting without rewriting the core app.
 
 ### Implementation Notes
@@ -742,64 +742,417 @@ This keeps the app realistic, reviewable, and scalable without overengineering t
 ---
 
 ## Phase 4 — Real-Time Features & Analytics
-**Status:** In Progress
+**Status:** Partially Completed (Phase 4A complete, phases 4B-4E planned)
 **Goal:** Add collaborative features, push notifications, and user analytics while keeping offline-first design.
 
-### What to build
-- Firebase Cloud Messaging (FCM) for real push notifications
-- Real-time collaboration (presence, friends, leaderboards)
-- Advanced user analytics and event tracking
-- Offline write queue for reliable sync
-- Data backup, restore, and export features
-- Achievement system and social features
+### Phase 4A: Push Notifications with FCM ✓ COMPLETED
+**Status:** ✅ COMPLETED
 
-### Suggested order
-1. **Phase 4A**: Set up FCM and test message delivery (2-3 hours)
-2. **Phase 4B**: Implement real-time listeners for presence and friends (4-5 hours)
-3. **Phase 4C**: Add event logging and analytics (3-4 hours)
-4. **Phase 4D**: Create offline queue worker for reliable sync (2-3 hours)
-5. **Phase 4E**: Implement leaderboard UI and achievement tracking (2-3 hours)
+#### Delivered Components
+- `FCMTokenManager.kt` — Manages FCM token lifecycle, subscription, and cleanup
+- `SafeReadyMessagingService.kt` — Handles incoming FCM messages and routing
+- `NotificationViewModel.kt` — Exposes FCM state to UI
+- `AndroidManifest.xml` updated — Added FCM service and required permissions (RECEIVE_BOOT_COMPLETED, WAKE_LOCK)
 
-### Phase 4A: Push Notifications with FCM
-- FirebaseMessagingService for FCM handling
-- FCMTokenManager for token lifecycle
-- Notification routing by message type
-- Test via Firebase Console
+#### How It Works
+1. FCMTokenManager acquires tokens on first launch and caches them locally
+2. SafeReadyMessagingService receives messages from Firebase Cloud Messaging
+3. Messages can be notification messages (auto-display) or data messages (custom handling)
+4. Supports message types: disaster_alert, sync_reminder, achievement_unlocked
+5. UI state via NotificationViewModel for testing and debugging
 
-### Phase 4B: Real-Time Collaboration
-- Presence system (online/offline tracking)
-- Friend system (add, remove, compare)
-- Real-time progress listeners
-- Leaderboards (global, regional, friends)
+#### Integration Points
+- Called from SafeReadyApp on app init (placeholder comment)
+- Can be wired into AuthRepository when user logs in
+- Notification routing uses existing NotificationHelper
 
-### Phase 4C: Analytics
-- Event logging repository
-- Custom event tracking
-- Analytics dashboard UI
-- User metrics and insights
+#### Next Steps
+- Call `requestNewToken()` in LoginActivity after auth succeeds
+- Subscribe to disaster topics after user selects region
+- Test message delivery via Firebase Console
 
-### Phase 4D: Data Management
-- Offline write queue
-- Backup and restore
-- Data export functionality
-- Settings UI
+### Phase 4B: Real-Time Collaboration (PARTIALLY COMPLETED)
+**Status:** 🟡 PARTIAL - Models & repositories created, UI work remains
 
-### Phase 4E: Social Features
-- Achievement system
-- Leaderboard UI components
-- Friend progress comparison
-- Achievement sharing
+#### Current Priority Update (2026-05-05)
+- Firebase ownership is now available for this project.
+- Continue with UI-first delivery: leaderboard/friends/activity feed screens before deep backend polish.
 
-### Dependencies
-- Phase 3 must be complete (auth, cloud sync)
-- Firebase project with FCM enabled
-- Room database for offline queue
-- WorkManager for background syncing
+#### Delivered Implementations
+- `FirebasePresenceRepository.kt` — Real-time user presence tracking
+- `FirebaseFriendshipRepository.kt` — Friend request/acceptance system
+- `FirebaseGlobalLeaderboardRepository.kt` — Global user rankings
+- `FirebaseRegionalLeaderboardRepository.kt` — Regional rankings
+- `FirebaseFriendLeaderboardRepository.kt` — Friends-only rankings
+- `LeaderboardViewModel.kt` — UI-ready ViewModel for all leaderboard types
+- `Phase4HubActivity.kt` + Profile entry button — UI-first collaboration hub scaffold
+- `Phase4LeaderboardActivity.kt` + `activity_phase4_leaderboard.xml` — first Firebase-backed leaderboard UI
 
-### Files to create
-See PHASE4_PLAN.md for complete file listing
+#### How It Works
+1. Presence system publishes online status to Firestore on login
+2. Real-time listeners notify when friends come online/offline
+3. Friendship system manages bidirectional friend relationships
+4. Leaderboard queries retrieve ranked user lists sorted by points
+5. ViewModel exposes leaderboard data as LiveData for UI consumption
+6. All repositories support real-time updates via Firestore listeners
 
-### Estimated complexity
-**High** — multiple interconnected features with real-time updates.
+#### What's Still Needed
+- [x] Regional/Friends leaderboard screens (global leaderboard first slice completed)
+- [x] Friends list UI and management screens
+- [ ] Friend request notifications
+- [x] Activity feed UI (friend progress sharing)
+- [ ] Firestore collection setup and indexing
+- [ ] LeaderboardViewModel dependency injection setup
+- [ ] Replace Phase4Hub placeholders with real leaderboard/friends/feed fragment flows
 
-### Total Phase 4 Effort: 13-18 hours (estimated)
+#### Integration Points Ready
+- Use LeaderboardViewModel in any Fragment
+- Call `presenceRepo.publishPresence()` in AuthRepository on login
+- Set up real-time listeners in onCreate/onDestroy
+- Observe LiveData for reactive UI updates
+
+#### Estimated Effort Remaining: 3-4 hours (initial global leaderboard UI completed)
+
+### Phase 4C: Analytics & Event Tracking (PLANNED)
+**Status:** 🔴 PLANNED (models/interfaces prepared)
+
+#### Models Created
+- `Phase4CModels.kt` — Complete data classes for:
+  - AnalyticsEvent, EventType enum
+  - LearningSession
+  - AnalyticsMetrics, TimePeriod enum
+  - PageMetric, ContentMetric, ConversionMetrics, RetentionMetrics
+  - FeatureHeatmap, CrashMetrics, PerformanceMetric
+  - UserBehaviorInsight, CustomEvent
+
+#### Repository Interfaces Created
+- `AnalyticsRepository` — Log events, page views, actions, content interaction, assessments, errors
+- `SessionRepository` — Track learning sessions
+- `MetricsRepository` — Query aggregated metrics
+- `HeatmapRepository` — Feature usage heatmaps
+- `CrashRepository` — Report and track crashes
+- `PerformanceRepository` — Log and monitor performance
+- `InsightsRepository` — Generate behavioral insights
+- `CustomEventRepository` — Track custom app events
+
+#### What to Build
+1. Event logging system (local + cloud)
+2. Session tracking and aggregation
+3. Analytics dashboard UI
+4. Crash reporting integration
+5. Performance monitoring
+6. User behavior insights calculation
+
+#### Estimated effort: 3-4 hours
+
+### Phase 4D: Offline Write Queue (PLANNED)
+**Status:** 🔴 PLANNED (models/interfaces prepared)
+
+#### Models Created
+- `Phase4DModels.kt` — Complete data classes for:
+  - QueuedWrite, WriteStatus enum
+  - SyncState
+  - SyncConflict, ConflictResolution enum
+  - OfflineQueueStats, OfflineQueueConfig
+  - WriteBatch, BatchStatus enum
+  - SyncCheckpoint
+
+#### Repository Interfaces Created
+- `OfflineQueueRepository` — Queue writes, manage pending/failed writes
+- `SyncRepository` — Manually trigger sync, manage sync state
+- `ConflictRepository` — Resolve sync conflicts
+- `CheckpointRepository` — Track sync progress
+- `OfflineSyncWorker` — Orchestrate entire sync workflow
+
+#### What to Build
+1. Local database (Room) for write queue storage
+2. Auto-retry logic with exponential backoff
+3. Conflict resolution strategies (prefer local, prefer remote, merge)
+4. Batch sync for efficiency
+5. Offline queue UI (show pending writes, retry options)
+6. Network connectivity listener
+
+#### Estimated effort: 2-3 hours
+
+### Phase 4E: Achievements & Leaderboards (PLANNED)
+**Status:** 🔴 PLANNED (Models & repository interfaces exist, no UI implementation)
+
+#### Models Created
+- `Phase4EModels.kt` — Complete data classes for:
+  - AchievementDefinition, UnlockCondition sealed class variants
+  - EarnedAchievement, UserAchievementState
+  - GlobalLeaderboardEntry, RegionalLeaderboardEntry, FriendLeaderboardEntry, DisasterLeaderboardEntry
+  - MilestoneAchievement, MilestoneType enum
+  - AchievementProgress, AchievementNotification
+  - LeaderboardStats, PersonalStatsCard
+  - BadgeCollection, SharedAchievement
+
+#### Repository Interfaces Created
+- `AchievementSystemRepository` — Award achievements, track progress, evaluate conditions
+- `GlobalLeaderboardRepository` — Global user rankings
+- `RegionalLeaderboardRepository` — Regional rankings
+- `FriendLeaderboardRepository` — Friends-only rankings
+- `DisasterLeaderboardRepository` — Disaster-specific rankings
+- `PersonalStatsRepository` — Personal achievement and stats displays
+- `MilestoneRepository` — Track milestones (level up, streaks, etc)
+- `AchievementNotificationRepository` — Notify users of achievements
+- `AchievementSystemFacade` — Comprehensive achievement/leaderboard management
+
+#### What to Build
+1. Achievement definitions and unlock conditions
+2. Auto-evaluation of achievement conditions
+3. Leaderboard queries with ranking
+4. Badge collection display and sharing
+5. Achievement UI screens
+6. Stat dashboards and profiles
+7. Real-time leaderboard updates
+
+#### Estimated effort: 2-3 hours
+
+---
+
+### Phase 4 Dependencies
+- ✓ Phase 3 complete (auth, cloud sync)
+- ✓ Firebase project configured with FCM
+- ⚠️ Room database (for offline queue in Phase 4D)
+- ✓ WorkManager (already added in Phase 3)
+- ⚠️ Firestore collections for leaderboards/social (Phase 4B+)
+
+### Phase 4 Files Created
+**Phase 4A (FCM):**
+- `service/FCMTokenManager.kt`
+- `service/SafeReadyMessagingService.kt`
+- `presentation/viewmodel/NotificationViewModel.kt`
+- AndroidManifest.xml (updated)
+
+**Phase 4B-E (Models & Repositories):**
+- `data/Phase4BModels.kt`
+- `data/Phase4CModels.kt`
+- `data/Phase4DModels.kt`
+- `data/Phase4EModels.kt`
+- `data/repository/Phase4BRepositories.kt`
+- `data/repository/Phase4CRepositories.kt`
+- `data/repository/Phase4DRepositories.kt`
+- `data/repository/Phase4ERepositories.kt`
+
+### Total Phase 4 Effort: 13-18 hours (Phase 4A complete, 4B-4E remaining)
+
+---
+
+# 🔵 PHASE 5 — Offline Disaster Mesh Network
+**Status:** 🟡 IN PROGRESS - Core components built, Nearby Connections integration and Room migration in progress
+
+## Phase 5 Completion Summary (as of 2026-05-05)
+**✅ Completed:**
+- `MeshService.kt` — Nearby Connections transport layer with advertising, discovery, and send/receive
+- `MeshMessageCache.kt` — SharedPreferences-based message persistence with serialization
+- `MeshRepository.kt` — Repository abstraction bridging service and cache with retry logic
+- `MeshViewModel.kt` — UI-facing state management with connection state and telemetry
+- `MeshDebugActivity.kt` & `MeshDebugFragment.kt` — Debug UI for testing mesh functionality
+- Message retry with telemetry (sent, relayed, failed, retried, dropped duplicate/expired)
+- Manual resend action for failed messages with outcome feedback
+- Room database schema and migration scaffolding via `MeshRoomMigrationPlan.kt`
+- Runtime permission handling for Bluetooth and location
+- Emergency Mode gating for mesh usage implemented (UI + activity + ViewModel/repository guards)
+
+**🔴 Remaining (High Priority):**
+1. Migrate message cache from SharedPreferences to Room database
+2. Complete Nearby Connections API integration in `MeshService`
+3. Add SOS send action in HomeFragment and EmergencyFragment (EmergencyActivity added; HomeFragment has a quick-send flow)
+4. Battery-friendly discovery scheduling
+5. End-to-end testing of store-and-forward relaying
+6. Unit and integration tests for MessageCache behavior
+
+## Goal
+Enable basic device-to-device communication when internet is unavailable using an opportunistic, store-and-forward mesh-like system.
+
+## Key Concept
+- Opportunistic Delay-Tolerant Networking (DTN) pattern: devices exchange small messages when in range and relay them further later.
+- Store-and-forward messaging with limited TTL and duplicate suppression.
+
+## Features
+- Broadcast distress / SOS signals
+- Relay messages between nearby devices
+- Nearby device discovery and connection management
+- Offline message propagation with TTL and duplicate filtering
+- Basic message acknowledgment to avoid infinite re-transmit loops
+
+## Technology Choice
+Preferred: Nearby Connections API
+- Pros: High-level APIs for discovery, reliable/data streams, handles multiple transports (Bluetooth, BLE, Wi‑Fi) where available.
+- Cons: Requires Google Play services on device; permission model to manage.
+
+Fallback: Bluetooth Classic / BLE
+- Pros: Broader device reach on devices without Play Services if necessary.
+- Cons: Lower-level, more engineering effort, connection stability and throughput limitations.
+
+### Tradeoffs
+- Nearby Connections simplifies implementation and avoids low-level Bluetooth pitfalls; use it for Phase 5 initial rollout.
+- If Nearby proves unavailable in field tests, consider a BLE/Classic fallback for critical features only (SOS, tiny payloads).
+
+---
+
+## Architecture (Message lifecycle)
+Message lifecycle: Create → Broadcast/Advertise → Receive → Store → Forward → Expire
+
+Important details:
+- Message ID (UUID) for de-duplication
+- TTL (time-based and optional hop count)
+- Duplicate filtering using seen-message-set with expiry
+- Acknowledgement with short ACK messages to prevent re-sends
+- Bounded retry and backoff to preserve battery
+
+---
+
+## Data Models
+
+Message (MeshMessage)
+- id: String (UUID)
+- senderId: String (deviceId / userId)
+- timestamp: Long (epoch ms)
+- type: Enum (SOS, ALERT, INFO, RELAY)
+- content: String (JSON or compact payload)
+- location: {lat: Double, lng: Double}? (optional)
+- signalStrength: Int? (RSSI sample on receive)
+- ttl: Int or expiresAt: Long
+
+Device (MeshDevice)
+- deviceId: String
+- lastSeen: Long
+- signalStrength: Int
+
+---
+
+## Components
+- MeshService: long-running component handling discovery, connections, send/receive, and relaying. Prefer WorkManager/foreground service if continuous background operation is required.
+- MeshRepository: repository abstraction for sending/receiving messages, persistence, and business rules.
+- MeshViewModel: UI-facing state and commands (send SOS, view cache, telemetry).
+- MessageCache: local persistence for messages (initially in SharedPreferences/file-based cache; migrate to Room soon).
+- DeviceDiscoveryManager: tracks nearby peers and connection health.
+
+---
+
+## Location Estimation (Fallback when GPS fails)
+If GPS is unavailable or inaccurate, fall back to a multi-signal heuristic:
+1. RSSI (signal strength) to estimate relative distance. Use Tx power calibration when available and a path-loss model (e.g., RSSI_to_distance ≈ 10 ^ ((txPower - RSSI) / (10 * n)), with n ≈ 2-4). Accuracy is low and should be treated as relative ranking only.
+2. Device proximity ranking: order peers by RSSI to identify closest devices.
+3. Last known GPS: include last valid GPS coordinates if within a reasonable age window (e.g., 10–30 minutes).
+4. Multi-hop triangulation: combine last-known locations of multiple hops to approximate a source position (very approximate, use only for human-readable hints).
+
+Notes on RSSI → distance:
+- RSSI-based distance estimates are noisy: walls, pockets, device models, and orientation affect readings.
+- Use moving-average smoothing and sample over a short time window (3–6 samples) before using RSSI for decisions.
+- Present estimated location with uncertainty to users.
+
+---
+
+## Limitations
+- Short range and variable reliability.
+- Battery usage must be carefully managed (duty-cycling, limited scanning intervals).
+- Message delivery delay is expected and acceptable for non-real-time use.
+- Location estimates are approximate.
+
+---
+
+# 🔴 PHASE 6 — Emergency Mode System
+**Status:** 🟡 IN PROGRESS (Phase 6 foundation started: Emergency Mode toggle and gating)
+
+## Trigger Conditions
+Emergency Mode activates when:
+1. Fall detection with no response within 30 seconds
+2. Manual SOS button press
+3. External event ingestion (news/disaster API — optional)
+4. Scheduled predicted disaster event (calendar/notification)
+
+## Features
+- Broadcast SOS via cloud (when online) and mesh (when offline)
+- Share last known location, status (injured/safe/trapped), and optional text
+- Auto-repeat broadcasts with configurable interval and backoff
+- Rescue acknowledgment system so rescuer devices can mark messages as acknowledged
+- Local escalation UI and audible alerts when in Emergency Mode
+
+## UI Flow
+Emergency Mode screens:
+1. Activation screen (confirm or auto-activate)
+2. SOS broadcast screen (shows broadcast status, last sent, peers reached)
+3. Rescue acknowledgment screen (incoming acknowledgment and responder details)
+4. Survivor status dashboard (history of SOS messages, acknowledged, and last known location)
+
+## Data Flow
+Trigger → EmergencyViewModel → EmergencyRepository → MeshRepository / CloudRepository → Nearby devices / Cloud
+
+## Components
+- EmergencyViewModel
+- EmergencyRepository
+- SOSMessage model (specialization of MeshMessage)
+- EmergencyController (manages auto-repeat and escalation logic)
+- Emergency UI fragments/screens
+
+---
+
+# 🟡 PHASE 7 — UI/UX REDESIGN SYSTEM
+**Status:** 🔴 NOT STARTED (Planned for Phase 7)
+
+## Goal
+Make the UI modern, calm, and consistent (ChronoVault-inspired) while keeping accessibility and performance in mind.
+
+## Design System Rules
+### Typography
+- Single font family (e.g., Inter or Poppins) for app; use weights consistently.
+
+### Icons
+- Use vector icons only (Material Icons or Phosphor). Avoid emojis in UI.
+
+### Bottom Navigation
+- Floating, rounded container with soft elevation and active tab highlight.
+- Smooth transitions and micro-interactions when switching tabs.
+
+### Colors
+- Soft, accessible gradients; high contrast for text; avoid saturated reds except for critical alerts.
+
+### Cards
+- Rounded corners, subtle elevation, consistent padding.
+
+### Animations
+- Subtle; prefer crossfade and small translate/elevate motions.
+
+### Accessibility
+- Scalable text sizes; proper color contrast; talkback-friendly element descriptions.
+
+### UI Elements to Improve
+- Home dashboard: clearer KPI cards and quick actions
+- Emergency screens: big, clear SOS controls and status
+- Progress screen: visual progress rings and per-disaster breakdown
+- Assistant screen: chat bubbles, suggested chips
+- Map UI: simplified markers and clustering for rescuer devices
+
+---
+
+# 🧠 PHASE 8 — ML / AI PLACEHOLDER STRUCTURE
+**Status:** 🔴 NOT STARTED (Planned for Phase 8)
+
+## Goal
+Prepare stubs and interfaces so ML components can be integrated later without major refactors.
+
+## Additions
+- RiskPredictionViewModel (exposes mocked risk outputs)
+- ModelInterface: interface that defines predict(inputs): RiskOutput
+- DummyModel implementation that returns deterministic/mock outputs.
+
+Example mocked outputs:
+- "High flood risk"
+- "Elevated earthquake exposure"
+
+## Future Integration
+- Replace DummyModel with on-device TFLite model or a cloud API.
+- Keep ModelInterface stable so ViewModels and UI do not change.
+
+---
+
+# Integration notes and next steps
+- Append these phases to `PLAN.md` and update `progress.md` to reflect the new scope.
+- Priority order now: 1) Emergency-mode-first UX, 2) Phase 5 mesh completion, 3) Phase 4B UI rollout (Firebase-owned project), 4) deeper backend polish.
+- Immediate UI-first next step: add dedicated Emergency screen and SOS controls, then add Phase 4B leaderboard entry and initial fragment UI.
+- Keep energy efficiency and clear consent prompts for all background/mesh flows.
+
+---

@@ -1,5 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
+
+    id("org.jetbrains.kotlin.android")
+
+    // REMOVE kapt
+    // id("org.jetbrains.kotlin.kapt")
+
+    // ADD KSP
+    id("com.google.devtools.ksp")
+
     id("com.google.gms.google-services")
 }
 
@@ -36,6 +45,14 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+kotlin {
+    jvmToolchain(11)
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -64,6 +81,14 @@ dependencies {
 
     // WorkManager for background tasks
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+    // Nearby Connections for mesh networking (Phase 5)
+    implementation("com.google.android.gms:play-services-nearby:18.0.0")
+
+    // Room for Phase 5 local mesh persistence
+    implementation("androidx.room:room-runtime:2.7.1")
+    implementation("androidx.room:room-ktx:2.7.1")
+
+    ksp("androidx.room:room-compiler:2.7.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

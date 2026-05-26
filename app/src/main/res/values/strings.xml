@@ -59,10 +59,142 @@
     <string name="lesson_default_title">Disaster basics</string>
     <string name="lesson_default_body">Select a chapter below to start the lesson.</string>
 
+    <string name="percentage_format">%d%%</string>
+
     <string name="missing_video_title">Video not found</string>
     <string name="missing_video_message">This chapter video is not available on the device yet.\n\nExpected naming: %1$s_ch%2$d_%3$s_%4$s.mp4 in res/raw\nExample: flood_ch2_during_en.mp4</string>
     <string name="missing_video_ok">OK</string>
 
     <string name="subtitles_title">Subtitles</string>
     <string name="subtitles_message">Since you have separate videos per language, subtitles are not required for language switching.\n\nIf you still want captions, they can be added later with VTT or SRT files.</string>
+
+    <!-- Modern UI Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_lab">Lab</string>
+    <string name="nav_medready">MedReady</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Emergency Button -->
+    <string name="sos_button">SOS Emergency</string>
+    <string name="emergency_sos_button">Emergency SOS</string>
+
+    <!-- Home Screen -->
+    <string name="home_greeting">Good Morning,</string>
+    <string name="home_greeting_morning">Good Morning,</string>
+    <string name="home_greeting_afternoon">Good Afternoon,</string>
+    <string name="home_greeting_evening">Good Evening,</string>
+    <string name="home_greeting_night">Good Night,</string>
+    <string name="home_preparedness_title">Preparedness Level</string>
+    <string name="home_preparedness_desc">Complete 3 more drills to reach Expert level</string>
+    <string name="home_risk_alert">Current Risk Level</string>
+    <string name="home_risk_none">No Active Alerts</string>
+    <string name="home_disaster_map">Disaster Map</string>
+    <string name="home_active_alerts">Active Alerts</string>
+    <string name="home_continue_mission">Continue Mission</string>
+    <string name="home_emergency_sos">Emergency SOS</string>
+    <string name="home_weekly_streak">Weekly Streak</string>
+    <string name="home_total_xp">Total XP</string>
+    <string name="home_emergency_mode_on">Emergency Mode ON</string>
+    <string name="home_emergency_mode_off">Emergency Mode OFF</string>
+    <string name="home_status_start_here">Start here</string>
+    <string name="home_status_keep_going">Keep going</string>
+    <string name="home_status_ready_to_review">Ready to review</string>
+    <string name="home_recommendation_default">Start a lesson to see a recommendation.</string>
+    <string name="home_map_alert_body">Flood risk in coastal areas</string>
+    <string name="home_map_nav">Navigate</string>
+    <string name="home_map_target">Locate</string>
+    <string name="home_map_segment_live">Live</string>
+    <string name="home_map_segment_24h">24h</string>
+    <string name="home_risk_heading">Moderate Risk Level</string>
+    <string name="home_risk_body">Heavy rainfall expected this week</string>
+    <string name="home_risk_view">View</string>
+    <string name="training_title">Training</string>
+    <string name="progress_overall_percent_format">%1$d%%</string>
+    <string name="progress_chapters_completed_format">%1$d/%2$d chapters completed</string>
+    <string name="progress_single_percent_format">%1$d%%</string>
+
+    <!-- Lab Screen -->
+    <string name="lab_daily_challenge">Daily Challenge</string>
+    <string name="lab_simulations">Simulations</string>
+    <string name="lab_quick_drills">Quick Drills</string>
+    <string name="lab_leaderboard">Leaderboard</string>
+    <string name="lab_achievements">Achievements</string>
+
+    <!-- Emergency Mode -->
+    <string name="emergency_mode_title">EMERGENCY MODE</string>
+    <string name="emergency_sos_broadcast">SOS Broadcast</string>
+    <string name="emergency_mesh_status">Mesh Network Status</string>
+    <string name="emergency_gps_status">GPS Location</string>
+    <string name="emergency_battery_status">Battery</string>
+    <string name="emergency_nearby_devices">Nearby Devices</string>
+    <string name="emergency_safe_status">Safe</string>
+    <string name="emergency_injured_status">Injured</string>
+    <string name="emergency_trapped_status">Trapped</string>
+    <string name="emergency_need_water">Need Water</string>
+    <string name="emergency_need_medical">Need Medical Help</string>
+    <string name="emergency_active">ACTIVE</string>
+    <string name="emergency_status_off">Emergency Mode: OFF</string>
+    <string name="emergency_sos_short">SOS</string>
+    <string name="emergency_broadcasting">Broadcasting</string>
+    <string name="emergency_location_broadcast">Your location is being broadcast to nearby devices and emergency services</string>
+    <string name="emergency_status_heading">Your Status</string>
+    <string name="emergency_quick_actions">Quick Actions</string>
+    <string name="emergency_nearby_devices_heading">Nearby Devices</string>
+    <string name="emergency_exit_mode">Exit Emergency Mode</string>
+
+    <!-- MedReady -->
+    <string name="medready_title">MedReady</string>
+    <string name="medready_subtitle">AI-powered emergency kit analyzer</string>
+    <string name="medready_scan">Scan Medicine</string>
+    <string name="medready_hero_title">Scan Your Emergency Kit</string>
+    <string name="medready_hero_desc">Upload or capture an image of your medicines and supplies for AI analysis</string>
+    <string name="medready_btn_take_photo">Take Photo</string>
+    <string name="medready_btn_upload">Upload</string>
+    <string name="medready_what_analyze">What We Analyze</string>
+    <string name="medready_detection">Medicine Detection</string>
+    <string name="medready_detection_desc">OCR scanning of labels</string>
+    <string name="medready_expiry_tracking">Expiry Tracking</string>
+    <string name="medready_expiry_tracking_desc">Automated alerts</string>
+    <string name="medready_missing_items">Missing Items</string>
+    <string name="medready_missing_items_desc">Gap analysis</string>
+    <string name="medready_readiness_score">Readiness Score</string>
+    <string name="medready_readiness_score_desc">Overall assessment</string>
+    <string name="medready_previous_scans">Previous Scans</string>
+    <string name="medready_view_all">View All</string>
+    <string name="medready_items_scanned">%d items scanned</string>
+    <string name="medready_readiness">%d%% Readiness</string>
+    <string name="medready_warnings_found">%d warnings found</string>
+
+    <!-- Profile -->
+    <string name="profile_edit">Edit Profile</string>
+    <string name="profile_level">Level</string>
+    <string name="profile_streak">Streak</string>
+    <string name="profile_badges">Badges</string>
+    <string name="profile_offline_maps">Offline Maps</string>
+    <string name="profile_emergency_contacts">Emergency Contacts</string>
+    <string name="profile_settings">Settings</string>
+    <string name="profile_certifications">Certifications</string>
+
+    <!-- Status Labels -->
+    <string name="status_online">Online</string>
+    <string name="status_offline">Offline</string>
+    <string name="status_syncing">Syncing</string>
+    <string name="status_failed">Failed</string>
+    <string name="status_pending">Pending</string>
+
+    <!-- Generic UI Strings -->
+    <string name="text_user">Alex</string>
+    <string name="text_location">Mumbai, Maharashtra</string>
+    <string name="text_info">Info</string>
+    <string name="text_moderate_risk">Moderate Risk Level</string>
+    <string name="text_heavy_rainfall_expected">Heavy rainfall expected this week</string>
+    <string name="text_view">View</string>
+    <string name="text_active_alerts">2 Active Alerts</string>
+    <string name="text_live">Live</string>
+    <string name="text_24h">24h</string>
+    <string name="text_continue">Continue Mission</string>
+    <string name="text_your_progress">Your Progress</string>
+    <string name="text_warning">Warning</string>
+    <string name="text_temperature">28°C</string>
+    <string name="text_preparedness_percentage">78%</string>
 </resources>

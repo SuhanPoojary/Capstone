@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ====== SPACING SYSTEM ====== -->
+    <!-- Base unit: 4dp -->
+    <dimen name="spacing_xxs">2dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">20dp</dimen>
+    <dimen name="spacing_2xl">24dp</dimen>
+    <dimen name="spacing_3xl">32dp</dimen>
+    <dimen name="spacing_4xl">40dp</dimen>
+
+    <!-- ====== CORNER RADIUS ====== -->
+    <dimen name="corner_none">0dp</dimen>
+    <dimen name="corner_xs">4dp</dimen>
+    <dimen name="corner_sm">8dp</dimen>
+    <dimen name="corner_md">12dp</dimen>
+    <dimen name="corner_lg">16dp</dimen>
+    <dimen name="corner_xl">20dp</dimen>
+    <dimen name="corner_2xl">24dp</dimen>
+    <dimen name="corner_full">9999dp</dimen>
+
+    <!-- ====== TYPOGRAPHY ====== -->
+    <!-- Display Sizes (Hero, Main Headers) -->
+    <dimen name="text_display_lg">32sp</dimen>
+    <dimen name="text_display_md">28sp</dimen>
+    <dimen name="text_display_sm">24sp</dimen>
+
+    <!-- Heading Sizes -->
+    <dimen name="text_heading_lg">22sp</dimen>
+    <dimen name="text_heading_md">20sp</dimen>
+    <dimen name="text_heading_sm">18sp</dimen>
+
+    <!-- Body Text -->
+    <dimen name="text_body_lg">16sp</dimen>
+    <dimen name="text_body_md">14sp</dimen>
+    <dimen name="text_body_sm">12sp</dimen>
+
+    <!-- Caption/Label -->
+    <dimen name="text_label_lg">13sp</dimen>
+    <dimen name="text_label_md">12sp</dimen>
+    <dimen name="text_label_sm">11sp</dimen>
+
+    <!-- ====== COMPONENT SIZES ====== -->
+    <!-- Card Padding -->
+    <dimen name="card_padding_vertical">20dp</dimen>
+    <dimen name="card_padding_horizontal">16dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+
+    <!-- Button Sizes -->
+    <dimen name="button_height_large">48dp</dimen>
+    <dimen name="button_height_medium">40dp</dimen>
+    <dimen name="button_height_small">36dp</dimen>
+
+    <!-- Emergency Button (FAB) -->
+    <dimen name="emergency_button_size">56dp</dimen>
+    <dimen name="emergency_button_size_large">64dp</dimen>
+
+    <!-- Bottom Navigation -->
+    <dimen name="bottom_nav_height">64dp</dimen>
+    <dimen name="bottom_nav_margin">16dp</dimen>
+
+    <!-- Floating Bottom Navigation -->
+    <dimen name="floating_nav_height">72dp</dimen>
+    <dimen name="emergency_button_lift">18dp</dimen>
+    <dimen name="floating_nav_overlap">18dp</dimen>
+
+    <!-- Reserve center space for floating emergency button (half on each side) -->
+    <dimen name="bottom_nav_center_space_half">40dp</dimen>
+    <!-- inner padding for nav items to keep them away from center gap -->
+    <dimen name="bottom_nav_inner_padding">16dp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="icon_xs">16dp</dimen>
+    <dimen name="icon_sm">20dp</dimen>
+    <dimen name="icon_md">24dp</dimen>
+    <dimen name="icon_lg">32dp</dimen>
+    <dimen name="icon_xl">48dp</dimen>
+
+    <!-- Progress Bar Height -->
+    <dimen name="progress_bar_height">8dp</dimen>
+    <dimen name="progress_bar_height_large">12dp</dimen>
+
+    <!-- Divider -->
+    <dimen name="divider_height">1dp</dimen>
+
+    <!-- Screen Padding (content margins) -->
+    <dimen name="screen_padding_vertical">16dp</dimen>
+    <dimen name="screen_padding_horizontal">16dp</dimen>
+
+    <!-- List/Grid Item Spacing -->
+    <dimen name="item_spacing">12dp</dimen>
+
+    <!-- Elevation/Shadow -->
+    <dimen name="elevation_light">2dp</dimen>
+    <dimen name="elevation_medium">4dp</dimen>
+    <dimen name="elevation_high">8dp</dimen>
+
+    <!-- Avatar Sizes -->
+    <dimen name="avatar_xs">32dp</dimen>
+    <dimen name="avatar_sm">40dp</dimen>
+    <dimen name="avatar_md">48dp</dimen>
+    <dimen name="avatar_lg">64dp</dimen>
+    <dimen name="avatar_xl">80dp</dimen>
+
+    <!-- Input Field Height -->
+    <dimen name="input_field_height">48dp</dimen>
+
+    <!-- Spacing for Fragment Layouts -->
+    <dimen name="fragment_top_padding">8dp</dimen>
+    <dimen name="fragment_bottom_padding">80dp</dimen>
+
+    <!-- Lab dashboard tokens -->
+    <dimen name="lab_corner_md">12dp</dimen>
+    <dimen name="lab_corner_lg">16dp</dimen>
+    <dimen name="lab_corner_xl">24dp</dimen>
+    <dimen name="lab_corner_xxl">28dp</dimen>
+    <dimen name="lab_simulation_card_width">264dp</dimen>
+    <dimen name="lab_achievement_card_width">124dp</dimen>
+
+    <!-- MedReady specific -->
+    <dimen name="medready_hero_corner">28dp</dimen>
+    <dimen name="medready_card_corner">22dp</dimen>
+    <dimen name="medready_icon_container_size">64dp</dimen>
+    <dimen name="medready_grid_spacing">12dp</dimen>
+    <dimen name="medready_hero_padding">24dp</dimen>
+    <dimen name="medready_button_height">48dp</dimen>
+    <dimen name="medready_button_corner">24dp</dimen>
+    <dimen name="medready_warning_strip_height">40dp</dimen>
+
+</resources>

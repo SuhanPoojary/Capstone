@@ -8,6 +8,7 @@ import com.example.capstone.data.AssistantReply
 import com.example.capstone.data.GamificationRepository
 import com.example.capstone.data.DisasterModule
 import com.example.capstone.data.DisasterProgress
+import com.example.capstone.data.EmergencyRepository
 import com.example.capstone.data.LessonRepository
 import com.example.capstone.data.RecommendationCard
 import com.example.capstone.data.RecommendationRepository
@@ -22,6 +23,7 @@ import com.example.capstone.data.SafeReadyPreferences
 import com.example.capstone.data.UserProfile
 import com.example.capstone.data.UserRepository
 
+
 data class HomeState(
     val user: UserProfile = UserProfile(),
     val regionLabel: String = "📍 Location unavailable",
@@ -30,6 +32,7 @@ data class HomeState(
     val recommendation: RecommendationCard? = null,
     val gamification: GamificationSummary = GamificationSummary(0, 1, 0, 0, emptyList(), "0 lessons completed"),
     val progressSnapshot: ProgressSnapshot = ProgressSnapshot(0, emptyList()),
+    val isEmergencyModeEnabled: Boolean = false,
 )
 
 data class TrainingState(
@@ -68,6 +71,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val gamificationRepository = GamificationRepository(prefs, progressRepository)
     private val recommendationRepository = RecommendationRepository(lessonRepository, progressRepository)
     private val locationRepository = LocationRepository(application.applicationContext)
+    private val emergencyRepository = EmergencyRepository(prefs)
 
     val state = MutableLiveData<HomeState>()
 
@@ -83,7 +87,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val recommended = progressRepository.getRecommendedModule(user.state ?: user.city, progressRepository.getCompletionHint())
         val gamification = gamificationRepository.getSummary()
         val recommendation = recommendationRepository.buildRecommendation(user, gamification)
-        state.value = HomeState(
+        state.postValue(HomeState(
             user = user,
             regionLabel = formatRegion(user.city, user.state),
             overallProgress = overall,
@@ -91,7 +95,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             recommendation = recommendation,
             gamification = gamification,
             progressSnapshot = ProgressSnapshot(overall, snapshot),
-        )
+            isEmergencyModeEnabled = emergencyRepository.isEmergencyModeEnabled(),
+        ))
     }
 
     fun resolveLocation() {
@@ -119,7 +124,7 @@ class TrainingViewModel(application: Application) : AndroidViewModel(application
     val state = MutableLiveData(TrainingState(lessonRepository.getModules()))
 
     fun refresh() {
-        state.value = TrainingState(lessonRepository.getModules())
+        state.postValue(TrainingState(lessonRepository.getModules()))
     }
 }
 
@@ -136,13 +141,13 @@ class ProgressViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun refresh() {
-        state.value = ProgressState(
+        state.postValue(ProgressState(
             snapshot = ProgressSnapshot(
                 overallPercent = progressRepository.getOverallProgress(),
                 disasterProgress = progressRepository.getAllProgress(),
             ),
             gamification = gamificationRepository.getSummary(),
-        )
+        ))
     }
 
     fun markChapterCompleted(disasterKey: String, chapterIndex: Int) {
@@ -217,18 +222,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun refresh() {
-        state.value = ProfileState(
+        state.postValue(ProfileState(
             profile = userRepository.getProfile(),
             completedDisasters = progressRepository.getAllProgress(),
             gamification = gamificationRepository.getSummary(),
-        )
-    }
-
-    fun resetAllData() {
-        userRepository.clearProfile()
-        progressRepository.clearProgress()
-        gamificationRepository.reset()
-        refresh()
+        ))
     }
 }
 
