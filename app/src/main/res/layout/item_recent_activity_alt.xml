@@ -4,10 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:background="@drawable/bg_white_card"
-    android:padding="14dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/recent1">
+    android:padding="14dp">
 
     <FrameLayout
         android:id="@+id/icon"
@@ -56,4 +53,3 @@
         app:layout_constraintTop_toTopOf="@id/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

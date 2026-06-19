@@ -1,5 +1,6 @@
 package com.example.capstone.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.example.capstone.DisasterDetailActivity
 import com.example.capstone.MainActivity
+import com.example.capstone.LoginActivity
 import com.example.capstone.R
 import com.google.android.material.button.MaterialButton
 import com.example.capstone.presentation.viewmodel.MeshViewModel
@@ -340,10 +342,26 @@ class ProfileFragment : Fragment() {
         val region = view.findViewById<TextView>(R.id.profileRegion)
         val summary = view.findViewById<TextView>(R.id.profileSummaryBody)
         val gamificationText = view.findViewById<TextView>(R.id.profileGamificationText)
+        val initial = view.findViewById<TextView>(R.id.profileInitial)
+        val signOutItem = view.findViewById<View>(R.id.signOutItem)
+
+        signOutItem?.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Sign Out")
+                .setMessage("Are you sure you want to sign out?")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Sign Out") { _, _ ->
+                    viewModel.logOut()
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    requireActivity().finishAffinity()
+                }
+                .show()
+        }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             val profile = state.profile
             name.text = profile.name.ifBlank { "User" }
+            initial.text = profile.name.take(1).uppercase()
             email.text = if (profile.email.isBlank()) "Email not saved yet" else profile.email
             institution.text = if (profile.institution.isBlank()) "Institution not saved yet" else profile.institution
             region.text = when {

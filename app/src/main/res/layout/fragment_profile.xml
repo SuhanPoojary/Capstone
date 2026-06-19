@@ -810,6 +810,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/notificationsItem"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:background="@color/sr_bg_card"
@@ -833,6 +834,40 @@
                         android:fontFamily="@font/plus_jakarta_sans"
                         android:text=">"
                         android:textColor="@color/sr_text_secondary"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_light" />
+
+                <LinearLayout
+                    android:id="@+id/signOutItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/sr_bg_card"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text="Sign Out"
+                        android:textColor="@color/sr_danger_red"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text=">"
+                        android:textColor="@color/sr_danger_red"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -874,4 +909,3 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

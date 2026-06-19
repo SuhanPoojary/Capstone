@@ -1,12 +1,23 @@
 package com.example.capstone.data
 
 data class UserProfile(
-    val name: String = "User",
+    val uid: String = "",
+    val username: String = "",
+    val name: String = "",
     val email: String = "",
     val institution: String = "",
     val city: String? = null,
     val state: String? = null,
+    val createdAt: Long = 0L,
+    val lastLogin: Long = 0L,
+    val profileCompleted: Boolean = false
 )
+
+sealed class AuthResult {
+    object Success : AuthResult()
+    data class Error(val message: String) : AuthResult()
+    object Loading : AuthResult()
+}
 
 data class LessonChapter(
     val index: Int,
@@ -57,4 +68,3 @@ data class ChatMessage(
     val text: String,
     val isUser: Boolean,
 )
-

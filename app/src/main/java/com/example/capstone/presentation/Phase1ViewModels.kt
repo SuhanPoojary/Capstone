@@ -22,6 +22,9 @@ import com.example.capstone.data.QuizResult
 import com.example.capstone.data.SafeReadyPreferences
 import com.example.capstone.data.UserProfile
 import com.example.capstone.data.UserRepository
+import com.example.capstone.data.remote.firebase.FirebaseAuthDataSource
+import com.example.capstone.data.remote.firebase.FirebaseUserDataSource
+import com.example.capstone.data.repository.AuthRepository
 
 
 data class HomeState(
@@ -214,6 +217,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     private val lessonRepository = LessonRepository()
     private val progressRepository = ProgressRepository(prefs, lessonRepository)
     private val gamificationRepository = GamificationRepository(prefs, progressRepository)
+    private val authRepository = AuthRepository(
+        FirebaseAuthDataSource(),
+        FirebaseUserDataSource(),
+        userRepository
+    )
 
     val state = MutableLiveData<ProfileState>()
 
@@ -227,6 +235,10 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             completedDisasters = progressRepository.getAllProgress(),
             gamification = gamificationRepository.getSummary(),
         ))
+    }
+
+    fun logOut() {
+        authRepository.logOut()
     }
 }
 
@@ -258,4 +270,3 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 }
-

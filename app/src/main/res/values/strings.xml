@@ -21,6 +21,9 @@
     <string name="signup_fullname">Full Name</string>
     <string name="signup_fullname_hint">Arjun Sharma</string>
 
+    <string name="signup_username">Username</string>
+    <string name="signup_username_hint">arjun_ready</string>
+
     <string name="signup_institution">Institution</string>
     <string name="signup_institution_hint">IIT Bombay</string>
 

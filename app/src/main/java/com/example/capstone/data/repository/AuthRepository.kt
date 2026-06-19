@@ -1,117 +1,87 @@
 package com.example.capstone.data.repository
 
+import android.util.Log
 import com.example.capstone.data.remote.firebase.FirebaseAuthDataSource
 import com.example.capstone.data.remote.firebase.FirebaseUserDataSource
 import com.example.capstone.data.UserProfile
 import com.example.capstone.data.UserRepository
+import com.google.firebase.auth.FirebaseUser
 
-/**
- * Handles authentication and user identity management.
- * Wraps both Firebase Auth and local user profile storage.
- * 
- * Offline-first strategy:
- * - If network is available, use Firebase Authentication.
- * - If network is unavailable, allow anonymous login to preserve offline access.
- * - Local profile is always kept in sync with cloud profile for resilience.
- */
 class AuthRepository(
     private val firebaseAuth: FirebaseAuthDataSource,
     private val firebaseUser: FirebaseUserDataSource,
     private val userRepository: UserRepository,
 ) {
-    /**
-     * Attempt to sign up a new user.
-     * Tries Firebase Auth first; falls back to local profile if network is unavailable.
-     * Returns true if signup succeeded (either via Firebase or local fallback).
-     */
     suspend fun signUp(
         email: String,
         password: String,
+        username: String,
         name: String,
         institution: String
-    ): Boolean {
-        // Try Firebase signup
-        val userId = firebaseAuth.signUp(email, password)
-        
-        if (userId != null) {
-            // Firebase signup succeeded; save profile locally and to cloud
-            userRepository.saveUserProfile(name, email, institution)
-            firebaseUser.saveUserProfile(userId, UserProfile(
-                name = name,
-                email = email,
-                institution = institution,
-            ))
-            return true
-        }
-
-        // Firebase signup failed; fall back to local profile
-        // This preserves offline-first behavior
-        userRepository.saveUserProfile(name, email, institution)
-        
-        // Try anonymous login as a fallback
-        firebaseAuth.signInAnonymously()
-        
-        return true
-    }
-
-    /**
-     * Attempt to log in an existing user.
-     * Tries Firebase Auth first; falls back to anonymous login if network is unavailable.
-     * Returns true if login succeeded.
-     */
-    suspend fun logIn(email: String, password: String): Boolean {
-        // Try Firebase login
-        val userId = firebaseAuth.logIn(email, password)
-        
-        if (userId != null) {
-            // Firebase login succeeded; fetch and store cloud profile locally
-            val cloudProfile = firebaseUser.getUserProfile(userId)
-            if (cloudProfile != null) {
-                userRepository.saveUserProfile(
-                    cloudProfile.name,
-                    cloudProfile.email,
-                    cloudProfile.institution
+    ): Result<Unit> {
+        return try {
+            Log.d("AuthRepo", "Starting Firebase Auth signup for $email")
+            val user = firebaseAuth.signUp(email, password)
+            if (user != null) {
+                val profile = UserProfile(
+                    uid = user.uid,
+                    username = username,
+                    name = name,
+                    email = email,
+                    institution = institution,
+                    createdAt = System.currentTimeMillis(),
+                    lastLogin = System.currentTimeMillis(),
+                    profileCompleted = true
                 )
-                if (cloudProfile.city != null || cloudProfile.state != null) {
-                    userRepository.saveRegion(cloudProfile.city, cloudProfile.state)
+                
+                Log.d("AuthRepo", "Auth succeeded, saving profile to Firestore for UID: ${user.uid}")
+                val firestoreSuccess = firebaseUser.saveUserProfile(profile)
+                
+                if (firestoreSuccess) {
+                    userRepository.saveUserProfile(profile)
+                    Log.d("AuthRepo", "Signup complete: Auth + Firestore success")
+                    Result.success(Unit)
+                } else {
+                    Log.e("AuthRepo", "Firestore profile save failed. Check rules!")
+                    Result.failure(Exception("Account created, but failed to save profile to cloud. Please check your internet or Firestore rules."))
                 }
+            } else {
+                Result.failure(Exception("Failed to create user account"))
             }
-            return true
+        } catch (e: Exception) {
+            Log.e("AuthRepo", "Signup error", e)
+            Result.failure(e)
         }
-
-        // Firebase login failed; fall back to anonymous login
-        // This preserves offline-first behavior
-        firebaseAuth.signInAnonymously()
-        return true
     }
 
-    /**
-     * Log out the current user.
-     */
+    suspend fun logIn(email: String, password: String): Result<Unit> {
+        return try {
+            val user = firebaseAuth.logIn(email, password)
+            if (user != null) {
+                firebaseUser.updateLastLogin(user.uid)
+                val cloudProfile = firebaseUser.getUserProfile(user.uid)
+                if (cloudProfile != null) {
+                    userRepository.saveUserProfile(cloudProfile)
+                }
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Invalid email or password"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     fun logOut() {
         firebaseAuth.signOut()
+        userRepository.clearProfile()
     }
 
-    /**
-     * Get the current user's ID (may be anonymous).
-     * Returns null if no user is logged in.
-     */
-    fun getCurrentUserId(): String? = firebaseAuth.getCurrentUserId()
+    fun getCurrentUserId(): String? = firebaseAuth.getCurrentUser()?.uid
+    
+    fun getCurrentUserEmail(): String? = firebaseAuth.getCurrentUser()?.email
+    
+    fun isAnonymous(): Boolean = firebaseAuth.getCurrentUser()?.isAnonymous ?: false
 
-    /**
-     * Get the current user's email.
-     * Returns null if no authenticated user or if using anonymous login.
-     */
-    fun getCurrentUserEmail(): String? = firebaseAuth.getCurrentUserEmail()
-
-    /**
-     * Check if a user is currently logged in.
-     */
-    fun isLoggedIn(): Boolean = firebaseAuth.isUserLoggedIn()
-
-    /**
-     * Check if the current user is an anonymous user.
-     */
-    fun isAnonymous(): Boolean = firebaseAuth.isAnonymousUser()
+    fun isLoggedIn(): Boolean = firebaseAuth.isLoggedIn()
 }
-

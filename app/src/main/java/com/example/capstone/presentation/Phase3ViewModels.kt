@@ -31,42 +31,31 @@ class AuthSyncViewModel(
     private val _currentUserId = MutableLiveData(authRepository.getCurrentUserId())
     val currentUserId: LiveData<String?> = _currentUserId
 
-    private val _currentUserEmail = MutableLiveData(authRepository.getCurrentUserEmail())
+    private val _currentUserEmail = MutableLiveData<String?>(authRepository.getCurrentUserEmail())
     val currentUserEmail: LiveData<String?> = _currentUserEmail
 
     /**
      * Attempt to sign up a new user.
      */
-    fun signUp(email: String, password: String, name: String, institution: String) {
+    fun signUp(email: String, password: String, username: String, name: String, institution: String) {
         viewModelScope.launch {
+            _authState.value = AuthResult.Loading
             try {
-                val success = authRepository.signUp(email, password, name, institution)
-                if (success) {
+                val result = authRepository.signUp(email, password, username, name, institution)
+                result.onSuccess {
                     val userId = authRepository.getCurrentUserId()
                     val userEmail = authRepository.getCurrentUserEmail()
                     val isAnon = authRepository.isAnonymous()
 
-                    _authState.value = AuthResult(
-                        success = true,
-                        userId = userId,
-                        email = userEmail,
-                        isAnonymous = isAnon,
-                        message = if (isAnon) "Signed up in offline mode" else "Signed up successfully"
-                    )
+                    _authState.value = AuthResult.Success
                     _isLoggedIn.value = true
                     _currentUserId.value = userId
                     _currentUserEmail.value = userEmail
-                } else {
-                    _authState.value = AuthResult(
-                        success = false,
-                        message = "Sign up failed"
-                    )
+                }.onFailure { e ->
+                    _authState.value = AuthResult.Error(e.message ?: "Sign up failed")
                 }
             } catch (e: Exception) {
-                _authState.value = AuthResult(
-                    success = false,
-                    message = "Sign up error: ${e.message}"
-                )
+                _authState.value = AuthResult.Error("Sign up error: ${e.message}")
             }
         }
     }
@@ -76,37 +65,25 @@ class AuthSyncViewModel(
      */
     fun logIn(email: String, password: String) {
         viewModelScope.launch {
+            _authState.value = AuthResult.Loading
             try {
-                val success = authRepository.logIn(email, password)
-                if (success) {
+                val result = authRepository.logIn(email, password)
+                result.onSuccess {
                     val userId = authRepository.getCurrentUserId()
                     val userEmail = authRepository.getCurrentUserEmail()
-                    val isAnon = authRepository.isAnonymous()
 
-                    _authState.value = AuthResult(
-                        success = true,
-                        userId = userId,
-                        email = userEmail,
-                        isAnonymous = isAnon,
-                        message = if (isAnon) "Logged in offline" else "Logged in successfully"
-                    )
+                    _authState.value = AuthResult.Success
                     _isLoggedIn.value = true
                     _currentUserId.value = userId
                     _currentUserEmail.value = userEmail
 
                     // Pull progress from cloud after login
                     pullProgressFromCloud()
-                } else {
-                    _authState.value = AuthResult(
-                        success = false,
-                        message = "Log in failed"
-                    )
+                }.onFailure { e ->
+                    _authState.value = AuthResult.Error(e.message ?: "Log in failed")
                 }
             } catch (e: Exception) {
-                _authState.value = AuthResult(
-                    success = false,
-                    message = "Log in error: ${e.message}"
-                )
+                _authState.value = AuthResult.Error("Log in error: ${e.message}")
             }
         }
     }
@@ -121,15 +98,9 @@ class AuthSyncViewModel(
                 _isLoggedIn.value = false
                 _currentUserId.value = null
                 _currentUserEmail.value = null
-                _authState.value = AuthResult(
-                    success = true,
-                    message = "Logged out successfully"
-                )
+                _authState.value = AuthResult.Success
             } catch (e: Exception) {
-                _authState.value = AuthResult(
-                    success = false,
-                    message = "Log out error: ${e.message}"
-                )
+                _authState.value = AuthResult.Error("Log out error: ${e.message}")
             }
         }
     }
@@ -172,4 +143,3 @@ class AuthSyncViewModel(
      */
     fun isAnonymousUser(): Boolean = authRepository.isAnonymous()
 }
-

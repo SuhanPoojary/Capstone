@@ -100,6 +100,12 @@
     <color name="status_warning">#F59E0B</color>
     <color name="status_danger">#EF4444</color>
     <color name="status_info">#3B82F6</color>
+
+    <!-- Navigation Tokens -->
+    <color name="nav_active">#0B2856</color>
+    <color name="nav_inactive">#9CA3AF</color>
+    <color name="nav_sos">#D91F32</color>
+
     <!-- Strict design system additions (SafeReady Profile) -->
     <!-- Backgrounds -->
     <color name="sr_bg_main">#F6F1E8</color>

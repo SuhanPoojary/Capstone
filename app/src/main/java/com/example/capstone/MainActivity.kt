@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import com.example.capstone.data.SafeReadyPreferences
-import com.example.capstone.data.UserRepository
 import com.example.capstone.presentation.HomeFragment
 import com.example.capstone.presentation.LabFragment
 import com.example.capstone.presentation.MedReadyFragment
@@ -33,14 +31,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val prefs = SafeReadyPreferences(this)
-        val userRepository = UserRepository(prefs)
-        val existing = userRepository.getProfile()
-
-        val name = intent.getStringExtra(EXTRA_NAME)?.takeIf { it.isNotBlank() } ?: existing.name
-        val email = intent.getStringExtra(EXTRA_EMAIL)?.takeIf { it.isNotBlank() } ?: existing.email
-        val institution = intent.getStringExtra(EXTRA_INSTITUTION)?.takeIf { it.isNotBlank() } ?: existing.institution
-        userRepository.saveUserProfile(name, email, institution)
+        // Legacy Intent-based profile saving removed. 
+        // User profile is now managed by AuthRepository and AuthViewModel.
 
         if (savedInstanceState != null) {
             currentTabId = savedInstanceState.getInt(KEY_CURRENT_TAB, R.id.nav_home)
@@ -58,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         sosButton.setOnClickListener {
             startActivity(Intent(this, EmergencyActivity::class.java))
         }
-        // start subtle pulse animation to indicate importance/dock into navbar
+        
+        // Start subtle pulse animation
         sosButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.sos_pulse))
 
         updateSelectedTabUi(currentTabId)
@@ -118,13 +111,17 @@ class MainActivity : AppCompatActivity() {
         }
         val icon = container.findViewById<ImageView>(iconId)
         val label = container.findViewById<TextView>(labelId)
-        val tint = if (selected) R.color.color_navy_900 else R.color.text_secondary
+        
+        val tint = if (selected) R.color.nav_active else R.color.nav_inactive
         container.setBackgroundResource(if (selected) R.drawable.bg_nav_selected_pill else android.R.color.transparent)
+        
         icon?.setColorFilter(ContextCompat.getColor(this, tint))
         label?.setTextColor(ContextCompat.getColor(this, tint))
     }
 
     companion object {
+        // Legacy extras kept only for compatibility if needed elsewhere, 
+        // but no longer used in onCreate.
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_EMAIL = "extra_email"
         const val EXTRA_INSTITUTION = "extra_institution"

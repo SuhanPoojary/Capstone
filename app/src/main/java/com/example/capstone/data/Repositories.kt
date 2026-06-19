@@ -5,19 +5,19 @@ import android.content.SharedPreferences
 import com.example.capstone.DemoVideoRepository
 import com.example.capstone.location.LocationHelper
 import androidx.core.content.edit
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.Locale
 
 class SafeReadyPreferences(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun saveUserProfile(name: String, email: String, institution: String) {
+    fun saveUserProfile(profile: UserProfile) {
         prefs.edit {
-            putString(KEY_NAME, name.trim())
-            putString(KEY_EMAIL, email.trim())
-            putString(KEY_INSTITUTION, institution.trim())
+            putString(KEY_UID, profile.uid)
+            putString(KEY_USERNAME, profile.username)
+            putString(KEY_NAME, profile.name.trim())
+            putString(KEY_EMAIL, profile.email.trim())
+            putString(KEY_INSTITUTION, profile.institution.trim())
         }
     }
 
@@ -30,6 +30,8 @@ class SafeReadyPreferences(context: Context) {
 
     fun getUserProfile(): UserProfile {
         return UserProfile(
+            uid = prefs.getString(KEY_UID, "").orEmpty(),
+            username = prefs.getString(KEY_USERNAME, "").orEmpty(),
             name = prefs.getString(KEY_NAME, null).orEmpty().ifBlank { "User" },
             email = prefs.getString(KEY_EMAIL, null).orEmpty(),
             institution = prefs.getString(KEY_INSTITUTION, null).orEmpty(),
@@ -40,6 +42,8 @@ class SafeReadyPreferences(context: Context) {
 
     fun clearProfile() {
         prefs.edit {
+            remove(KEY_UID)
+            remove(KEY_USERNAME)
             remove(KEY_NAME)
             remove(KEY_EMAIL)
             remove(KEY_INSTITUTION)
@@ -133,6 +137,8 @@ class SafeReadyPreferences(context: Context) {
 
     companion object {
         private const val PREFS_NAME = "safeready_prefs"
+        private const val KEY_UID = "user_uid"
+        private const val KEY_USERNAME = "user_username"
         private const val KEY_NAME = "user_name"
         private const val KEY_EMAIL = "user_email"
         private const val KEY_INSTITUTION = "user_institution"
@@ -163,8 +169,7 @@ class EmergencyRepository(private val prefs: SafeReadyPreferences) {
 }
 
 class UserRepository(private val prefs: SafeReadyPreferences) {
-    fun saveUserProfile(name: String, email: String, institution: String) =
-        prefs.saveUserProfile(name, email, institution)
+    fun saveUserProfile(profile: UserProfile) = prefs.saveUserProfile(profile)
 
     fun getProfile(): UserProfile = prefs.getUserProfile()
 
@@ -242,10 +247,10 @@ class LessonRepository {
         return ((completedChapterCount.toFloat() / totalChapters) * 100).toInt().coerceIn(0, 100)
     }
 
-    fun getVideoUri(context: Context, disasterKey: String, chapterIndex: Int, languageCode: String) =
+    fun getVideoUri(context: android.content.Context, disasterKey: String, chapterIndex: Int, languageCode: String) =
         DemoVideoRepository.getVideoUri(context, disasterKey, chapterIndex, languageCode)
 
-    fun getAvailableLanguages(context: Context, disasterKey: String, chapterIndex: Int) =
+    fun getAvailableLanguages(context: android.content.Context, disasterKey: String, chapterIndex: Int) =
         DemoVideoRepository.getAvailableLanguages(context, disasterKey, chapterIndex)
 
     fun getChapterTitle(disasterKey: String, chapterIndex: Int): String {
@@ -376,43 +381,43 @@ class AssistantRepository {
         return respondWithContext(input).answer
     }
 
-    fun respondWithContext(input: String): AssistantReply {
+    fun respondWithContext(input: String): com.example.capstone.data.AssistantReply {
         val text = input.lowercase(Locale.US)
         return when {
-            text.contains("earthquake") || text.contains("shake") -> AssistantReply(
+            text.contains("earthquake") || text.contains("shake") -> com.example.capstone.data.AssistantReply(
                 answer = "During shaking, Drop, Cover, and Hold On. Stay away from windows and unsecured furniture.",
                 suggestedTopic = "Earthquake lesson",
                 suggestedModuleKey = "earthquake",
                 suggestedChapterIndex = 1,
                 followUpPrompts = listOf("How do I secure furniture?", "What should I do after shaking stops?")
             )
-            text.contains("flood") || text.contains("water") -> AssistantReply(
+            text.contains("flood") || text.contains("water") -> com.example.capstone.data.AssistantReply(
                 answer = "Move to higher ground, avoid walking or driving through floodwater, and keep an emergency kit ready.",
                 suggestedTopic = "Flood lesson",
                 suggestedModuleKey = "floods",
                 suggestedChapterIndex = 1,
                 followUpPrompts = listOf("What should I pack for floods?", "How do I stay safe at night?")
             )
-            text.contains("cyclone") || text.contains("storm") || text.contains("wind") -> AssistantReply(
+            text.contains("cyclone") || text.contains("storm") || text.contains("wind") -> com.example.capstone.data.AssistantReply(
                 answer = "Follow official alerts, secure loose items, and evacuate early if authorities advise it.",
                 suggestedTopic = "Cyclone lesson",
                 suggestedModuleKey = "cyclone",
                 suggestedChapterIndex = 0,
                 followUpPrompts = listOf("How do I prepare my home?", "When should I evacuate?")
             )
-            text.contains("landslide") || text.contains("hill") || text.contains("slope") -> AssistantReply(
+            text.contains("landslide") || text.contains("hill") || text.contains("slope") -> com.example.capstone.data.AssistantReply(
                 answer = "Watch for cracks, heavy rain, and movement on slopes. Move away from unstable areas immediately.",
                 suggestedTopic = "Landslide lesson",
                 suggestedModuleKey = "landslides",
                 suggestedChapterIndex = 0,
                 followUpPrompts = listOf("What are warning signs?", "Should I evacuate before the slide?")
             )
-            text.contains("kit") || text.contains("prepare") -> AssistantReply(
+            text.contains("kit") || text.contains("prepare") -> com.example.capstone.data.AssistantReply(
                 answer = "Keep water, food, first aid, flashlight, medicine, and documents in a ready-to-go bag.",
                 suggestedTopic = "Emergency kit checklist",
                 followUpPrompts = listOf("What documents should I store?", "How often should I check my kit?")
             )
-            else -> AssistantReply(
+            else -> com.example.capstone.data.AssistantReply(
                 answer = "I can help with earthquake, flood, cyclone, landslide, evacuation, and emergency kit questions.",
                 suggestedTopic = "Try asking about a disaster type",
                 followUpPrompts = quickPrompts()
@@ -432,5 +437,3 @@ class LocationRepository(private val context: Context) {
         LocationHelper.fetchCity(context) { onResult(it?.takeIf { value -> value.isNotBlank() }) }
     }
 }
-
-

@@ -5,17 +5,6 @@ package com.example.capstone.data
  */
 
 /**
- * Represents the result of an authentication attempt.
- */
-data class AuthResult(
-    val success: Boolean,
-    val userId: String? = null,
-    val email: String? = null,
-    val isAnonymous: Boolean = false,
-    val message: String? = null,
-)
-
-/**
  * Represents sync status for cloud operations.
  */
 data class SyncStatus(
@@ -50,4 +39,3 @@ data class SyncConfig(
     val syncIntervalMinutes: Int = 30,
     val lastSyncTime: Long = 0L,
 )
-
