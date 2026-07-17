@@ -3,8 +3,11 @@ package com.example.capstone.presentation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import com.example.capstone.data.AssistantRepository
 import com.example.capstone.data.AssistantReply
+import com.example.capstone.data.ChatMessage
 import com.example.capstone.data.GamificationRepository
 import com.example.capstone.data.DisasterModule
 import com.example.capstone.data.DisasterProgress
@@ -48,10 +51,12 @@ data class ProgressState(
 )
 
 data class AssistantState(
-    val messages: List<com.example.capstone.data.ChatMessage> = emptyList(),
+    val messages: List<ChatMessage> = emptyList(),
     val prompts: List<String> = emptyList(),
     val suggestedTopic: String? = null,
     val followUpPrompts: List<String> = emptyList(),
+    val backendLabel: String = "Offline disaster assistant",
+    val isLoading: Boolean = false,
 )
 
 data class ProfileState(
@@ -178,36 +183,40 @@ class AssistantViewModel(application: Application) : AndroidViewModel(applicatio
     val state = MutableLiveData(
         AssistantState(
             messages = listOf(
-                com.example.capstone.data.ChatMessage(
+                ChatMessage(
                     text = "Hi! Ask me about earthquakes, floods, cyclones, landslides, evacuation, or emergency kits.",
                     isUser = false,
                 )
             ),
             prompts = assistantRepository.quickPrompts(),
+            backendLabel = assistantRepository.backendLabel(),
         )
     )
 
     fun sendMessage(text: String) {
         val trimmed = text.trim()
-        if (trimmed.isBlank()) return
+        if (trimmed.isBlank() || state.value?.isLoading == true) return
 
-        val reply: AssistantReply = assistantRepository.respondWithContext(trimmed)
-
-        val current = state.value?.messages.orEmpty().toMutableList()
-        current += com.example.capstone.data.ChatMessage(trimmed, true)
-        current += com.example.capstone.data.ChatMessage(reply.answer, false)
-
-        state.value = state.value?.copy(
-            messages = current,
-            prompts = reply.followUpPrompts.ifEmpty { assistantRepository.quickPrompts() },
-            suggestedTopic = reply.suggestedTopic,
-            followUpPrompts = reply.followUpPrompts,
-        ) ?: AssistantState(
-            messages = current,
-            prompts = reply.followUpPrompts.ifEmpty { assistantRepository.quickPrompts() },
-            suggestedTopic = reply.suggestedTopic,
-            followUpPrompts = reply.followUpPrompts,
+        val previous = state.value ?: AssistantState()
+        val optimisticMessages = previous.messages + ChatMessage(trimmed, true)
+        state.value = previous.copy(
+            messages = optimisticMessages,
+            isLoading = true,
+            backendLabel = assistantRepository.backendLabel(),
         )
+
+        viewModelScope.launch {
+            val reply: AssistantReply = assistantRepository.respondWithContext(trimmed, optimisticMessages)
+            val updatedMessages = optimisticMessages + ChatMessage(reply.answer, false)
+            state.value = (state.value ?: previous).copy(
+                messages = updatedMessages,
+                prompts = reply.followUpPrompts.ifEmpty { assistantRepository.quickPrompts() },
+                suggestedTopic = reply.suggestedTopic,
+                followUpPrompts = reply.followUpPrompts,
+                backendLabel = assistantRepository.backendLabel(),
+                isLoading = false,
+            )
+        }
     }
 }
 

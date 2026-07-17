@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.capstone.DemoVideoRepository
 import com.example.capstone.location.LocationHelper
+import com.example.capstone.data.remote.groq.GroqChatDataSource
 import androidx.core.content.edit
 import java.util.Locale
 
@@ -369,7 +370,9 @@ class QuizRepository(private val lessons: LessonRepository) {
     fun getQuizForChapter(disasterKey: String, chapterIndex: Int) = getQuestion(disasterKey, chapterIndex)
 }
 
-class AssistantRepository {
+class AssistantRepository(
+    private val groqChatDataSource: GroqChatDataSource = GroqChatDataSource(),
+) {
     fun quickPrompts(): List<String> = listOf(
         "What should I do during an earthquake?",
         "How do I prepare for a flood?",
@@ -377,11 +380,51 @@ class AssistantRepository {
         "What are landslide warning signs?"
     )
 
-    fun respond(input: String): String {
-        return respondWithContext(input).answer
+    fun backendLabel(): String {
+        return if (groqChatDataSource.isConfigured()) {
+            "Groq online • disaster fallback ready"
+        } else {
+            "Offline disaster assistant"
+        }
     }
 
-    fun respondWithContext(input: String): com.example.capstone.data.AssistantReply {
+    fun respond(input: String): String {
+        return localReplyFor(input).answer
+    }
+
+    suspend fun respondWithContext(
+        input: String,
+        conversation: List<com.example.capstone.data.ChatMessage> = emptyList(),
+    ): com.example.capstone.data.AssistantReply {
+        val localReply = localReplyFor(input)
+        if (!groqChatDataSource.isConfigured()) {
+            return localReply
+        }
+
+        val systemPrompt = buildString {
+            append("You are SafeReady, a disaster-preparedness assistant for earthquakes, floods, cyclones, landslides, evacuation, emergency kits, first aid, and recovery. ")
+            append("Give concise, actionable guidance in plain language. ")
+            append("Stay focused on safety and preparedness. ")
+            append("If the user asks about anything outside disaster readiness, redirect them back to emergency safety. ")
+            append("Never invent live alerts or claim to be an emergency service. ")
+            append("If the situation sounds immediate or life-threatening, tell the user to contact local emergency services right away.")
+        }
+
+        val groqAnswer = runCatching {
+            groqChatDataSource.complete(systemPrompt, conversation, input)
+        }.getOrNull()
+
+        return if (groqAnswer.isNullOrBlank()) {
+            localReply
+        } else {
+            localReply.copy(
+                answer = groqAnswer.trim(),
+                followUpPrompts = localReply.followUpPrompts.ifEmpty { quickPrompts() },
+            )
+        }
+    }
+
+    private fun localReplyFor(input: String): com.example.capstone.data.AssistantReply {
         val text = input.lowercase(Locale.US)
         return when {
             text.contains("earthquake") || text.contains("shake") -> com.example.capstone.data.AssistantReply(

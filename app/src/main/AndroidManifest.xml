@@ -79,6 +79,12 @@
             android:name=".Phase4FeedActivity"
             android:exported="false" />
         <activity
+            android:name=".SituationalGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssistantActivity"
+            android:exported="false" />
+        <activity
             android:name=".EmergencyActivity"
             android:exported="false" />
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_card">
+
+    <android.webkit.WebView
+        android:id="@+id/gameWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_card"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:id="@+id/gameLoadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_card"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/TextStyle.Body.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:text="@string/game2_loading"
+            android:textColor="@color/color_navy_900" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gameErrorOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_card"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_2xl"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/TextStyle.Heading.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game2_error_title"
+            android:textColor="@color/color_navy_900" />
+
+        <TextView
+            style="@style/TextStyle.Body.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:gravity="center"
+            android:text="@string/game2_error_message"
+            android:textColor="@color/text_secondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/gameRetryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:text="@string/game2_retry"
+            android:textAllCaps="false" />
+    </LinearLayout>
+</FrameLayout>

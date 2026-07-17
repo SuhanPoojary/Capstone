@@ -197,6 +197,66 @@
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/assistantLaunchCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            app:cardBackgroundColor="@color/sr_bg_card"
+            app:cardCornerRadius="@dimen/corner_2xl"
+            app:cardElevation="@dimen/elevation_light">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_lg">
+
+                <FrameLayout
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_quick_icon_purple">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/assistant_card_title"
+                        android:src="@drawable/ic_quick_robot" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_md"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/assistant_card_title"
+                        android:textColor="@color/sr_text_primary" />
+
+                    <TextView
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="@string/assistant_card_body"
+                        android:textColor="@color/sr_text_secondary" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/Button.Lab.GridCta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assistant_card_action" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/riskAlertCard"
                 android:layout_width="match_parent"
@@ -674,7 +734,6 @@
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
-
 
 
 

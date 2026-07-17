@@ -103,6 +103,16 @@
     <string name="home_status_keep_going">Keep going</string>
     <string name="home_status_ready_to_review">Ready to review</string>
     <string name="home_recommendation_default">Start a lesson to see a recommendation.</string>
+    <string name="assistant_suggestion_default">Ask about a disaster or emergency kit to get started.</string>
+    <string name="assistant_input_hint">Ask a disaster safety question</string>
+    <string name="assistant_status_offline">Offline disaster assistant</string>
+    <string name="assistant_status_groq_ready">Groq online • disaster fallback ready</string>
+    <string name="assistant_status_thinking">Thinking...</string>
+    <string name="assistant_card_title">AI Assistant</string>
+    <string name="assistant_card_body">Get quick disaster-first answers powered by Groq.</string>
+    <string name="assistant_card_action">Open Assistant</string>
+    <string name="assistant_activity_title">SafeReady Assistant</string>
+    <string name="assistant_activity_subtitle">Ask disaster preparedness questions anytime</string>
     <string name="home_map_alert_body">Flood risk in coastal areas</string>
     <string name="home_map_nav">Navigate</string>
     <string name="home_map_target">Locate</string>
@@ -122,6 +132,9 @@
     <string name="lab_quick_drills">Quick Drills</string>
     <string name="lab_leaderboard">Leaderboard</string>
     <string name="lab_achievements">Achievements</string>
+    <string name="lab_game_title">Situational Game</string>
+    <string name="lab_game_body">Play the deployed disaster scenario inside SafeReady.</string>
+    <string name="lab_game_action">Play Game</string>
 
     <!-- Emergency Mode -->
     <string name="emergency_mode_title">EMERGENCY MODE</string>
@@ -177,6 +190,15 @@
     <string name="profile_emergency_contacts">Emergency Contacts</string>
     <string name="profile_settings">Settings</string>
     <string name="profile_certifications">Certifications</string>
+
+    <!-- Situational Game -->
+    <string name="game2_title">Interactive Disaster Stories</string>
+    <string name="game2_subtitle">Play the scenario without leaving SafeReady</string>
+    <string name="game2_loading">Loading game...</string>
+    <string name="game2_error_title">Game unavailable</string>
+    <string name="game2_error_message">The game could not be loaded right now. Check your connection and try again.</string>
+    <string name="game2_retry">Retry</string>
+    <string name="game2_back">Back</string>
 
     <!-- Status Labels -->
     <string name="status_online">Online</string>

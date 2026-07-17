@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.example.capstone.AssistantActivity
 import com.example.capstone.DisasterDetailActivity
 import com.example.capstone.MainActivity
 import com.example.capstone.LoginActivity
@@ -57,6 +58,9 @@ class HomeFragment : Fragment() {
         }
         view.findViewById<CardView>(R.id.homeViewProgressButton)?.setOnClickListener {
             (activity as? MainActivity)?.selectTab(R.id.nav_profile)
+        }
+        view.findViewById<CardView>(R.id.assistantLaunchCard)?.setOnClickListener {
+            startActivity(Intent(requireContext(), AssistantActivity::class.java))
         }
         view.findViewById<CardView>(R.id.homeSendSosButton)?.setOnClickListener {
             // reuse the same SOS confirmation flow as older UI
@@ -259,6 +263,8 @@ class AssistantFragment : Fragment() {
         val input = view.findViewById<EditText>(R.id.assistantInput)
         val send = view.findViewById<MaterialButton>(R.id.assistantSendButton)
         val suggestion = view.findViewById<TextView>(R.id.assistantSuggestion)
+        val statusBadge = view.findViewById<TextView>(R.id.assistantStatusBadge)
+        val loading = view.findViewById<ProgressBar>(R.id.assistantLoadingIndicator)
 
         fun submitMessage() {
             val text = input.text?.toString().orEmpty().trim()
@@ -288,6 +294,10 @@ class AssistantFragment : Fragment() {
                 chatContainer.addView(chatBubble(message.text, message.isUser))
             }
             suggestion.text = state.suggestedTopic ?: "Ask about a disaster or emergency kit to get started."
+            statusBadge.text = state.backendLabel
+            loading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+            send.isEnabled = !state.isLoading
+            input.isEnabled = !state.isLoading
 
             promptsContainer.removeAllViews()
             state.prompts.forEach { prompt ->

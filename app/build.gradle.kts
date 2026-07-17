@@ -1,3 +1,16 @@
+import java.util.Properties
+
+fun String.kotlinStringLiteral(): String = replace("\\", "\\\\").replace("\"", "\\\"")
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+val groqApiKey = (localProperties.getProperty("groq_api_key") ?: System.getenv("GROQ_API_KEY") ?: "").trim()
+
 plugins {
     alias(libs.plugins.android.application)
 
@@ -20,12 +33,18 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.capstone"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("String", "GROQ_API_KEY", "\"${groqApiKey.kotlinStringLiteral()}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

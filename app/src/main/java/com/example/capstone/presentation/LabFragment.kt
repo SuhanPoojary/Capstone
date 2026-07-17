@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.capstone.R
 import com.example.capstone.StartLearningActivity
+import com.example.capstone.SituationalGameActivity
 
 class LabFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,6 +27,10 @@ class LabFragment : Fragment() {
             startActivity(Intent(requireContext(), StartLearningActivity::class.java))
         }
 
+        view.findViewById<View>(R.id.situationalGameCard)?.setOnClickListener {
+            startActivity(Intent(requireContext(), SituationalGameActivity::class.java))
+        }
+
         // Quick drill sample click handlers (placeholder)
         view.findViewById<View>(R.id.drill_cpr)?.setOnClickListener {
             Toast.makeText(requireContext(), "Start CPR Practice (not implemented)", Toast.LENGTH_SHORT).show()
@@ -41,4 +46,3 @@ class LabFragment : Fragment() {
         }
     }
 }
-
