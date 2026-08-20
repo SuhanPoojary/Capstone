@@ -297,6 +297,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/homeRiskHeading"
                         style="@style/TextStyle.Label.Large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -304,6 +305,7 @@
                         android:textColor="@color/sr_text_primary" />
 
                     <TextView
+                        android:id="@+id/homeRiskBody"
                         style="@style/TextStyle.Body.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -647,55 +649,6 @@
                         android:textColor="@color/sr_text_secondary" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/actionContinue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                app:cardBackgroundColor="@color/sr_bg_card"
-                app:cardCornerRadius="@dimen/corner_2xl"
-                app:cardElevation="@dimen/elevation_light"
-                app:strokeColor="@color/border_light"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_lg">
-
-                    <FrameLayout
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_quick_icon_peach"
-                        android:padding="8dp">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="@string/text_continue"
-                            android:src="@drawable/ic_play_circle"
-                            android:tint="@color/color_navy_800" />
-                    </FrameLayout>
-
-                    <TextView
-                        style="@style/TextStyle.Label.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="Continue Mission"
-                        android:textColor="@color/sr_text_primary" />
-
-                    <TextView
-                        style="@style/TextStyle.Body.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="Resume learning"
-                        android:textColor="@color/sr_text_secondary" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
         </GridLayout>
 
         <LinearLayout
@@ -729,10 +682,23 @@
                 android:layout_marginTop="@dimen/spacing_sm"
                 android:text="Level 1 • 0-day streak • 0 XP"
                 android:textColor="@color/sr_text_secondary" />
+
+            <TextView
+                android:id="@+id/homeMedReadyBadge"
+                style="@style/TextStyle.Label.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:background="@drawable/bg_quick_icon_green"
+                android:paddingStart="@dimen/spacing_md"
+                android:paddingTop="@dimen/spacing_xxs"
+                android:paddingEnd="@dimen/spacing_md"
+                android:paddingBottom="@dimen/spacing_xxs"
+                android:text="MedReady: Not Scanned"
+                android:textColor="@color/sr_primary_navy"
+                android:visibility="gone" />
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>
 
 

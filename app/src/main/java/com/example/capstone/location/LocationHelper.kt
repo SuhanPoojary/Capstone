@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Build
@@ -11,6 +12,13 @@ import androidx.core.content.ContextCompat
 import java.util.Locale
 
 object LocationHelper {
+
+    data class LastKnownLocation(
+        val latitude: Double,
+        val longitude: Double,
+        val accuracyMeters: Float? = null,
+        val provider: String? = null,
+    )
 
     fun hasLocationPermission(context: Context): Boolean {
         val fineGranted = ContextCompat.checkSelfPermission(
@@ -139,5 +147,47 @@ object LocationHelper {
         } catch (_: Throwable) {
             onResult(null)
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun fetchLastKnownLocation(
+        context: Context,
+        onResult: (LastKnownLocation?) -> Unit,
+    ) {
+        if (!hasLocationPermission(context)) {
+            onResult(null)
+            return
+        }
+
+        val lm = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        if (lm == null) {
+            onResult(null)
+            return
+        }
+
+        val location = lm.getProviders(true)
+            .asSequence()
+            .mapNotNull { provider ->
+                try {
+                    lm.getLastKnownLocation(provider)
+                } catch (_: SecurityException) {
+                    null
+                }
+            }
+            .maxByOrNull { it.time }
+
+        if (location == null) {
+            onResult(null)
+            return
+        }
+
+        onResult(
+            LastKnownLocation(
+                latitude = location.latitude,
+                longitude = location.longitude,
+                accuracyMeters = location.accuracy.takeIf { it > 0f },
+                provider = location.provider,
+            )
+        )
     }
 }

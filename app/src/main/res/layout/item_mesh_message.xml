@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_md"
+    app:cardCornerRadius="@dimen/corner_lg"
+    app:cardBackgroundColor="#3A4F7F"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_lg"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/msgIcon"
+            android:layout_width="@dimen/icon_lg"
+            android:layout_height="@dimen/icon_lg"
+            android:src="@drawable/ic_device"
+            android:tint="@color/text_inverse"
+            android:contentDescription="Device" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_lg"
+            android:paddingEnd="@dimen/spacing_lg">
+
+            <TextView
+                android:id="@+id/msgSenderName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device Name"
+                android:textColor="@color/text_inverse"
+                android:textSize="@dimen/text_body_md"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/msgContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Message content goes here"
+                android:textColor="@color/text_inverse"
+                android:textSize="@dimen/text_body_sm"
+                android:alpha="0.7"
+                android:layout_marginTop="@dimen/spacing_xs" />
+
+            <TextView
+                android:id="@+id/msgLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textColor="@color/text_inverse"
+                android:textSize="@dimen/text_body_sm"
+                android:alpha="0.5"
+                android:layout_marginTop="@dimen/spacing_xs" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/msgStatusCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/corner_md"
+            app:cardBackgroundColor="@color/color_green_500"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:id="@+id/msgStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Safe"
+                android:textColor="@color/text_inverse"
+                android:textSize="@dimen/text_body_sm"
+                android:padding="@dimen/spacing_sm" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

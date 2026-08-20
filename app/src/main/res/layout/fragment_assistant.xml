@@ -12,10 +12,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/plus_jakarta_sans"
         android:text="Assistant"
         android:textColor="@color/dashboard_name"
         android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +28,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="6dp"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/plus_jakarta_sans"
         android:text="@string/assistant_suggestion_default"
         android:textColor="@color/dashboard_greeting"
         android:textSize="13sp"
@@ -57,6 +58,7 @@
             android:paddingVertical="6dp"
             android:text="@string/assistant_status_offline"
             android:textColor="@color/dashboard_name"
+            android:fontFamily="@font/plus_jakarta_sans"
             android:textSize="12sp" />
 
         <ProgressBar
@@ -94,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="88dp"
         android:background="@drawable/bg_white_card"
         android:elevation="2dp"
         android:padding="14dp"
@@ -122,6 +124,7 @@
             android:padding="14dp"
             android:textColor="@color/signup_input"
             android:textColorHint="@color/signup_hint"
+            android:fontFamily="@font/plus_jakarta_sans"
             app:layout_constraintEnd_toStartOf="@id/assistantSendButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/assistantPromptsContainer" />
@@ -135,6 +138,8 @@
             android:text="Send"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:textStyle="bold"
             app:backgroundTint="@color/safeready_navy"
             app:cornerRadius="18dp"
             app:layout_constraintBottom_toBottomOf="@id/assistantInput"

@@ -74,7 +74,7 @@ data class MeshMessage(
     }
 
     companion object {
-        const val DEFAULT_TTL = 3
+        const val DEFAULT_TTL = 12
         const val DEFAULT_TTL_MS = 30L * 60L * 1000L
     }
 }
@@ -122,4 +122,3 @@ data class MeshTelemetryState(
     val droppedExpired: Int = 0,
     val lastError: String? = null,
 )
-

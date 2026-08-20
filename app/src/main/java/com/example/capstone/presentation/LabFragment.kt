@@ -6,43 +6,88 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.capstone.DisasterDetailActivity
 import com.example.capstone.R
+import com.example.capstone.QuizActivity
 import com.example.capstone.StartLearningActivity
 import com.example.capstone.SituationalGameActivity
 
 class LabFragment : Fragment() {
+    private lateinit var viewModel: LabViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_lab_modern, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[LabViewModel::class.java]
 
-        // Interactive Learning cards open StartLearningActivity
-        view.findViewById<View>(R.id.interactive_card_earthquake)?.setOnClickListener {
-            startActivity(Intent(requireContext(), StartLearningActivity::class.java))
-        }
-        view.findViewById<View>(R.id.interactive_card_floods)?.setOnClickListener {
-            startActivity(Intent(requireContext(), StartLearningActivity::class.java))
+        val progressBar = view.findViewById<ProgressBar>(R.id.videoLearningProgress)
+        val levelText = view.findViewById<TextView>(R.id.labSurvivalLevel)
+        val quizzesText = view.findViewById<TextView>(R.id.labQuizzesDone)
+        val simulationsText = view.findViewById<TextView>(R.id.labSimulationsDone)
+        val scoreText = view.findViewById<TextView>(R.id.labSurvivalScore)
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            progressBar?.progress = state.overallProgress
         }
 
+        viewModel.gamificationSummary.observe(viewLifecycleOwner) { summary ->
+            levelText?.text = getString(R.string.lab_level_format, summary.level)
+            quizzesText?.text = summary.quizzesCompleted.toString()
+            simulationsText?.text = summary.simulationsCompleted.toString()
+            scoreText?.text = summary.points.toString()
+        }
+
+        // Daily Challenge card
+        view.findViewById<View>(R.id.dailyChallengeCard)?.setOnClickListener {
+            startActivity(Intent(requireContext(), QuizActivity::class.java))
+        }
+
+        // Situational Game card
         view.findViewById<View>(R.id.situationalGameCard)?.setOnClickListener {
             startActivity(Intent(requireContext(), SituationalGameActivity::class.java))
         }
 
-        // Quick drill sample click handlers (placeholder)
-        view.findViewById<View>(R.id.drill_cpr)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Start CPR Practice (not implemented)", Toast.LENGTH_SHORT).show()
+        // Role-Based Game card
+        view.findViewById<View>(R.id.roleBasedGameCard)?.setOnClickListener {
+            Toast.makeText(requireContext(), "Role-based game coming in next update", Toast.LENGTH_SHORT).show()
         }
-        view.findViewById<View>(R.id.drill_first_aid)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Start First Aid Quiz (not implemented)", Toast.LENGTH_SHORT).show()
+
+        // Quiz stays behind the explicit button inside the quiz card.
+        view.findViewById<View>(R.id.quizCard)?.isClickable = false
+        view.findViewById<View>(R.id.quizCard)?.isFocusable = false
+        view.findViewById<View>(R.id.startQuizButton)?.setOnClickListener {
+            startActivity(Intent(requireContext(), QuizActivity::class.java))
         }
-        view.findViewById<View>(R.id.drill_supply_check)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Start Supply Check (not implemented)", Toast.LENGTH_SHORT).show()
+
+        // Video Learning card opens StartLearningActivity
+        view.findViewById<View>(R.id.video_card_disasters)?.setOnClickListener {
+            startActivity(Intent(requireContext(), StartLearningActivity::class.java))
         }
-        view.findViewById<View>(R.id.drill_route_planning)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Start Route Planning (not implemented)", Toast.LENGTH_SHORT).show()
+
+        // Disaster Training Cards
+        view.findViewById<View>(R.id.cardEarthquake)?.setOnClickListener { startDisaster("earthquake") }
+        view.findViewById<View>(R.id.cardFloods)?.setOnClickListener { startDisaster("floods") }
+        view.findViewById<View>(R.id.cardCyclone)?.setOnClickListener { startDisaster("cyclone") }
+        view.findViewById<View>(R.id.cardLandslides)?.setOnClickListener { startDisaster("landslides") }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::viewModel.isInitialized) {
+            viewModel.refresh()
         }
+    }
+
+    private fun startDisaster(disasterKey: String) {
+        val activity = requireActivity() as AppCompatActivity
+        startActivity(DisasterDetailActivity.newIntent(activity, disasterKey))
     }
 }

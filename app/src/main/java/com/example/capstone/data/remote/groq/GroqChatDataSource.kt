@@ -85,6 +85,6 @@ class GroqChatDataSource {
 
     private companion object {
         private const val ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
-        private const val MODEL = "llama-3.1-8b-instant"
+        private const val MODEL = "gemma2-9b-it"
     }
 }

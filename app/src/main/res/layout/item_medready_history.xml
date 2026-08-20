@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_md"
+    app:cardBackgroundColor="@color/bg_card"
+    app:cardCornerRadius="@dimen/medready_card_corner"
+    app:cardElevation="@dimen/elevation_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_lg"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/historyDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_body_lg"
+                    android:textStyle="bold"
+                    android:textColor="@color/sr_text_primary"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:text="October 24, 2023" />
+
+                <TextView
+                    android:id="@+id/historyItemCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_body_sm"
+                    android:textColor="@color/sr_text_secondary"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:text="12 items scanned" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/historyScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_heading_md"
+                android:textStyle="bold"
+                android:textColor="@color/sr_primary_navy"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:text="85%" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/historyWarningStrip"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/medready_warning_strip_height"
+            android:background="@color/color_orange_50"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/spacing_lg"
+            android:paddingEnd="@dimen/spacing_lg"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/icon_xs"
+                android:layout_height="@dimen/icon_xs"
+                android:src="@drawable/ic_medready_missing"
+                app:tint="@color/status_warning"
+                android:layout_marginEnd="@dimen/spacing_sm" />
+
+            <TextView
+                android:id="@+id/historyWarningText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_label_lg"
+                android:textStyle="bold"
+                android:textColor="@color/status_warning"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:text="2 warnings found" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -12,15 +12,20 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.cardview.widget.CardView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import org.osmdroid.config.Configuration
+import android.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.example.capstone.AssistantActivity
 import com.example.capstone.DisasterDetailActivity
+import com.example.capstone.EmergencyActivity
 import com.example.capstone.MainActivity
 import com.example.capstone.LoginActivity
 import com.example.capstone.R
@@ -29,9 +34,44 @@ import com.example.capstone.presentation.viewmodel.MeshViewModel
 import com.example.capstone.data.MeshMessage
 import com.example.capstone.data.MeshMessageType
 
+import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import android.app.Activity
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
+import com.example.capstone.location.LocationHelper
+import com.example.capstone.data.MedReadyScanResult
+import com.example.capstone.data.SafeReadyPreferences
+import com.example.capstone.data.remote.groq.GroqVisionDataSource
+import com.example.capstone.data.repository.MedReadyRepository
+import com.example.capstone.presentation.fragment.ShelterMapFragment
+import com.example.capstone.presentation.viewmodel.MedReadyViewModel
+import com.example.capstone.presentation.viewmodel.MedReadyViewModelFactory
+import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var meshViewModel: MeshViewModel
+
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                viewModel.resolveLocation()
+            }
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                viewModel.resolveLocation()
+            }
+            else -> {
+                // No location access granted.
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_home_modern, container, false)
@@ -41,6 +81,15 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[HomeViewModel::class.java]
         meshViewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[MeshViewModel::class.java]
+
+        if (!LocationHelper.hasLocationPermission(requireContext())) {
+            locationPermissionRequest.launch(arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ))
+        } else {
+            viewModel.resolveLocation()
+        }
 
         val greeting = view.findViewById<TextView>(R.id.homeGreeting)
         val name = view.findViewById<TextView>(R.id.homeUserName)
@@ -52,6 +101,8 @@ class HomeFragment : Fragment() {
         val recommendationBody = view.findViewById<TextView>(R.id.homeRecommendationBody)
         val recommendationCard = view.findViewById<CardView>(R.id.preparednessCard)
         val gamificationText = view.findViewById<TextView>(R.id.homeGamificationText)
+        val weatherChip = view.findViewById<com.google.android.material.chip.Chip>(R.id.weatherChip)
+        val medReadyBadge = view.findViewById<TextView>(R.id.homeMedReadyBadge)
 
         view.findViewById<CardView>(R.id.homeStartTrainingButton)?.setOnClickListener {
             (activity as? MainActivity)?.selectTab(R.id.nav_lab)
@@ -63,22 +114,11 @@ class HomeFragment : Fragment() {
             startActivity(Intent(requireContext(), AssistantActivity::class.java))
         }
         view.findViewById<CardView>(R.id.homeSendSosButton)?.setOnClickListener {
-            // reuse the same SOS confirmation flow as older UI
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Send SOS")
-                .setMessage("Are you sure you want to broadcast an SOS to nearby devices?")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Send") { _, _ ->
-                    val pkg = requireContext().packageName
-                    val msg = MeshMessage(
-                        senderId = pkg,
-                        type = MeshMessageType.SOS,
-                        content = "SOS: I need help. Sent from ${pkg}",
-                    )
-                    meshViewModel.broadcast(msg)
-                    Toast.makeText(requireContext(), "SOS queued", Toast.LENGTH_SHORT).show()
-                }
-                .show()
+            startActivity(Intent(requireContext(), EmergencyActivity::class.java))
+        }
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.riskViewButton)?.setOnClickListener {
+            (activity as? MainActivity)?.selectTab(R.id.nav_lab)
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -112,6 +152,22 @@ class HomeFragment : Fragment() {
             } else {
                 getString(R.string.home_emergency_mode_off)
             }
+            weatherChip.text = state.weather
+            
+            // Log for debugging
+            android.util.Log.d("HomeFragment", "Risk Level: ${state.riskLevel}, Desc: ${state.riskDescription}")
+
+            medReadyBadge?.visibility = if (state.medReadyReadiness >= 0) View.VISIBLE else View.GONE
+            medReadyBadge?.text = if (state.medReadyReadiness >= 0) {
+                "MedReady: ${state.medReadyReadiness}% Ready"
+            } else {
+                "MedReady: Not Scanned"
+            }
+
+            val riskHeading = view.findViewById<TextView>(R.id.homeRiskHeading)
+            val riskBody = view.findViewById<TextView>(R.id.homeRiskBody)
+            riskHeading?.text = state.riskLevel
+            riskBody?.text = state.riskDescription
 
             recommendationCard.setOnClickListener {
                 val disasterKey = recommendation?.disasterKey ?: state.recommendedModule?.key
@@ -123,6 +179,13 @@ class HomeFragment : Fragment() {
             }
 
             recommendationBody.setOnClickListener { recommendationCard.performClick() }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::viewModel.isInitialized) {
+            viewModel.refresh()
         }
     }
 
@@ -138,17 +201,34 @@ class HomeFragment : Fragment() {
 }
 
 class TrainingFragment : Fragment() {
+    private lateinit var viewModel: ProgressViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.activity_start_learning, container, false)
+        return inflater.inflate(R.layout.fragment_lab_modern, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val title = view.findViewById<TextView>(R.id.title)
-        title.text = getString(R.string.training_title)
+        viewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[ProgressViewModel::class.java]
 
-        view.findViewById<View>(R.id.backButton)?.setOnClickListener {
-            (activity as? MainActivity)?.selectTab(R.id.nav_home)
+        val survivalLevel = view.findViewById<TextView>(R.id.labSurvivalLevel)
+        val quizzesDone = view.findViewById<TextView>(R.id.labQuizzesDone)
+        val simulationsDone = view.findViewById<TextView>(R.id.labSimulationsDone)
+        val survivalScore = view.findViewById<TextView>(R.id.labSurvivalScore)
+        val dailyChallengeCard = view.findViewById<View>(R.id.dailyChallengeCard)
+        val learningProgress = view.findViewById<ProgressBar>(R.id.videoLearningProgress)
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            val snapshot = state.snapshot
+            survivalLevel.text = "Level ${state.gamification.level}"
+            quizzesDone.text = state.gamification.quizzesCompleted.toString()
+            simulationsDone.text = state.gamification.simulationsCompleted.toString()
+            survivalScore.text = state.gamification.points.toString()
+            learningProgress.progress = snapshot.overallPercent
+        }
+
+        dailyChallengeCard.setOnClickListener {
+            Toast.makeText(requireContext(), "Daily Challenge: First Aid Burn Treatment started!", Toast.LENGTH_SHORT).show()
         }
 
         view.findViewById<View>(R.id.cardEarthquake)?.setOnClickListener {
@@ -162,6 +242,14 @@ class TrainingFragment : Fragment() {
         }
         view.findViewById<View>(R.id.cardLandslides)?.setOnClickListener {
             startDisaster("landslides")
+        }
+
+        view.findViewById<View>(R.id.situationalGameCard)?.setOnClickListener {
+            Toast.makeText(requireContext(), "Starting Survival Simulation...", Toast.LENGTH_SHORT).show()
+        }
+
+        view.findViewById<View>(R.id.startQuizButton)?.setOnClickListener {
+            Toast.makeText(requireContext(), "Generating AI Quiz...", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -197,6 +285,10 @@ class ProgressFragment : Fragment() {
             overallPercent.text = getString(R.string.progress_overall_percent_format, snapshot.overallPercent)
             overallBar.progress = snapshot.overallPercent
             summary.text = state.gamification.progressText
+            
+            // Lab Progress Mapping
+            view.findViewById<TextView>(R.id.labLessonsValue)?.text = "${state.gamification.lessonsCompleted}/${snapshot.disasterProgress.sumOf { it.totalChapters }}"
+
             container.removeAllViews()
             snapshot.disasterProgress.forEach { progress ->
                 container.addView(progressRow(progress))
@@ -353,7 +445,65 @@ class ProfileFragment : Fragment() {
         val summary = view.findViewById<TextView>(R.id.profileSummaryBody)
         val gamificationText = view.findViewById<TextView>(R.id.profileGamificationText)
         val initial = view.findViewById<TextView>(R.id.profileInitial)
+        val levelValue = view.findViewById<TextView>(R.id.stat1Value)
+        val streakValue = view.findViewById<TextView>(R.id.stat2Value)
+        val pointsValue = view.findViewById<TextView>(R.id.stat3Value)
+        val pointsLabel = view.findViewById<TextView>(R.id.stat3Label)
         val signOutItem = view.findViewById<View>(R.id.signOutItem)
+        val themeItem = view.findViewById<View>(R.id.themeItem)
+        val currentThemeText = view.findViewById<TextView>(R.id.currentThemeText)
+        val emergencyModeItem = view.findViewById<View>(R.id.emergencyModeItem)
+        val currentEmergencyModeText = view.findViewById<TextView>(R.id.currentEmergencyModeText)
+        val manageContacts = view.findViewById<View>(R.id.manageContactsText)
+        val downloadMaps = view.findViewById<View>(R.id.downloadMapsText)
+        val editProfileButton = view.findViewById<View>(R.id.editProfileButton)
+
+        val simValue = view.findViewById<TextView>(R.id.simulationsValue)
+        val simProgress = view.findViewById<View>(R.id.simulationsProgress)
+        val lessonValue = view.findViewById<TextView>(R.id.lessonsValue)
+        val lessonProgress = view.findViewById<View>(R.id.lessonsProgress)
+        val drillValue = view.findViewById<TextView>(R.id.drillsValue)
+        val drillProgress = view.findViewById<View>(R.id.drillsProgress)
+        val contactsContainer = view.findViewById<LinearLayout>(R.id.emergencyContactsContainer)
+
+        themeItem?.setOnClickListener {
+            val themes = arrayOf("Auto", "Light Mode", "Dark Mode")
+            val currentMode = viewModel.state.value?.themeMode ?: 0
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Select Theme")
+                .setSingleChoiceItems(themes, currentMode) { dialog, which ->
+                    viewModel.setThemeMode(which)
+                    updateTheme(which)
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
+        emergencyModeItem?.setOnClickListener {
+            val enabled = viewModel.toggleEmergencyMode()
+            currentEmergencyModeText.text = if (enabled) "On" else "Off"
+            Toast.makeText(requireContext(), if (enabled) "Emergency Mode enabled" else "Emergency Mode disabled", Toast.LENGTH_SHORT).show()
+        }
+
+        manageContacts?.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, EmergencyContactsFragment())
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
+
+        editProfileButton?.setOnClickListener {
+            showEditProfileDialog()
+        }
+
+        downloadMaps?.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, ShelterMapFragment())
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
 
         signOutItem?.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
@@ -385,18 +535,310 @@ class ProfileFragment : Fragment() {
                 append("Total tracked disasters: ${state.completedDisasters.size}")
             }
             gamificationText.text = state.gamification.progressText
+            levelValue.text = state.gamification.level.toString()
+            streakValue.text = state.gamification.currentStreak.toString()
+            pointsValue.text = state.gamification.points.toString()
+            pointsLabel.text = "Points"
+
+            // Update Journey Progress
+            simValue?.text = "${state.simulationsCompleted}/${state.totalSimulations}"
+            updateProgressWidth(simProgress, state.simulationsCompleted, state.totalSimulations)
+            
+            lessonValue?.text = "${state.lessonsCompleted}/${state.totalLessons}"
+            updateProgressWidth(lessonProgress, state.lessonsCompleted, state.totalLessons)
+            
+            drillValue?.text = "${state.drillsCompleted}/${state.totalDrills}"
+            updateProgressWidth(drillProgress, state.drillsCompleted, state.totalDrills)
+
+            currentThemeText?.text = when(state.themeMode) {
+                1 -> "Light"
+                2 -> "Dark"
+                else -> "Auto"
+            }
+            currentEmergencyModeText?.text = if (state.isEmergencyModeEnabled) "On" else "Off"
+
+            // Update Emergency Contacts
+            contactsContainer?.removeAllViews()
+            if (state.emergencyContacts.isEmpty()) {
+                val emptyText = TextView(requireContext()).apply {
+                    text = "No contacts added"
+                    setPadding(16, 16, 16, 16)
+                    setTextColor(ContextCompat.getColor(context, R.color.sr_text_secondary))
+                }
+                contactsContainer?.addView(emptyText)
+            } else {
+                state.emergencyContacts.take(3).forEach { contact ->
+                    contactsContainer?.addView(createContactView(contact))
+                }
+            }
+            }
         }
+
+        override fun onResume() {
+            super.onResume()
+            if (::viewModel.isInitialized) {
+                viewModel.refresh()
+        }
+        }
+
+        private fun showEditProfileDialog() {
+            val state = viewModel.state.value ?: return
+            val dialogView = layoutInflater.inflate(R.layout.dialog_edit_profile, null)
+            val nameInput = dialogView.findViewById<EditText>(R.id.profileNameInput)
+            val emailInput = dialogView.findViewById<EditText>(R.id.profileEmailInput)
+            val institutionInput = dialogView.findViewById<EditText>(R.id.profileInstitutionInput)
+            val cityInput = dialogView.findViewById<EditText>(R.id.profileCityInput)
+            val stateInput = dialogView.findViewById<EditText>(R.id.profileStateInput)
+
+            nameInput.setText(state.profile.name)
+            emailInput.setText(state.profile.email)
+            institutionInput.setText(state.profile.institution)
+            cityInput.setText(state.profile.city.orEmpty())
+            stateInput.setText(state.profile.state.orEmpty())
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Edit Profile")
+                .setView(dialogView)
+                .setPositiveButton("Save") { _, _ ->
+                    viewModel.updateProfile(
+                        name = nameInput.text?.toString().orEmpty().trim().ifBlank { "User" },
+                        email = emailInput.text?.toString().orEmpty().trim(),
+                        institution = institutionInput.text?.toString().orEmpty().trim(),
+                        city = cityInput.text?.toString().orEmpty().trim().ifBlank { null },
+                        state = stateInput.text?.toString().orEmpty().trim().ifBlank { null },
+                    )
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
+    private fun updateProgressWidth(view: View?, completed: Int, total: Int) {
+        if (view == null || total == 0) return
+        val params = view.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        params.matchConstraintPercentWidth = (completed.toFloat() / total).coerceIn(0f, 1f)
+        view.layoutParams = params
+    }
+
+    private fun updateTheme(mode: Int) {
+        val appCompatMode = when(mode) {
+            1 -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+            2 -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+            else -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(appCompatMode)
+    }
+
+    private fun createContactView(contact: com.example.capstone.data.EmergencyContact): View {
+        val card = com.google.android.material.card.MaterialCardView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = 8 }
+            setCardBackgroundColor(ContextCompat.getColor(context, R.color.sr_bg_card))
+            radius = 12f * resources.displayMetrics.density
+            cardElevation = 2f * resources.displayMetrics.density
+        }
+
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            setPadding(
+                (12 * resources.displayMetrics.density).toInt(),
+                (12 * resources.displayMetrics.density).toInt(),
+                (12 * resources.displayMetrics.density).toInt(),
+                (12 * resources.displayMetrics.density).toInt()
+            )
+        }
+
+        val icon = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                (40 * resources.displayMetrics.density).toInt(),
+                (40 * resources.displayMetrics.density).toInt()
+            ).apply { marginEnd = (12 * resources.displayMetrics.density).toInt() }
+            setBackgroundColor(android.graphics.Color.parseColor("#F3F4F6"))
+        }
+
+        val info = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+
+        val name = TextView(requireContext()).apply {
+            text = contact.name
+            typeface = android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(context, R.color.sr_text_primary))
+            textSize = 14f
+        }
+
+        val phone = TextView(requireContext()).apply {
+            text = contact.phone
+            setTextColor(ContextCompat.getColor(context, R.color.sr_text_secondary))
+            textSize = 12f
+        }
+
+        info.addView(name)
+        info.addView(phone)
+        layout.addView(icon)
+        layout.addView(info)
+        card.addView(layout)
+        return card
     }
 }
 
 class MedReadyFragment : Fragment() {
+    private lateinit var viewModel: MedReadyViewModel
+
+    private val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val bitmap = result.data?.extras?.get("data") as? Bitmap
+            bitmap?.let { processImage(it) }
+        }
+    }
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            uri?.let {
+                val inputStream = requireContext().contentResolver.openInputStream(it)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                processImage(bitmap)
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_medready, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        val repository = MedReadyRepository(GroqVisionDataSource(), SafeReadyPreferences(requireContext()))
+        viewModel = ViewModelProvider(this, MedReadyViewModelFactory(repository))[MedReadyViewModel::class.java]
+
         val title = view.findViewById<TextView>(R.id.medreadyTitle)
         title?.text = getString(R.string.medready_title)
+
+        view.findViewById<View>(R.id.medreadyTakePhotoButton)?.setOnClickListener {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takePhotoLauncher.launch(intent)
+        }
+
+        view.findViewById<View>(R.id.medreadyUploadButton)?.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
+        }
+
+        val historyContainer = view.findViewById<LinearLayout>(R.id.medreadyHistoryContainer)
+        val progressBar = view.findViewById<ProgressBar>(R.id.medreadyProgressBar)
+
+        viewModel.scanHistory.observe(viewLifecycleOwner) { history ->
+            historyContainer?.let { updateHistoryUI(it, history) }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.scanResult.observe(viewLifecycleOwner) { result ->
+            result?.let {
+                showScanResultDialog(it)
+                viewModel.clearResult()
+            }
+        }
+    }
+
+    private fun processImage(bitmap: Bitmap) {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+        viewModel.analyzeKit(stream.toByteArray())
+    }
+
+    private fun updateHistoryUI(container: LinearLayout, history: List<MedReadyScanResult>) {
+        container.removeAllViews()
+        if (history.isEmpty()) {
+            val emptyView = TextView(requireContext()).apply {
+                text = "No previous scans found."
+                setPadding(0, 32, 0, 32)
+                gravity = android.view.Gravity.CENTER
+                setTextColor(ContextCompat.getColor(context, R.color.sr_text_secondary))
+            }
+            container.addView(emptyView)
+            return
+        }
+
+        history.forEach { result ->
+            val card = layoutInflater.inflate(R.layout.item_medready_history, container, false)
+            val dateText = card.findViewById<TextView>(R.id.historyDate)
+            val countText = card.findViewById<TextView>(R.id.historyItemCount)
+            val scoreText = card.findViewById<TextView>(R.id.historyScore)
+            val warningStrip = card.findViewById<View>(R.id.historyWarningStrip)
+            val warningText = card.findViewById<TextView>(R.id.historyWarningText)
+
+            val sdf = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+            dateText.text = sdf.format(Date(result.timestamp))
+            countText.text = "${result.itemCount} items scanned"
+            scoreText.text = "${result.readinessScore}%"
+            
+            if (result.warnings > 0) {
+                warningStrip.visibility = View.VISIBLE
+                warningText.text = "${result.warnings} warnings found"
+            } else {
+                warningStrip.visibility = View.GONE
+            }
+
+            card.setOnClickListener { showScanResultDialog(result) }
+            container.addView(card)
+        }
+    }
+
+    private fun showScanResultDialog(result: MedReadyScanResult) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_medready_result, null)
+        val scoreText = dialogView.findViewById<TextView>(R.id.dialogScore)
+        val summaryText = dialogView.findViewById<TextView>(R.id.dialogSummary)
+        val itemsContainer = dialogView.findViewById<LinearLayout>(R.id.dialogItemsContainer)
+
+        scoreText.text = "${result.readinessScore}%"
+        summaryText.text = result.summary
+
+        result.items.forEach { item ->
+            val itemView = layoutInflater.inflate(R.layout.item_medready_detail, itemsContainer, false)
+            val nameText = itemView.findViewById<TextView>(R.id.itemName)
+            val statusText = itemView.findViewById<TextView>(R.id.itemStatus)
+            val statusIcon = itemView.findViewById<ImageView>(R.id.itemStatusIcon)
+
+            nameText.text = item.name
+            statusText.text = item.status
+            
+            when (item.status) {
+                "Detected" -> {
+                    statusIcon.setImageResource(R.drawable.ic_medready_detection)
+                    statusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.status_success))
+                    statusText.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_success))
+                }
+                "Missing" -> {
+                    statusIcon.setImageResource(R.drawable.ic_medready_missing)
+                    statusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.status_danger))
+                    statusText.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_danger))
+                }
+                "Expired" -> {
+                    statusIcon.setImageResource(R.drawable.ic_medready_expiry)
+                    statusIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.status_warning))
+                    statusText.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_warning))
+                }
+            }
+            itemsContainer.addView(itemView)
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .setPositiveButton("Dismiss", null)
+            .show()
     }
 }

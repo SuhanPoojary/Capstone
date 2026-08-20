@@ -11,7 +11,7 @@
         android:fillViewport="true"
         android:overScrollMode="never"
         android:clipToPadding="false"
-        android:paddingBottom="140dp"
+        android:paddingBottom="@dimen/fragment_bottom_padding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +135,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_lg"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
@@ -280,7 +281,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="Completed lessons and quiz summaries will appear here."
+                        android:text="Your learning milestones and progress will appear here."
                         android:textColor="@color/sr_text_secondary"
                         android:textSize="13sp" />
 
@@ -290,7 +291,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="Level 1 • 0-day streak • 0 points"
+                        android:text="Loading progress..."
                         android:textColor="@color/sr_text_secondary"
                         android:textSize="13sp" />
 
@@ -316,10 +317,11 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/simulationsValue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="32/50"
+                                android:text="0/0"
                                 android:textColor="@color/sr_text_secondary"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -331,13 +333,14 @@
                             android:background="@color/sr_bg_warm_cream">
 
                             <View
+                                android:id="@+id/simulationsProgress"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
                                 android:background="@drawable/progress_gradient_blue"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintWidth_percent="0.64" />
+                                app:layout_constraintWidth_percent="0.0" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
@@ -365,10 +368,11 @@
                                     android:textSize="14sp" />
 
                                 <TextView
+                                    android:id="@+id/lessonsValue"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/plus_jakarta_sans"
-                                    android:text="24/40"
+                                    android:text="0/0"
                                     android:textColor="@color/sr_text_secondary"
                                     android:textSize="13sp" />
                             </LinearLayout>
@@ -380,13 +384,14 @@
                                 android:background="@color/sr_bg_warm_cream">
 
                                 <View
+                                    android:id="@+id/lessonsProgress"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
                                     android:background="@drawable/progress_gradient_teal"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintWidth_percent="0.60" />
+                                    app:layout_constraintWidth_percent="0.0" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </LinearLayout>
 
@@ -415,10 +420,11 @@
                                     android:textSize="14sp" />
 
                                 <TextView
+                                    android:id="@+id/drillsValue"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/plus_jakarta_sans"
-                                    android:text="18/25"
+                                    android:text="0/0"
                                     android:textColor="@color/sr_text_secondary"
                                     android:textSize="13sp" />
                             </LinearLayout>
@@ -430,144 +436,21 @@
                                 android:background="@color/sr_bg_warm_cream">
 
                                 <View
+                                    android:id="@+id/drillsProgress"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
                                     android:background="@drawable/progress_gradient_bronze"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintWidth_percent="0.72" />
+                                    app:layout_constraintWidth_percent="0.0" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/plus_jakarta_sans"
-                android:text="Certifications"
-                android:textColor="@color/sr_primary_navy"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/certificationsList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="@color/sr_bg_card"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:gravity="center"
-                            android:text="🚑"
-                            android:textSize="28sp" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="First Responder Certified"
-                                android:textColor="@color/sr_text_primary"
-                                android:textSize="15sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="Issued on May 1, 2026"
-                                android:textColor="@color/sr_text_secondary"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_chip_active"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:paddingStart="10dp"
-                            android:paddingTop="6dp"
-                            android:paddingEnd="10dp"
-                            android:paddingBottom="6dp"
-                            android:text="Verified"
-                            android:textColor="@color/sr_teal"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/plus_jakarta_sans"
-                    android:text="Recent Badges"
-                    android:textColor="@color/sr_primary_navy"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/plus_jakarta_sans"
-                    android:text="View All"
-                    android:textColor="@color/sr_accent_navy"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:overScrollMode="never"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <include layout="@layout/item_badge_preview" />
-                    <include layout="@layout/item_badge_preview" />
-                    <include layout="@layout/item_badge_preview" />
-                    <include layout="@layout/item_badge_preview" />
-                </LinearLayout>
-            </HorizontalScrollView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -587,128 +470,27 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/manageContactsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/plus_jakarta_sans"
-                    android:text="Manage"
+                    android:text="+ Add"
                     android:textColor="@color/sr_accent_navy"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/emergencyContacts"
+                android:id="@+id/emergencyContactsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="@color/sr_bg_card"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
+                <!-- Dynamic contacts will be added here -->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
-
-                        <View
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="#F3F4F6" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="Mom"
-                                android:textColor="@color/sr_text_primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="+91 98765 43210"
-                                android:textColor="@color/sr_text_secondary"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="@color/sr_bg_card"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
-
-                        <View
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="#F3F4F6" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="Emergency Services"
-                                android:textColor="@color/sr_text_primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="112"
-                                android:textColor="@color/sr_text_secondary"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_chip_active"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:paddingStart="8dp"
-                            android:paddingTop="6dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="6dp"
-                            android:text="SOS"
-                            android:textColor="@color/sr_danger_red"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
             <LinearLayout
@@ -729,12 +511,15 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/downloadMapsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/plus_jakarta_sans"
                     android:text="Download"
                     android:textColor="@color/sr_accent_navy"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
@@ -810,6 +595,51 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/themeItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/sr_bg_card"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text="Theme Selection"
+                        android:textColor="@color/sr_text_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/currentThemeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text="Auto"
+                        android:textColor="@color/sr_text_secondary"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text=">"
+                        android:textColor="@color/sr_text_secondary"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_light" />
+
+                <LinearLayout
                     android:id="@+id/notificationsItem"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -827,6 +657,51 @@
                         android:text="Notifications"
                         android:textColor="@color/sr_text_primary"
                         android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text=">"
+                        android:textColor="@color/sr_text_secondary"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_light" />
+
+                <LinearLayout
+                    android:id="@+id/emergencyModeItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/sr_bg_card"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text="Emergency Mode"
+                        android:textColor="@color/sr_text_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/currentEmergencyModeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/plus_jakarta_sans"
+                        android:text="On"
+                        android:textColor="@color/sr_text_secondary"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="wrap_content"

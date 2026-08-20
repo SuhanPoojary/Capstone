@@ -31,9 +31,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Legacy Intent-based profile saving removed. 
-        // User profile is now managed by AuthRepository and AuthViewModel.
-
         if (savedInstanceState != null) {
             currentTabId = savedInstanceState.getInt(KEY_CURRENT_TAB, R.id.nav_home)
         }
@@ -46,13 +43,15 @@ class MainActivity : AppCompatActivity() {
 
         bindNavClicks()
 
-        // Emergency button opens the EmergencyActivity (center floating button)
         sosButton.setOnClickListener {
             startActivity(Intent(this, EmergencyActivity::class.java))
         }
         
-        // Start subtle pulse animation
-        sosButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.sos_pulse))
+        try {
+            sosButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.sos_pulse))
+        } catch (e: Exception) {
+            // Pulse animation might be missing, ignore
+        }
 
         updateSelectedTabUi(currentTabId)
         if (savedInstanceState == null) {
@@ -113,10 +112,15 @@ class MainActivity : AppCompatActivity() {
         val label = container.findViewById<TextView>(labelId)
         
         val tint = if (selected) R.color.nav_active else R.color.nav_inactive
+        // Standardize highlight to v2.0 design system
         container.setBackgroundResource(if (selected) R.drawable.bg_nav_selected_pill else android.R.color.transparent)
         
         icon?.setColorFilter(ContextCompat.getColor(this, tint))
         label?.setTextColor(ContextCompat.getColor(this, tint))
+        
+        // Typography for v2.0 Plus Jakarta Sans is applied via labels in XML, 
+        // but we ensure the selection is visually distinct
+        label?.typeface = android.graphics.Typeface.create("sans-serif", if (selected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
     }
 
     companion object {

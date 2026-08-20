@@ -102,8 +102,8 @@
     <color name="status_info">#3B82F6</color>
 
     <!-- Navigation Tokens -->
-    <color name="nav_active">#0B2856</color>
-    <color name="nav_inactive">#9CA3AF</color>
+    <color name="nav_active">#0E4B93</color>
+    <color name="nav_inactive">#8E9AB3</color>
     <color name="nav_sos">#D91F32</color>
 
     <!-- Strict design system additions (SafeReady Profile) -->

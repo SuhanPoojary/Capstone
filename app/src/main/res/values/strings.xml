@@ -222,4 +222,5 @@
     <string name="text_warning">Warning</string>
     <string name="text_temperature">28°C</string>
     <string name="text_preparedness_percentage">78%</string>
+    <string name="lab_level_format">Level %d</string>
 </resources>

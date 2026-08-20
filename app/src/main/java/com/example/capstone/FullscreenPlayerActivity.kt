@@ -9,7 +9,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.example.capstone.presentation.ProgressViewModel
-import com.example.capstone.presentation.QuizBottomSheetDialogFragment
 
 class FullscreenPlayerActivity : AppCompatActivity() {
 
@@ -56,8 +55,6 @@ class FullscreenPlayerActivity : AppCompatActivity() {
         val (disasterKey, chapterIndex) = fullscreenCompletionKey ?: return
         quizShown = true
         progressViewModel.markChapterCompleted(disasterKey, chapterIndex)
-        QuizBottomSheetDialogFragment.newInstance(disasterKey, chapterIndex)
-            .show(supportFragmentManager, "quiz_bottom_sheet_fullscreen")
     }
 
     private val playbackListener = object : Player.Listener {

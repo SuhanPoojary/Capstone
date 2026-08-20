@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Card.Elevated"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/item_spacing">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/contactName"
+                style="@style/TextStyle.Heading.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Name"
+                android:textColor="@color/sr_text_primary"/>
+
+            <TextView
+                android:id="@+id/contactRelation"
+                style="@style/TextStyle.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relation"
+                android:textColor="@color/sr_text_secondary"/>
+
+            <TextView
+                android:id="@+id/contactPhone"
+                style="@style/TextStyle.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone Number"
+                android:textColor="@color/sr_primary_navy"
+                android:layout_marginTop="@dimen/spacing_xs"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/deleteContactButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Delete Contact"
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            app:tint="@color/sr_danger_red"/>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

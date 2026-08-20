@@ -59,7 +59,12 @@ class GamificationRepository(
         val bestStreak = prefs.getBestStreak()
         val level = (points / 50) + 1
         val completedChapters = progressRepository.getTotalCompletedChapters()
-        val badges = buildBadges(points, currentStreak, completedChapters, progressRepository.getAllProgress())
+        val snapshots = progressRepository.getAllProgress()
+        val badges = buildBadges(points, currentStreak, completedChapters, snapshots)
+
+        // Mocking quiz and simulation counts based on points/progress for now
+        val quizzes = points / 100
+        val simulations = snapshots.count { it.percent >= 100 }
 
         return GamificationSummary(
             points = points,
@@ -68,6 +73,9 @@ class GamificationRepository(
             bestStreak = bestStreak,
             badges = badges,
             progressText = "${completedChapters} lessons completed • Level $level • ${currentStreak}-day streak",
+            lessonsCompleted = completedChapters,
+            quizzesCompleted = quizzes,
+            simulationsCompleted = simulations
         )
     }
 

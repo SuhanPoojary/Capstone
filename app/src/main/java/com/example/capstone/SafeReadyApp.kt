@@ -10,15 +10,28 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.capstone.service.DisasterMonitorWorker
+import org.osmdroid.config.Configuration
+import java.util.concurrent.TimeUnit
+
 class SafeReadyApp : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        // Set osmdroid User-Agent to comply with OSM Tile Usage Policy
+        Configuration.getInstance().userAgentValue = packageName
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
 
         // Initialize notification channels
         NotificationHelper(this)
+
+        // Schedule Disaster Monitor
+        scheduleDisasterMonitoring()
 
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
@@ -38,6 +51,18 @@ class SafeReadyApp : Application() {
                 previous?.uncaughtException(t, e)
             }
         }
+    }
+
+    private fun scheduleDisasterMonitoring() {
+        val monitorRequest = PeriodicWorkRequestBuilder<DisasterMonitorWorker>(
+            15, TimeUnit.MINUTES
+        ).build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "disaster_monitor",
+            ExistingPeriodicWorkPolicy.KEEP,
+            monitorRequest
+        )
     }
 
     private fun writeCrashToFile(threadName: String, e: Throwable) {

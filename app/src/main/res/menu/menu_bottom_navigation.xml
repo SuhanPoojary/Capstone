@@ -2,19 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:title="@string/nav_home"
+        android:title="Home"
         android:icon="@drawable/ic_nav_home" />
     <item
         android:id="@+id/nav_lab"
-        android:title="@string/nav_lab"
+        android:title="Lab"
         android:icon="@drawable/ic_nav_lab" />
     <item
+        android:id="@+id/nav_placeholder"
+        android:title=""
+        android:enabled="false"
+        android:icon="@android:color/transparent" />
+    <item
         android:id="@+id/nav_medready"
-        android:title="@string/nav_medready"
+        android:title="MedReady"
         android:icon="@drawable/ic_nav_medready" />
     <item
         android:id="@+id/nav_profile"
-        android:title="@string/nav_profile"
+        android:title="Profile"
         android:icon="@drawable/ic_nav_profile" />
 </menu>
 

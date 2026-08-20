@@ -90,4 +90,3 @@ class MeshViewModel(application: Application) : AndroidViewModel(application) {
     fun getRoomMigrationPreviewCount(): Int = repo.getRoomMigrationPreviewCount()
 }
 
-

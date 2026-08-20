@@ -110,7 +110,7 @@
 
     <!-- Spacing for Fragment Layouts -->
     <dimen name="fragment_top_padding">8dp</dimen>
-    <dimen name="fragment_bottom_padding">80dp</dimen>
+    <dimen name="fragment_bottom_padding">88dp</dimen>
 
     <!-- Lab dashboard tokens -->
     <dimen name="lab_corner_md">12dp</dimen>

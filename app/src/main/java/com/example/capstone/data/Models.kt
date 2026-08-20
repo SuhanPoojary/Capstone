@@ -68,3 +68,20 @@ data class ChatMessage(
     val text: String,
     val isUser: Boolean,
 )
+
+data class MedReadyItem(
+    val name: String,
+    val status: String, // "Detected", "Missing", "Expired"
+    val expiryDate: String? = null,
+    val isEssential: Boolean = true
+)
+
+data class MedReadyScanResult(
+    val id: String = "",
+    val timestamp: Long = 0L,
+    val itemCount: Int = 0,
+    val readinessScore: Int = 0,
+    val warnings: Int = 0,
+    val items: List<MedReadyItem> = emptyList(),
+    val summary: String = ""
+)

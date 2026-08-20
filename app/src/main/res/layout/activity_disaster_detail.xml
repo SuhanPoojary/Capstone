@@ -175,7 +175,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search_pill"
                 android:padding="14dp"
-                android:text="01  Understanding Seismic Waves"
+                android:text="01  Pre-Disaster"
                 android:textColor="@color/dashboard_name"
                 android:textSize="13sp" />
 
@@ -186,7 +186,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search_pill"
                 android:padding="14dp"
-                android:text="02  Drop, Cover, Hold On"
+                android:text="02  During-Disaster"
                 android:textColor="@color/dashboard_name"
                 android:textSize="13sp" />
 
@@ -197,7 +197,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search_pill"
                 android:padding="14dp"
-                android:text="03  Post-Quake Evacuation"
+                android:text="03  Post-Disaster"
                 android:textColor="@color/dashboard_name"
                 android:textSize="13sp" />
 

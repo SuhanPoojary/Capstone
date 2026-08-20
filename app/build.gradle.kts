@@ -27,26 +27,22 @@ plugins {
 
 android {
     namespace = "com.example.capstone"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
-
-    buildFeatures {
-        buildConfig = true
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.capstone"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         buildConfigField("String", "GROQ_API_KEY", "\"${groqApiKey.kotlinStringLiteral()}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -82,10 +78,19 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     implementation("androidx.gridlayout:gridlayout:1.0.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // Network
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // Video playback
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
+
+    // Maps
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))

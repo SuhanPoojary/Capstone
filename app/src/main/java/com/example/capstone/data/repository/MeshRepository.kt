@@ -60,6 +60,9 @@ class MeshRepository(context: Context) {
     private val listener = object : MeshService.Listener {
         override fun onStateChanged(state: MeshConnectionState) {
             _state.value = state
+            if (state.connectedDevices > 0) {
+                scope.launch { flushPendingMessages() }
+            }
         }
 
         override fun onEndpointDiscovered(deviceId: String, deviceName: String, signalStrength: Int?) {
@@ -71,13 +74,28 @@ class MeshRepository(context: Context) {
         }
 
         override fun onMessageReceived(message: MeshMessage) {
-            scope.launch { handleInboundMessage(message) }
+            scope.launch { 
+                handleInboundMessage(message)
+                if (message.type == MeshMessageType.SOS) {
+                    sendAcknowledge(message)
+                }
+            }
         }
 
         override fun onConnectionError(message: String) {
             _state.value = _state.value.copy(lastError = message)
             _telemetry.value = _telemetry.value.copy(lastError = message)
         }
+    }
+
+    private suspend fun sendAcknowledge(sosMessage: MeshMessage) {
+        val ack = MeshMessage(
+            senderId = localDeviceId,
+            senderName = prefs.getUserProfile().name,
+            type = MeshMessageType.ACK,
+            content = "ACK:${sosMessage.id}"
+        )
+        service.broadcastMessage(ack)
     }
 
     fun start(displayName: String) {
@@ -158,6 +176,13 @@ class MeshRepository(context: Context) {
             _telemetry.value = _telemetry.value.copy(droppedExpired = _telemetry.value.droppedExpired + 1)
             return
         }
+        
+        if (message.type == MeshMessageType.ACK && message.content.startsWith("ACK:")) {
+            val targetId = message.content.removePrefix("ACK:")
+            acknowledge(targetId, message.senderId)
+            return
+        }
+
         if (dao.hasMessage(message.id)) {
             _telemetry.value = _telemetry.value.copy(droppedDuplicate = _telemetry.value.droppedDuplicate + 1)
             return
@@ -175,17 +200,42 @@ class MeshRepository(context: Context) {
                 lastAttemptAt = System.currentTimeMillis(),
             )
             dao.upsert(relayed.toEntity())
+            
+            // Jitter to avoid collision
+            delay((200..1000).random().toLong())
             sendWithRetry(relayed, isRelay = true)
         }
     }
 
+    private suspend fun flushPendingMessages() {
+        if (service.getConnectedCount() <= 0) return
+
+        val queued = dao.getRecent(MESSAGE_LIMIT)
+            .filter { message ->
+                (message.type == MeshMessageType.SOS || message.type == MeshMessageType.ALERT) &&
+                    (message.sendStatus == MeshSendStatus.PENDING || message.sendStatus == MeshSendStatus.FAILED)
+            }
+            .map { it.toDomain() }
+            .sortedByDescending { it.timestamp }
+
+        queued.forEach { sendWithRetry(it, isRelay = false) }
+    }
+
     private fun shouldRelay(message: MeshMessage): Boolean {
-        return message.type != MeshMessageType.ACK &&
+        // Only relay if it's a high-priority type (SOS, ALERT)
+        // and it hasn't exceeded TTL or reached us before
+        return (message.type == MeshMessageType.SOS || message.type == MeshMessageType.ALERT) &&
             message.shouldRelay() &&
             !message.relayedBy.contains(localDeviceId)
     }
 
     private suspend fun sendWithRetry(message: MeshMessage, isRelay: Boolean, maxRetries: Int = 2) {
+        if (service.getConnectedCount() <= 0) {
+            dao.upsert(message.copy(sendStatus = MeshSendStatus.PENDING).toEntity())
+            _telemetry.value = _telemetry.value.copy(lastError = "Queued for relay until a nearby device is available")
+            return
+        }
+
         var attempt = 0
         while (attempt <= maxRetries) {
             val attemptMessage = message.copy(
@@ -289,4 +339,3 @@ class MeshRepository(context: Context) {
         private const val MESSAGE_LIMIT = 100
     }
 }
-

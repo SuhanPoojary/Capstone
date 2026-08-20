@@ -33,18 +33,51 @@ class QuizBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val questionText = view.findViewById<TextView>(R.id.quizQuestion)
         val optionsContainer = view.findViewById<LinearLayout>(R.id.quizOptionsContainer)
         val resultText = view.findViewById<TextView>(R.id.quizResultText)
-        val closeButton = view.findViewById<MaterialButton>(R.id.quizCloseButton)
+        val nextButton = view.findViewById<MaterialButton>(R.id.quizCloseButton)
 
-        closeButton.setOnClickListener { dismissAllowingStateLoss() }
+        nextButton.setOnClickListener {
+            val state = viewModel.state.value
+            if (state?.isFinished == true || state?.question == null) {
+                dismissAllowingStateLoss()
+            } else if (state.result != null) {
+                viewModel.nextQuestion()
+            } else {
+                dismissAllowingStateLoss()
+            }
+        }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            if (state.isLoading) {
+                questionText.text = "Loading quiz..."
+                optionsContainer.removeAllViews()
+                nextButton.visibility = View.GONE
+                return@observe
+            }
+
+            if (state.isFinished) {
+                val passed = (state.score.toFloat() / state.totalQuestions) > 0.5f
+                questionText.text = if (passed) "Congratulations!" else "Quiz Finished"
+                optionsContainer.removeAllViews()
+                val scoreText = TextView(requireContext()).apply {
+                    text = "Your score: ${state.score} / ${state.totalQuestions}\n\n" +
+                            if (passed) "You passed this chapter! You can now proceed to the next one."
+                            else "You didn't pass this time. A score of more than 50% is required to unlock the next chapter. Please review the lesson and try again."
+                    textSize = 16f
+                    setPadding(0, 20, 0, 20)
+                }
+                optionsContainer.addView(scoreText)
+                nextButton.text = "Finish"
+                nextButton.visibility = View.VISIBLE
+                resultText.visibility = View.GONE
+                return@observe
+            }
+
             val question = state.question ?: return@observe
-            questionText.text = question.question
-            resultText.text = state.result?.message.orEmpty()
+            questionText.text = "Question ${state.currentQuestionIndex + 1}/${state.totalQuestions}\n\n${question.question}"
             optionsContainer.removeAllViews()
 
             question.options.forEachIndexed { index, option ->
-                val button = MaterialButton(requireContext()).apply {
+                val button = MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonStyle).apply {
                     text = option
                     isAllCaps = false
                     setOnClickListener {
@@ -52,16 +85,28 @@ class QuizBottomSheetDialogFragment : BottomSheetDialogFragment() {
                             viewModel.submitAnswer(index)
                         }
                     }
+                    // Color coding for results
+                    if (state.result != null) {
+                        if (index == question.correctIndex) {
+                            setBackgroundColor(android.graphics.Color.parseColor("#4CAF50")) // Green
+                            setTextColor(android.graphics.Color.WHITE)
+                        } else if (index == state.selectedIndex) {
+                            setBackgroundColor(android.graphics.Color.parseColor("#F44336")) // Red
+                            setTextColor(android.graphics.Color.WHITE)
+                        }
+                    }
                 }
                 optionsContainer.addView(button)
             }
 
             if (state.result != null) {
-                questionText.text = question.question
+                resultText.visibility = View.VISIBLE
                 resultText.text = state.result.message
-                optionsContainer.forEachChild { child ->
-                    (child as? MaterialButton)?.isEnabled = false
-                }
+                nextButton.text = if (state.currentQuestionIndex + 1 < state.totalQuestions) "Next Question" else "See Results"
+                nextButton.visibility = View.VISIBLE
+            } else {
+                resultText.visibility = View.GONE
+                nextButton.visibility = View.GONE
             }
         }
     }

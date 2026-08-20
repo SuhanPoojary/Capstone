@@ -7,6 +7,7 @@
     android:fillViewport="true">
 
     <LinearLayout
+        android:id="@+id/medreadyMainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -26,6 +27,15 @@
             android:textColor="@color/sr_text_primary"
             android:fontFamily="@font/plus_jakarta_sans"
             android:layout_marginBottom="@dimen/spacing_xs" />
+
+        <ProgressBar
+            android:id="@+id/medreadyProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:layout_marginBottom="@dimen/spacing_md" />
 
         <TextView
             android:id="@+id/medreadySubtitle"
@@ -406,207 +416,11 @@
 
         </LinearLayout>
 
-        <!-- Previous Scan Item 1 -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/medreadyHistoryContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/bg_card"
-            app:cardCornerRadius="@dimen/medready_card_corner"
-            app:cardElevation="@dimen/elevation_light"
-            android:layout_marginBottom="@dimen/spacing_lg">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Top Row: Date and Readiness -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/spacing_lg"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="May 5, 2026"
-                            android:textSize="@dimen/text_body_lg"
-                            android:textStyle="bold"
-                            android:textColor="@color/sr_text_primary"
-                            android:fontFamily="@font/plus_jakarta_sans" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="12 items scanned"
-                            android:textSize="@dimen/text_body_sm"
-                            android:textColor="@color/sr_text_secondary"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:layout_marginTop="@dimen/spacing_xs" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="78%"
-                        android:textSize="@dimen/text_display_sm"
-                        android:textStyle="bold"
-                        android:textColor="@color/sr_primary_navy"
-                        android:fontFamily="@font/plus_jakarta_sans" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Readiness"
-                        android:textSize="@dimen/text_label_md"
-                        android:textColor="@color/sr_text_secondary"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:layout_marginStart="@dimen/spacing_sm" />
-
-                </LinearLayout>
-
-                <!-- Warning Strip -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/medready_warning_strip_height"
-                    android:background="@color/color_orange_50"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/spacing_lg"
-                    android:paddingEnd="@dimen/spacing_lg"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_sm"
-                        android:layout_height="@dimen/icon_sm"
-                        android:src="@drawable/ic_warning_small"
-                        android:contentDescription="Warning"
-                        android:tint="@color/color_orange_500"
-                        android:layout_marginEnd="@dimen/spacing_sm" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2 warnings found"
-                        android:textSize="@dimen/text_body_sm"
-                        android:textColor="@color/color_orange_600"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Previous Scan Item 2 -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/bg_card"
-            app:cardCornerRadius="@dimen/medready_card_corner"
-            app:cardElevation="@dimen/elevation_light"
-            android:layout_marginBottom="@dimen/spacing_lg">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Top Row: Date and Readiness -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/spacing_lg"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="April 28, 2026"
-                            android:textSize="@dimen/text_body_lg"
-                            android:textStyle="bold"
-                            android:textColor="@color/sr_text_primary"
-                            android:fontFamily="@font/plus_jakarta_sans" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="10 items scanned"
-                            android:textSize="@dimen/text_body_sm"
-                            android:textColor="@color/sr_text_secondary"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:layout_marginTop="@dimen/spacing_xs" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="65%"
-                        android:textSize="@dimen/text_display_sm"
-                        android:textStyle="bold"
-                        android:textColor="@color/sr_primary_navy"
-                        android:fontFamily="@font/plus_jakarta_sans" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Readiness"
-                        android:textSize="@dimen/text_label_md"
-                        android:textColor="@color/sr_text_secondary"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:layout_marginStart="@dimen/spacing_sm" />
-
-                </LinearLayout>
-
-                <!-- Warning Strip -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/medready_warning_strip_height"
-                    android:background="@color/color_orange_50"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/spacing_lg"
-                    android:paddingEnd="@dimen/spacing_lg"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_sm"
-                        android:layout_height="@dimen/icon_sm"
-                        android:src="@drawable/ic_warning_small"
-                        android:contentDescription="Warning"
-                        android:tint="@color/color_orange_500"
-                        android:layout_marginEnd="@dimen/spacing_sm" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4 warnings found"
-                        android:textSize="@dimen/text_body_sm"
-                        android:textColor="@color/color_orange_600"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+            android:orientation="vertical" />
 
     </LinearLayout>
 

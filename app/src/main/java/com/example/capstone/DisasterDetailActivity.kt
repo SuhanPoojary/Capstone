@@ -13,7 +13,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.example.capstone.model.LanguageOption
 import com.example.capstone.presentation.ProgressViewModel
-import com.example.capstone.presentation.QuizBottomSheetDialogFragment
 
 class DisasterDetailActivity : AppCompatActivity() {
 
@@ -31,7 +30,7 @@ class DisasterDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_disaster_detail)
         progressViewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[ProgressViewModel::class.java]
 
-        val disasterKey = intent.getStringExtra(EXTRA_DISASTER_KEY) ?: "earthquake"
+        val disasterKey = intent.getStringExtra(QuizActivity.EXTRA_DISASTER_KEY) ?: "earthquake"
 
         findViewById<android.view.View>(R.id.backButton)?.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -50,7 +49,11 @@ class DisasterDetailActivity : AppCompatActivity() {
 
         // CTA now means "start lesson" (plays chapter 1 with language picker)
         findViewById<android.view.View>(R.id.takeQuizBtn)?.setOnClickListener {
-            // TODO: hook quiz activity later
+            val intent = Intent(this, QuizActivity::class.java).apply {
+                putExtra(QuizActivity.EXTRA_DISASTER_KEY, disasterKey)
+                putExtra(QuizActivity.EXTRA_TOPIC, disasterKey)
+            }
+            startActivity(intent)
         }
 
         findViewById<android.view.View>(R.id.ccBadge)?.setOnClickListener {
@@ -136,8 +139,7 @@ class DisasterDetailActivity : AppCompatActivity() {
         if (quizShownForChapter == chapterIndex) return
         quizShownForChapter = chapterIndex
         progressViewModel.markChapterCompleted(disasterKey, chapterIndex)
-        QuizBottomSheetDialogFragment.newInstance(disasterKey, chapterIndex)
-            .show(supportFragmentManager, "quiz_bottom_sheet")
+        // Removed automatic QuizBottomSheetDialogFragment popup as per user request
     }
 
     private val playbackListener = object : Player.Listener {
@@ -145,7 +147,7 @@ class DisasterDetailActivity : AppCompatActivity() {
             super.onPlaybackStateChanged(playbackState)
             if (playbackState == Player.STATE_ENDED) {
                 val chapterIndex = selectedChapterIndex ?: return
-                onPlaybackCompleted(intent.getStringExtra(EXTRA_DISASTER_KEY) ?: "earthquake", chapterIndex)
+                onPlaybackCompleted(intent.getStringExtra(QuizActivity.EXTRA_DISASTER_KEY) ?: "earthquake", chapterIndex)
             }
         }
     }

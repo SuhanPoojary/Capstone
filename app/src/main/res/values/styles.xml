@@ -22,48 +22,48 @@
 
     <!-- Label/Caption Base -->
     <style name="TextStyle.Label" parent="TextStyle">
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Display.Large" parent="TextStyle.Display">
         <item name="android:textSize">@dimen/text_display_lg</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Display.Medium" parent="TextStyle.Display">
         <item name="android:textSize">@dimen/text_display_md</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Heading.Large" parent="TextStyle.Heading">
         <item name="android:textSize">@dimen/text_heading_lg</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Heading.Medium" parent="TextStyle.Heading">
         <item name="android:textSize">@dimen/text_heading_md</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Heading.Small" parent="TextStyle.Heading">
         <item name="android:textSize">@dimen/text_heading_sm</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Body.Large" parent="TextStyle.Body">
         <item name="android:textSize">@dimen/text_body_lg</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Body.Medium" parent="TextStyle.Body">
         <item name="android:textSize">@dimen/text_body_md</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Body.Small" parent="TextStyle.Body">
         <item name="android:textSize">@dimen/text_body_sm</item>
         <item name="android:textColor">@color/text_secondary</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="TextStyle.Label.Large" parent="TextStyle.Label">
@@ -73,6 +73,11 @@
 
     <style name="TextStyle.Label.Medium" parent="TextStyle.Label">
         <item name="android:textSize">@dimen/text_label_md</item>
+        <item name="android:textColor">@color/text_tertiary</item>
+    </style>
+
+    <style name="TextStyle.Label.Small" parent="TextStyle.Label">
+        <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/text_tertiary</item>
     </style>
 
@@ -89,7 +94,7 @@
         <item name="android:minHeight">@dimen/button_height_large</item>
         <item name="cornerRadius">@dimen/corner_lg</item>
         <item name="android:textSize">@dimen/text_body_md</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
@@ -208,20 +213,20 @@
         <item name="android:paddingBottom">@dimen/spacing_xs</item>
         <item name="android:textSize">@dimen/text_label_md</item>
         <item name="android:textColor">@color/text_inverse</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="StatNumber">
         <item name="android:textSize">@dimen/text_display_md</item>
         <item name="android:textColor">@color/color_navy_800</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <style name="StatLabel">
         <item name="android:textSize">@dimen/text_label_md</item>
         <item name="android:textColor">@color/text_secondary</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
     </style>
 
     <!-- ====== LAB DASHBOARD STYLES ====== -->
