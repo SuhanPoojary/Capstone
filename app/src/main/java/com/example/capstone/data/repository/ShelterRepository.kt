@@ -29,7 +29,8 @@ class ShelterRepository(private val shelterDao: ShelterDao, private val context:
                         capacity = it.capacity,
                         inmates = it.inmates,
                         campType = it.campType,
-                        year = it.year
+                        year = it.year,
+                        source = it.source
                     )
                 }
                 shelterDao.insertAll(entities)

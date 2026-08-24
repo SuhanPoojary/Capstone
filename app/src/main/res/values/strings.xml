@@ -103,6 +103,10 @@
     <string name="home_status_keep_going">Keep going</string>
     <string name="home_status_ready_to_review">Ready to review</string>
     <string name="home_recommendation_default">Start a lesson to see a recommendation.</string>
+    <string name="home_user_default">User</string>
+    <string name="home_medready_ready">MedReady: %1$d%% Ready</string>
+    <string name="home_medready_not_scanned">MedReady: Not Scanned</string>
+
     <string name="assistant_suggestion_default">Ask about a disaster or emergency kit to get started.</string>
     <string name="assistant_input_hint">Ask a disaster safety question</string>
     <string name="assistant_status_offline">Offline disaster assistant</string>
@@ -136,18 +140,56 @@
     <string name="lab_game_body">Play the deployed disaster scenario inside SafeReady.</string>
     <string name="lab_game_action">Play Game</string>
 
+    <string name="lab_survival_progress_title">Your Survival Progress</string>
+    <string name="lab_survival_rank_default">Advanced Survivor</string>
+    <string name="lab_stat_quizzes">Quizzes</string>
+    <string name="lab_stat_simulations">Simulations</string>
+    <string name="lab_stat_xp">XP Points</string>
+    <string name="lab_daily_challenge_pill">⚡ DAILY CHALLENGE</string>
+    <string name="lab_daily_challenge_title">First Aid: Burn Treatment</string>
+    <string name="lab_daily_challenge_desc">Quick decision challenge: Identify the correct action for a 2nd-degree burn.</string>
+    <string name="lab_daily_challenge_meta">+50 XP • Ends in 4h 20m</string>
+    <string name="lab_daily_challenge_action">Solve Now</string>
+    <string name="lab_simulations_title">Survival Simulations</string>
+    <string name="lab_role_game_title">Role-Based Game</string>
+    <string name="lab_role_game_body">Play as different roles in disaster scenarios</string>
+    <string name="lab_coming_soon">Coming Soon</string>
+    <string name="lab_quiz_section_title">Disaster Preparedness Quiz</string>
+    <string name="lab_quiz_section_action">Take Quiz</string>
+    <string name="lab_ai_quiz_title">AI-Generated Quizzes</string>
+    <string name="lab_ai_quiz_meta">5 questions • Timed • Get explanations</string>
+    <string name="lab_ai_quiz_action">Start Quiz Levels</string>
+    <string name="lab_training_modules_title">Training Modules</string>
+    <string name="lab_earthquake_desc">Learn Drop, Cover, and Hold on techniques.</string>
+    <string name="lab_flood_desc">Emergency kits and evacuation routes.</string>
+    <string name="lab_cyclone_desc">Structural safety and weather tracking.</string>
+    <string name="lab_landslide_desc">Early warning signs and safe zones.</string>
+    <string name="lab_start_training">Start Training</string>
+    <string name="lab_disaster_modules_title">Disaster Modules</string>
+    <string name="lab_role_game_toast">Role-based game coming in next update</string>
+    <string name="lab_earthquake_name">Earthquake</string>
+    <string name="lab_floods_name">Floods</string>
+    <string name="lab_cyclone_name">Cyclone</string>
+    <string name="lab_landslides_name">Landslides</string>
+
     <!-- Emergency Mode -->
     <string name="emergency_mode_title">EMERGENCY MODE</string>
     <string name="emergency_sos_broadcast">SOS Broadcast</string>
+    <string name="emergency_network_status">Network Status</string>
     <string name="emergency_mesh_status">Mesh Network Status</string>
     <string name="emergency_gps_status">GPS Location</string>
-    <string name="emergency_battery_status">Battery</string>
+    <string name="emergency_battery_status">Battery Status</string>
     <string name="emergency_nearby_devices">Nearby Devices</string>
     <string name="emergency_safe_status">Safe</string>
     <string name="emergency_injured_status">Injured</string>
     <string name="emergency_trapped_status">Trapped</string>
     <string name="emergency_need_water">Need Water</string>
     <string name="emergency_need_medical">Need Medical Help</string>
+    <string name="emergency_need_food">Need Food</string>
+    <string name="emergency_flashlight">Flashlight</string>
+    <string name="emergency_shelters">Find Shelters</string>
+    <string name="emergency_contacts">Emergency Contacts</string>
+    <string name="emergency_checklist">Survival Checklist</string>
     <string name="emergency_active">ACTIVE</string>
     <string name="emergency_status_off">Emergency Mode: OFF</string>
     <string name="emergency_sos_short">SOS</string>
@@ -157,6 +199,10 @@
     <string name="emergency_quick_actions">Quick Actions</string>
     <string name="emergency_nearby_devices_heading">Nearby Devices</string>
     <string name="emergency_exit_mode">Exit Emergency Mode</string>
+    <string name="emergency_exit_confirm_title">Exit Emergency Mode?</string>
+    <string name="emergency_exit_confirm_message">This will stop broadcasting your location and disable mesh networking.</string>
+    <string name="emergency_exit_confirm_yes">Exit</string>
+    <string name="emergency_exit_confirm_no">Stay in Emergency Mode</string>
 
     <!-- MedReady -->
     <string name="medready_title">MedReady</string>
@@ -223,4 +269,77 @@
     <string name="text_temperature">28°C</string>
     <string name="text_preparedness_percentage">78%</string>
     <string name="lab_level_format">Level %d</string>
+    <string name="mesh_hops_format">Hops: %d</string>
+    <string name="mesh_relay_direct">Direct</string>
+    <string name="mesh_relay_relayed">Relayed</string>
+    <string name="emergency_manual_discover">Discover</string>
+    <string name="emergency_mesh_messages_heading">Recent Mesh Messages</string>
+    <string name="status_connected_format">%1$s • %2$s</string>
+    <string name="emergency_permissions_granted">Permissions granted. Ready for mesh.</string>
+    <string name="emergency_permissions_required">Permissions required for SOS Mesh features.</string>
+    <string name="emergency_sos_confirm_title">Confirm SOS</string>
+    <string name="emergency_sos_confirm_message_generic">Broadcast a danger alert with your last known location to nearby devices?</string>
+    <string name="emergency_sos_confirm_message_status">Broadcast status \'%1$s\' with your last known location to nearby devices?</string>
+    <string name="emergency_sos_sent_count">SOS sent to %1$d saved contacts</string>
+    <string name="emergency_sos_queued">SOS queued</string>
+    <string name="emergency_flashlight_not_supported">Flashlight is not supported on this device</string>
+    <string name="emergency_flashlight_not_found">No flashlight found</string>
+    <string name="emergency_flashlight_on">Flashlight on</string>
+    <string name="emergency_flashlight_off">Flashlight off</string>
+    <string name="emergency_flashlight_error">Unable to control flashlight</string>
+    <string name="emergency_checklist_title">Emergency checklist</string>
+    <string name="emergency_checklist_content">1. Move to safety.\n2. Send SOS with your status.\n3. Keep the flashlight ready.\n4. Check emergency contacts.</string>
+    <string name="emergency_mesh_connected_count">🟢 %1$d connected</string>
+    <string name="emergency_mode_enable_first">Enable Emergency Mode first</string>
+    <string name="emergency_status_on">On</string>
+    <string name="emergency_status_off_short">Off</string>
+
+    <!-- Quiz -->
+    <string name="quiz_empty_error">Quiz could not be loaded. Please try again.</string>
+    <string name="quiz_finish">Finish</string>
+    <string name="quiz_next">Next</string>
+    <string name="quiz_view_results">View Results</string>
+    <string name="quiz_next_question">Next Question</string>
+    <string name="quiz_levels_complete">All levels complete!</string>
+    <string name="quiz_level_complete_format">Level %1$d Complete!\n\n</string>
+    <string name="quiz_score_format">You scored: %1$d / %2$d\n\n</string>
+    <string name="quiz_mastered">Great job! You\'ve mastered this level.</string>
+    <string name="lab_daily_challenge_started">Daily Challenge: First Aid Burn Treatment started!</string>
+    <string name="lab_starting_simulation">Starting Survival Simulation...</string>
+    <string name="lab_generating_quiz">Generating AI Quiz...</string>
+    <string name="lab_lessons_format">%1$d/%2$d</string>
+
+    <!-- Progress -->
+    <string name="progress_cleared">Local progress cleared</string>
+    <string name="progress_region_not_available">Region: not available</string>
+    <string name="progress_region_format">Region: %1$s</string>
+    <string name="progress_region_city_state_format">Region: %1$s, %2$s</string>
+    <string name="progress_email_not_saved">Email not saved yet</string>
+    <string name="progress_institution_not_saved">Institution not saved yet</string>
+    <string name="progress_summary_format">Completed lessons are tracked locally.\nTotal tracked disasters: %1$d</string>
+    <string name="progress_no_contacts">No contacts added</string>
+    <string name="progress_edit_profile">Edit Profile</string>
+    <string name="progress_points">Points</string>
+
+    <!-- Assistant -->
+    <string name="assistant_type_question">Type a question first</string>
+
+    <!-- MedReady -->
+    <string name="medready_no_scans">No previous scans found.</string>
+
+    <!-- Profile -->
+    <string name="profile_select_theme">Select Theme</string>
+    <string name="profile_theme_auto">Auto</string>
+    <string name="profile_theme_light">Light Mode</string>
+    <string name="profile_theme_dark">Dark Mode</string>
+    <string name="profile_sign_out_confirm">Are you sure you want to sign out?</string>
+    <string name="profile_emergency_mode_enabled">Emergency Mode enabled</string>
+    <string name="profile_emergency_mode_disabled">Emergency Mode disabled</string>
+
+    <!-- Map -->
+    <string name="map_attribution">© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team</string>
+    <string name="quiz_finish_action">Finish Quiz</string>
+    <string name="quiz_start_next_level">Start Level %1$d</string>
+    <string name="quiz_failed">You need 60% to reach the next level. Try again!</string>
+    <string name="quiz_default_topic">disaster preparedness</string>
 </resources>

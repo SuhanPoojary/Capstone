@@ -25,6 +25,9 @@ class MeshViewModel(application: Application) : AndroidViewModel(application) {
     private val _telemetry = MutableStateFlow(MeshTelemetryState())
     val telemetry: StateFlow<MeshTelemetryState> = _telemetry
 
+    private val _nearbyDevices = MutableStateFlow<List<com.example.capstone.data.MeshDevice>>(emptyList())
+    val nearbyDevices: StateFlow<List<com.example.capstone.data.MeshDevice>> = _nearbyDevices
+
     private val _actionMessage = MutableStateFlow<String?>(null)
     val actionMessage: StateFlow<String?> = _actionMessage
 
@@ -40,6 +43,10 @@ class MeshViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             repo.telemetry.collectLatest { _telemetry.value = it }
+        }
+
+        viewModelScope.launch {
+            repo.nearbyDevices.collectLatest { _nearbyDevices.value = it }
         }
     }
 
@@ -79,6 +86,13 @@ class MeshViewModel(application: Application) : AndroidViewModel(application) {
             }
             _actionMessage.value = repo.resendLatestFailed()
         }
+    }
+
+    fun restartMesh() {
+        val name = prefs.getUserProfile().name
+        repo.stop()
+        repo.start(name)
+        _actionMessage.value = "Mesh discovery restarted"
     }
 
     private fun isEmergencyModeEnabled(): Boolean = prefs.getEmergencyModeEnabled()

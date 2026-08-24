@@ -56,28 +56,35 @@ class GroqChatDataSource {
         }
 
         val response = runCatching {
-            val payload = if (connection.responseCode in 200..299) {
+            val code = connection.responseCode
+            val payload = if (code in 200..299) {
                 connection.inputStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
             } else {
-                connection.errorStream?.bufferedReader(StandardCharsets.UTF_8)?.use { it.readText() }.orEmpty()
+                val err = connection.errorStream?.bufferedReader(StandardCharsets.UTF_8)?.use { it.readText() }.orEmpty()
+                android.util.Log.e("GroqChat", "API Error ($code): $err")
+                err
             }
             JSONObject(payload.ifBlank { "{}" })
         }.getOrElse { error ->
             connection.disconnect()
+            android.util.Log.e("GroqChat", "Request failed", error)
             throw IOException("Groq request failed: ${error.message}", error)
         }
 
         connection.disconnect()
 
-        val answer = response.optJSONArray("choices")
-            ?.optJSONObject(0)
+        val choices = response.optJSONArray("choices")
+        val answer = choices?.optJSONObject(0)
             ?.optJSONObject("message")
             ?.optString("content")
             .orEmpty()
             .trim()
 
         if (answer.isBlank()) {
-            throw IOException("Groq response did not include assistant content")
+            val errorMsg = response.optJSONObject("error")?.optString("message") 
+                ?: "Groq response did not include assistant content. Response: $response"
+            android.util.Log.e("GroqChat", "Empty or error response: $errorMsg")
+            throw IOException(errorMsg)
         }
 
         answer
@@ -85,6 +92,6 @@ class GroqChatDataSource {
 
     private companion object {
         private const val ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
-        private const val MODEL = "gemma2-9b-it"
+        private const val MODEL = "openai/gpt-oss-20b"
     }
 }

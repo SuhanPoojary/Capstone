@@ -85,3 +85,18 @@ data class MedReadyScanResult(
     val items: List<MedReadyItem> = emptyList(),
     val summary: String = ""
 )
+
+data class Shelter(
+    val state: String,
+    val district: String,
+    val name: String,
+    val disasterType: String,
+    val address: String,
+    val latitude: Double,
+    val longitude: Double,
+    val capacity: Int,
+    val actualInmates: Int,
+    val campType: String,
+    val yearEvent: String,
+    val source: String
+)

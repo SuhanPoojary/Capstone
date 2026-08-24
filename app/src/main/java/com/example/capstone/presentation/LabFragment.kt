@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.capstone.DisasterDetailActivity
 import com.example.capstone.R
-import com.example.capstone.QuizActivity
 import com.example.capstone.StartLearningActivity
 import com.example.capstone.SituationalGameActivity
 
@@ -47,7 +46,10 @@ class LabFragment : Fragment() {
 
         // Daily Challenge card
         view.findViewById<View>(R.id.dailyChallengeCard)?.setOnClickListener {
-            startActivity(Intent(requireContext(), QuizActivity::class.java))
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, QuizFragment.newInstance("disaster preparedness"))
+                .addToBackStack(null)
+                .commit()
         }
 
         // Situational Game card
@@ -57,14 +59,17 @@ class LabFragment : Fragment() {
 
         // Role-Based Game card
         view.findViewById<View>(R.id.roleBasedGameCard)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Role-based game coming in next update", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.lab_role_game_toast), Toast.LENGTH_SHORT).show()
         }
 
         // Quiz stays behind the explicit button inside the quiz card.
         view.findViewById<View>(R.id.quizCard)?.isClickable = false
         view.findViewById<View>(R.id.quizCard)?.isFocusable = false
         view.findViewById<View>(R.id.startQuizButton)?.setOnClickListener {
-            startActivity(Intent(requireContext(), QuizActivity::class.java))
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, QuizFragment.newInstance("emergency response"))
+                .addToBackStack(null)
+                .commit()
         }
 
         // Video Learning card opens StartLearningActivity

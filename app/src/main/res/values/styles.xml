@@ -81,6 +81,31 @@
         <item name="android:textColor">@color/text_tertiary</item>
     </style>
 
+    <!-- Emergency Text -->
+    <style name="TextStyle.Emergency" parent="TextStyle">
+        <item name="android:textColor">@color/text_inverse</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+    </style>
+
+    <style name="TextStyle.Emergency.Display" parent="TextStyle.Emergency">
+        <item name="android:textSize">@dimen/text_display_lg</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextStyle.Emergency.Heading" parent="TextStyle.Emergency">
+        <item name="android:textSize">@dimen/text_heading_md</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextStyle.Emergency.Body" parent="TextStyle.Emergency">
+        <item name="android:textSize">@dimen/text_body_md</item>
+    </style>
+
+    <style name="TextStyle.Emergency.Label" parent="TextStyle.Emergency">
+        <item name="android:textSize">@dimen/text_label_md</item>
+        <item name="android:textColor">@color/text_secondary_emergency</item>
+    </style>
+
     <!-- Compatibility base style for profile layouts (some XML may reference @style/Profile) -->
     <style name="Profile">
         <item name="android:fontFamily">@font/plus_jakarta_sans</item>
@@ -140,6 +165,14 @@
         <item name="cardCornerRadius">@dimen/card_corner_radius</item>
         <item name="strokeColor">@color/color_red_500</item>
         <item name="strokeWidth">2dp</item>
+    </style>
+
+    <style name="Card.Dark" parent="Widget.Material3.CardView.Filled">
+        <item name="cardElevation">@dimen/elevation_medium</item>
+        <item name="cardBackgroundColor">@color/bg_card_emergency</item>
+        <item name="cardCornerRadius">@dimen/corner_lg</item>
+        <item name="strokeColor">@color/border_emergency</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 
     <!-- ====== PROGRESS BAR STYLES ====== -->

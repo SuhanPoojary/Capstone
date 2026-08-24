@@ -553,55 +553,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/homeViewProgressButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                app:cardBackgroundColor="@color/sr_bg_card"
-                app:cardCornerRadius="@dimen/corner_2xl"
-                app:cardElevation="@dimen/elevation_light"
-                app:strokeColor="@color/border_light"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_lg">
-
-                    <FrameLayout
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_quick_icon_purple"
-                        android:padding="8dp">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="@string/text_your_progress"
-                            android:src="@drawable/ic_quick_quiz"
-                            android:tint="@color/color_navy_800" />
-                    </FrameLayout>
-
-                    <TextView
-                        style="@style/TextStyle.Label.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="View Progress"
-                        android:textColor="@color/sr_text_primary" />
-
-                    <TextView
-                        style="@style/TextStyle.Body.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="Readiness summary"
-                        android:textColor="@color/sr_text_secondary" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/homeSendSosButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

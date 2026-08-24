@@ -30,7 +30,7 @@ class DisasterDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_disaster_detail)
         progressViewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[ProgressViewModel::class.java]
 
-        val disasterKey = intent.getStringExtra(QuizActivity.EXTRA_DISASTER_KEY) ?: "earthquake"
+        val disasterKey = intent.getStringExtra(EXTRA_DISASTER_KEY) ?: "earthquake"
 
         findViewById<android.view.View>(R.id.backButton)?.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -49,9 +49,11 @@ class DisasterDetailActivity : AppCompatActivity() {
 
         // CTA now means "start lesson" (plays chapter 1 with language picker)
         findViewById<android.view.View>(R.id.takeQuizBtn)?.setOnClickListener {
-            val intent = Intent(this, QuizActivity::class.java).apply {
-                putExtra(QuizActivity.EXTRA_DISASTER_KEY, disasterKey)
-                putExtra(QuizActivity.EXTRA_TOPIC, disasterKey)
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                putExtra("NAVIGATE_TO", "QUIZ")
+                putExtra("QUIZ_DISASTER_KEY", disasterKey)
+                putExtra("QUIZ_TOPIC", disasterKey)
             }
             startActivity(intent)
         }
@@ -147,7 +149,7 @@ class DisasterDetailActivity : AppCompatActivity() {
             super.onPlaybackStateChanged(playbackState)
             if (playbackState == Player.STATE_ENDED) {
                 val chapterIndex = selectedChapterIndex ?: return
-                onPlaybackCompleted(intent.getStringExtra(QuizActivity.EXTRA_DISASTER_KEY) ?: "earthquake", chapterIndex)
+                onPlaybackCompleted(intent.getStringExtra(EXTRA_DISASTER_KEY) ?: "earthquake", chapterIndex)
             }
         }
     }

@@ -219,7 +219,7 @@ class GroqQuizDataSource(private val apiKey: String) {
 
     companion object {
         private const val API_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
-        private const val MODEL = "gemma2-9b-it"
+        private const val MODEL = "openai/gpt-oss-20b"
         private val SYSTEM_PROMPT = """
             You are a disaster preparedness expert creating educational quiz questions.
             Generate clear, practical multiple-choice questions about disaster safety, emergency preparedness, and survival skills.

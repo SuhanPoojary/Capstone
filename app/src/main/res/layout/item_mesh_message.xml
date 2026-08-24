@@ -59,6 +59,31 @@
                 android:textSize="@dimen/text_body_sm"
                 android:alpha="0.5"
                 android:layout_marginTop="@dimen/spacing_xs" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:alpha="0.6">
+
+                <TextView
+                    android:id="@+id/msgHopCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mesh_hops_format"
+                    android:textColor="@color/text_inverse"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="@dimen/spacing_md" />
+
+                <TextView
+                    android:id="@+id/msgRelayStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mesh_relay_direct"
+                    android:textColor="@color/text_inverse"
+                    android:textSize="11sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

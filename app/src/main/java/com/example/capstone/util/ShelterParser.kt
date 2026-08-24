@@ -37,7 +37,8 @@ object ShelterParser {
                                     capacity = tokens[7].toIntOrNull() ?: 0,
                                     inmates = tokens[8].toIntOrNull() ?: 0,
                                     campType = tokens[9],
-                                    year = tokens[10]
+                                    year = tokens[10],
+                                    source = tokens[11]
                                 )
                             )
                         }

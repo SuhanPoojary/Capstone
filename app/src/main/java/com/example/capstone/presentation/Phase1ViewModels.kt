@@ -314,43 +314,74 @@ class ProgressViewModel(application: Application) : AndroidViewModel(application
 }
 
 class AssistantViewModel(application: Application) : AndroidViewModel(application) {
-    private val assistantRepository = AssistantRepository()
+    private val db = com.example.capstone.data.local.database.AppDatabase.getDatabase(application)
+    private val assistantRepository = AssistantRepository(
+        chatDao = db.chatDao()
+    )
+    
     val state = MutableLiveData(
         AssistantState(
-            messages = listOf(
-                ChatMessage(
-                    text = "Hi! Ask me about earthquakes, floods, cyclones, landslides, evacuation, or emergency kits.",
-                    isUser = false,
-                )
-            ),
             prompts = assistantRepository.quickPrompts(),
             backendLabel = assistantRepository.backendLabel(),
         )
     )
+
+    init {
+        viewModelScope.launch {
+            assistantRepository.chatHistory.collect { messages ->
+                val current = state.value ?: AssistantState()
+                val displayMessages = if (messages.isEmpty()) {
+                    listOf(
+                        ChatMessage(
+                            text = "Hi! Ask me about earthquakes, floods, cyclones, landslides, evacuation, or emergency kits.",
+                            isUser = false,
+                        )
+                    )
+                } else {
+                    messages
+                }
+                state.postValue(current.copy(
+                    messages = displayMessages,
+                    backendLabel = assistantRepository.backendLabel()
+                ))
+            }
+        }
+    }
 
     fun sendMessage(text: String) {
         val trimmed = text.trim()
         if (trimmed.isBlank() || state.value?.isLoading == true) return
 
         val previous = state.value ?: AssistantState()
-        val optimisticMessages = previous.messages + ChatMessage(trimmed, true)
         state.value = previous.copy(
-            messages = optimisticMessages,
             isLoading = true,
             backendLabel = assistantRepository.backendLabel(),
         )
 
         viewModelScope.launch {
-            val reply: AssistantReply = assistantRepository.respondWithContext(trimmed, optimisticMessages)
-            val updatedMessages = optimisticMessages + ChatMessage(reply.answer, false)
+            // Save user message to persistent storage
+            assistantRepository.saveMessage(trimmed, true)
+            
+            // Fix: Pass previous.messages (history) without the current trimmed text, 
+            // as respondWithContext/complete adds the current input separately.
+            val reply: AssistantReply = assistantRepository.respondWithContext(trimmed, previous.messages)
+            
+            // Save assistant message to persistent storage
+            assistantRepository.saveMessage(reply.answer, false)
+            
             state.value = (state.value ?: previous).copy(
-                messages = updatedMessages,
                 prompts = reply.followUpPrompts.ifEmpty { assistantRepository.quickPrompts() },
                 suggestedTopic = reply.suggestedTopic,
                 followUpPrompts = reply.followUpPrompts,
                 backendLabel = assistantRepository.backendLabel(),
                 isLoading = false,
             )
+        }
+    }
+
+    fun clearHistory() {
+        viewModelScope.launch {
+            assistantRepository.clearHistory()
         }
     }
 }
@@ -442,7 +473,7 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
     private val lessonRepository = LessonRepository()
     private val progressRepository = ProgressRepository(prefs, lessonRepository)
     private val gamificationRepository = GamificationRepository(prefs, progressRepository)
-    private val quizRepository = QuizRepository(lessonRepository, com.example.capstone.data.remote.groq.GroqQuizDataSource(BuildConfig.GROQ_API_KEY))
+    private val quizRepository = QuizRepository(lessonRepository, prefs, com.example.capstone.data.remote.groq.GroqQuizDataSource(BuildConfig.GROQ_API_KEY))
 
     val state = MutableLiveData(QuizState())
     private var questionsList = listOf<QuizQuestion>()
@@ -488,8 +519,8 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
             score = 0,
         )
         viewModelScope.launch {
-            // Each level will have 5 questions
-            val questions = quizRepository.generateDynamicQuiz(topic, 5, level)
+            // Increased to 10 questions per level for better engagement
+            val questions = quizRepository.generateDynamicQuiz(topic, 10, level)
             isDynamicQuiz = true
             if (questions.isNotEmpty()) {
                 questionsList = questions.mapIndexed { index, q ->

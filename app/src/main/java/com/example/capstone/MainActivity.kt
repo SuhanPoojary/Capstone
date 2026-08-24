@@ -8,6 +8,8 @@ import com.example.capstone.presentation.HomeFragment
 import com.example.capstone.presentation.LabFragment
 import com.example.capstone.presentation.MedReadyFragment
 import com.example.capstone.presentation.ProfileFragment
+import com.example.capstone.presentation.QuizFragment
+import com.example.capstone.presentation.fragment.EmergencyFragment
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -44,7 +46,10 @@ class MainActivity : AppCompatActivity() {
         bindNavClicks()
 
         sosButton.setOnClickListener {
-            startActivity(Intent(this, EmergencyActivity::class.java))
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, EmergencyFragment())
+                .addToBackStack(null)
+                .commit()
         }
         
         try {
@@ -56,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         updateSelectedTabUi(currentTabId)
         if (savedInstanceState == null) {
             showTab(currentTabId)
+            handleIntent(intent)
         }
     }
 
@@ -68,6 +74,29 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(KEY_CURRENT_TAB, currentTabId)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val navigateTo = intent.getStringExtra("NAVIGATE_TO")
+        if (navigateTo == "QUIZ") {
+            val disasterKey = intent.getStringExtra("QUIZ_DISASTER_KEY")
+            val topic = intent.getStringExtra("QUIZ_TOPIC")
+            
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, QuizFragment.newInstance(topic, disasterKey))
+                .addToBackStack(null)
+                .commit()
+        } else if (navigateTo == "EMERGENCY") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, EmergencyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun showTab(itemId: Int) {

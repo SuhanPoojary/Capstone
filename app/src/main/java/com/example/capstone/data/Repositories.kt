@@ -9,6 +9,11 @@ import androidx.core.app.NotificationCompat
 import com.example.capstone.DemoVideoRepository
 import com.example.capstone.location.LocationHelper
 import com.example.capstone.data.remote.groq.GroqChatDataSource
+import com.example.capstone.data.local.database.dao.ChatDao
+import com.example.capstone.data.local.database.entity.ChatMessageEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
 import com.example.capstone.data.remote.groq.GroqQuizDataSource
 import com.example.capstone.data.remote.groq.QuizQuestion as GroqQuizQuestion
 import androidx.core.content.edit
@@ -134,6 +139,19 @@ class SafeReadyPreferences(context: Context) {
     fun setLastCompletionDay(day: Long) {
         prefs.edit { putLong(KEY_LAST_COMPLETION_DAY, day) }
     }
+
+    fun getDailyChallengeTopic(): String? {
+        return prefs.getString(KEY_DAILY_TOPIC, null)
+    }
+
+    fun setDailyChallengeTopic(topic: String, timestamp: Long) {
+        prefs.edit {
+            putString(KEY_DAILY_TOPIC, topic)
+            putLong(KEY_DAILY_TIMESTAMP, timestamp)
+        }
+    }
+
+    fun getDailyChallengeTimestamp(): Long = prefs.getLong(KEY_DAILY_TIMESTAMP, 0L)
 
     fun clearProgress() {
         prefs.all.keys
@@ -268,6 +286,8 @@ class SafeReadyPreferences(context: Context) {
         private const val KEY_CURRENT_STREAK = "gamification_current_streak"
         private const val KEY_BEST_STREAK = "gamification_best_streak"
         private const val KEY_LAST_COMPLETION_DAY = "gamification_last_completion_day"
+        private const val KEY_DAILY_TOPIC = "daily_challenge_topic"
+        private const val KEY_DAILY_TIMESTAMP = "daily_challenge_timestamp"
         private const val KEY_EMERGENCY_MODE_ENABLED = "emergency_mode_enabled"
         private const val KEY_EMERGENCY_CONTACTS = "emergency_contacts"
         private const val KEY_THEME_MODE = "theme_mode"
@@ -520,6 +540,7 @@ class ProgressRepository(
 
 class QuizRepository(
     private val lessons: LessonRepository,
+    private val prefs: SafeReadyPreferences,
     private val groqSource: GroqQuizDataSource? = null
 ) {
     private val questionPool = mutableMapOf<String, List<QuizQuestion>>()
@@ -670,6 +691,22 @@ class QuizRepository(
         return groqSource?.generateQuiz(topic, count, level) ?: emptyList()
     }
 
+    fun getDailyChallengeTopic(): String {
+        val now = System.currentTimeMillis()
+        val lastTimestamp = prefs.getDailyChallengeTimestamp()
+        val storedTopic = prefs.getDailyChallengeTopic()
+
+        // Check if it's a new day (24h period)
+        if (storedTopic != null && (now - lastTimestamp) < 24 * 60 * 60 * 1000) {
+            return storedTopic
+        }
+
+        // Generate new daily topic
+        val newTopic = getDisasterTopics().random()
+        prefs.setDailyChallengeTopic(newTopic, now)
+        return newTopic
+    }
+
     fun getDisasterTopics(): List<String> {
         return listOf(
             "Earthquakes",
@@ -688,7 +725,19 @@ class QuizRepository(
 
 class AssistantRepository(
     private val groqChatDataSource: GroqChatDataSource = GroqChatDataSource(),
+    private val chatDao: ChatDao? = null
 ) {
+    val chatHistory: Flow<List<ChatMessage>> = chatDao?.getAllMessages()?.map { list ->
+        list.map { ChatMessage(it.text, it.isUser) }
+    } ?: kotlinx.coroutines.flow.flowOf(emptyList())
+
+    suspend fun saveMessage(text: String, isUser: Boolean) {
+        chatDao?.insertMessage(ChatMessageEntity(text = text, isUser = isUser))
+    }
+
+    suspend fun clearHistory() {
+        chatDao?.clearChat()
+    }
     fun quickPrompts(): List<String> = listOf(
         "What should I do during an earthquake?",
         "How do I prepare for a flood?",

@@ -16,5 +16,6 @@ data class ShelterEntity(
     val capacity: Int,
     val inmates: Int,
     val campType: String,
-    val year: String
+    val year: String,
+    val source: String
 )

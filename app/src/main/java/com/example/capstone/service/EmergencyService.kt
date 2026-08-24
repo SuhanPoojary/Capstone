@@ -11,7 +11,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.capstone.EmergencyActivity
+import com.example.capstone.MainActivity
 import com.example.capstone.R
 import com.example.capstone.data.MeshMessage
 import com.example.capstone.data.MeshMessageType
@@ -67,10 +67,13 @@ class EmergencyService : Service(), SensorEventListener {
             manager.createNotificationChannel(channel)
         }
 
-        val notificationIntent = Intent(this, EmergencyActivity::class.java)
+        val notificationIntent = Intent(this, MainActivity::class.java).apply {
+            putExtra("NAVIGATE_TO", "EMERGENCY")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val notification = NotificationCompat.Builder(this, channelId)

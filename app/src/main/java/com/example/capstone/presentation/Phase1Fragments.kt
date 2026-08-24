@@ -25,10 +25,10 @@ import android.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.example.capstone.AssistantActivity
 import com.example.capstone.DisasterDetailActivity
-import com.example.capstone.EmergencyActivity
 import com.example.capstone.MainActivity
 import com.example.capstone.LoginActivity
 import com.example.capstone.R
+import com.example.capstone.presentation.fragment.EmergencyFragment
 import com.google.android.material.button.MaterialButton
 import com.example.capstone.presentation.viewmodel.MeshViewModel
 import com.example.capstone.data.MeshMessage
@@ -107,14 +107,16 @@ class HomeFragment : Fragment() {
         view.findViewById<CardView>(R.id.homeStartTrainingButton)?.setOnClickListener {
             (activity as? MainActivity)?.selectTab(R.id.nav_lab)
         }
-        view.findViewById<CardView>(R.id.homeViewProgressButton)?.setOnClickListener {
-            (activity as? MainActivity)?.selectTab(R.id.nav_profile)
-        }
+
         view.findViewById<CardView>(R.id.assistantLaunchCard)?.setOnClickListener {
             startActivity(Intent(requireContext(), AssistantActivity::class.java))
         }
         view.findViewById<CardView>(R.id.homeSendSosButton)?.setOnClickListener {
-            startActivity(Intent(requireContext(), EmergencyActivity::class.java))
+            (activity as? MainActivity)?.selectTab(R.id.nav_home)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, EmergencyFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         view.findViewById<com.google.android.material.button.MaterialButton>(R.id.riskViewButton)?.setOnClickListener {
@@ -123,7 +125,7 @@ class HomeFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             greeting.text = greetingText()
-            name.text = state.user.name.ifBlank { "User" }
+            name.text = state.user.name.ifBlank { getString(R.string.home_user_default) }
             region.text = state.regionLabel
             progressPercent.text = getString(R.string.percentage_format, state.overallProgress)
             progressBar.progress = state.overallProgress
@@ -131,7 +133,7 @@ class HomeFragment : Fragment() {
                 com.example.capstone.data.RecommendationCard(
                     title = it.title,
                     reason = it.summary,
-                    ctaLabel = "Continue",
+                    ctaLabel = getString(R.string.quiz_next),
                     disasterKey = it.key,
                     chapterIndex = 0,
                 )
@@ -159,9 +161,9 @@ class HomeFragment : Fragment() {
 
             medReadyBadge?.visibility = if (state.medReadyReadiness >= 0) View.VISIBLE else View.GONE
             medReadyBadge?.text = if (state.medReadyReadiness >= 0) {
-                "MedReady: ${state.medReadyReadiness}% Ready"
+                getString(R.string.home_medready_ready, state.medReadyReadiness)
             } else {
-                "MedReady: Not Scanned"
+                getString(R.string.home_medready_not_scanned)
             }
 
             val riskHeading = view.findViewById<TextView>(R.id.homeRiskHeading)
@@ -220,7 +222,7 @@ class TrainingFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             val snapshot = state.snapshot
-            survivalLevel.text = "Level ${state.gamification.level}"
+            survivalLevel.text = getString(R.string.lab_level_format, state.gamification.level)
             quizzesDone.text = state.gamification.quizzesCompleted.toString()
             simulationsDone.text = state.gamification.simulationsCompleted.toString()
             survivalScore.text = state.gamification.points.toString()
@@ -228,7 +230,7 @@ class TrainingFragment : Fragment() {
         }
 
         dailyChallengeCard.setOnClickListener {
-            Toast.makeText(requireContext(), "Daily Challenge: First Aid Burn Treatment started!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.lab_daily_challenge_started), Toast.LENGTH_SHORT).show()
         }
 
         view.findViewById<View>(R.id.cardEarthquake)?.setOnClickListener {
@@ -245,11 +247,11 @@ class TrainingFragment : Fragment() {
         }
 
         view.findViewById<View>(R.id.situationalGameCard)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Starting Survival Simulation...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.lab_starting_simulation), Toast.LENGTH_SHORT).show()
         }
 
         view.findViewById<View>(R.id.startQuizButton)?.setOnClickListener {
-            Toast.makeText(requireContext(), "Generating AI Quiz...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.lab_generating_quiz), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -277,7 +279,7 @@ class ProgressFragment : Fragment() {
 
         view.findViewById<MaterialButton>(R.id.clearProgressButton).setOnClickListener {
             viewModel.clearProgress()
-            Toast.makeText(requireContext(), "Local progress cleared", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.progress_cleared), Toast.LENGTH_SHORT).show()
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -287,7 +289,7 @@ class ProgressFragment : Fragment() {
             summary.text = state.gamification.progressText
             
             // Lab Progress Mapping
-            view.findViewById<TextView>(R.id.labLessonsValue)?.text = "${state.gamification.lessonsCompleted}/${snapshot.disasterProgress.sumOf { it.totalChapters }}"
+            view.findViewById<TextView>(R.id.labLessonsValue)?.text = getString(R.string.lab_lessons_format, state.gamification.lessonsCompleted, snapshot.disasterProgress.sumOf { it.totalChapters })
 
             container.removeAllViews()
             snapshot.disasterProgress.forEach { progress ->
@@ -361,7 +363,7 @@ class AssistantFragment : Fragment() {
         fun submitMessage() {
             val text = input.text?.toString().orEmpty().trim()
             if (text.isBlank()) {
-                Toast.makeText(requireContext(), "Type a question first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.assistant_type_question), Toast.LENGTH_SHORT).show()
                 return
             }
             viewModel.sendMessage(text)
@@ -385,7 +387,7 @@ class AssistantFragment : Fragment() {
             state.messages.forEach { message ->
                 chatContainer.addView(chatBubble(message.text, message.isUser))
             }
-            suggestion.text = state.suggestedTopic ?: "Ask about a disaster or emergency kit to get started."
+            suggestion.text = state.suggestedTopic ?: getString(R.string.assistant_suggestion_default)
             statusBadge.text = state.backendLabel
             loading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
             send.isEnabled = !state.isLoading
@@ -467,10 +469,14 @@ class ProfileFragment : Fragment() {
         val contactsContainer = view.findViewById<LinearLayout>(R.id.emergencyContactsContainer)
 
         themeItem?.setOnClickListener {
-            val themes = arrayOf("Auto", "Light Mode", "Dark Mode")
+            val themes = arrayOf(
+                getString(R.string.profile_theme_auto),
+                getString(R.string.profile_theme_light),
+                getString(R.string.profile_theme_dark)
+            )
             val currentMode = viewModel.state.value?.themeMode ?: 0
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Select Theme")
+                .setTitle(getString(R.string.profile_select_theme))
                 .setSingleChoiceItems(themes, currentMode) { dialog, which ->
                     viewModel.setThemeMode(which)
                     updateTheme(which)
@@ -481,8 +487,8 @@ class ProfileFragment : Fragment() {
 
         emergencyModeItem?.setOnClickListener {
             val enabled = viewModel.toggleEmergencyMode()
-            currentEmergencyModeText.text = if (enabled) "On" else "Off"
-            Toast.makeText(requireContext(), if (enabled) "Emergency Mode enabled" else "Emergency Mode disabled", Toast.LENGTH_SHORT).show()
+            currentEmergencyModeText.text = if (enabled) getString(R.string.emergency_status_on) else getString(R.string.emergency_status_off_short)
+            Toast.makeText(requireContext(), if (enabled) getString(R.string.profile_emergency_mode_enabled) else getString(R.string.profile_emergency_mode_disabled), Toast.LENGTH_SHORT).show()
         }
 
         manageContacts?.setOnClickListener {
@@ -507,10 +513,10 @@ class ProfileFragment : Fragment() {
 
         signOutItem?.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Sign Out")
-                .setMessage("Are you sure you want to sign out?")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Sign Out") { _, _ ->
+                .setTitle(getString(R.string.signup_footer_action))
+                .setMessage(getString(R.string.profile_sign_out_confirm))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(getString(R.string.signup_footer_action)) { _, _ ->
                     viewModel.logOut()
                     startActivity(Intent(requireContext(), LoginActivity::class.java))
                     requireActivity().finishAffinity()
@@ -520,25 +526,22 @@ class ProfileFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             val profile = state.profile
-            name.text = profile.name.ifBlank { "User" }
+            name.text = profile.name.ifBlank { getString(R.string.home_user_default) }
             initial.text = profile.name.take(1).uppercase()
-            email.text = if (profile.email.isBlank()) "Email not saved yet" else profile.email
-            institution.text = if (profile.institution.isBlank()) "Institution not saved yet" else profile.institution
+            email.text = if (profile.email.isBlank()) getString(R.string.progress_email_not_saved) else profile.email
+            institution.text = if (profile.institution.isBlank()) getString(R.string.progress_institution_not_saved) else profile.institution
             region.text = when {
-                !profile.city.isNullOrBlank() && !profile.state.isNullOrBlank() -> "Region: ${profile.city}, ${profile.state}"
-                !profile.state.isNullOrBlank() -> "Region: ${profile.state}"
-                !profile.city.isNullOrBlank() -> "Region: ${profile.city}"
-                else -> "Region: not available"
+                !profile.city.isNullOrBlank() && !profile.state.isNullOrBlank() -> getString(R.string.progress_region_city_state_format, profile.city, profile.state)
+                !profile.state.isNullOrBlank() -> getString(R.string.progress_region_format, profile.state)
+                !profile.city.isNullOrBlank() -> getString(R.string.progress_region_format, profile.city)
+                else -> getString(R.string.progress_region_not_available)
             }
-            summary.text = buildString {
-                append("Completed lessons are tracked locally.\n")
-                append("Total tracked disasters: ${state.completedDisasters.size}")
-            }
+            summary.text = getString(R.string.progress_summary_format, state.completedDisasters.size)
             gamificationText.text = state.gamification.progressText
             levelValue.text = state.gamification.level.toString()
             streakValue.text = state.gamification.currentStreak.toString()
             pointsValue.text = state.gamification.points.toString()
-            pointsLabel.text = "Points"
+            pointsLabel.text = getString(R.string.progress_points)
 
             // Update Journey Progress
             simValue?.text = "${state.simulationsCompleted}/${state.totalSimulations}"
@@ -561,7 +564,7 @@ class ProfileFragment : Fragment() {
             contactsContainer?.removeAllViews()
             if (state.emergencyContacts.isEmpty()) {
                 val emptyText = TextView(requireContext()).apply {
-                    text = "No contacts added"
+                    text = getString(R.string.progress_no_contacts)
                     setPadding(16, 16, 16, 16)
                     setTextColor(ContextCompat.getColor(context, R.color.sr_text_secondary))
                 }
@@ -756,7 +759,16 @@ class MedReadyFragment : Fragment() {
 
     private fun processImage(bitmap: Bitmap) {
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+        // Compress and resize image to prevent payload errors
+        val scaledBitmap = if (bitmap.width > 1024 || bitmap.height > 1024) {
+            val ratio = bitmap.width.toFloat() / bitmap.height.toFloat()
+            val newWidth = if (ratio > 1) 1024 else (1024 * ratio).toInt()
+            val newHeight = if (ratio > 1) (1024 / ratio).toInt() else 1024
+            Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+        } else {
+            bitmap
+        }
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
         viewModel.analyzeKit(stream.toByteArray())
     }
 
@@ -764,7 +776,7 @@ class MedReadyFragment : Fragment() {
         container.removeAllViews()
         if (history.isEmpty()) {
             val emptyView = TextView(requireContext()).apply {
-                text = "No previous scans found."
+                text = getString(R.string.medready_no_scans)
                 setPadding(0, 32, 0, 32)
                 gravity = android.view.Gravity.CENTER
                 setTextColor(ContextCompat.getColor(context, R.color.sr_text_secondary))

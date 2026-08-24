@@ -2,6 +2,7 @@ package com.example.capstone.data.repository
 
 import android.content.Context
 import com.example.capstone.data.MeshConnectionState
+import com.example.capstone.data.MeshDevice
 import com.example.capstone.data.MeshMessage
 import com.example.capstone.data.MeshMessageType
 import com.example.capstone.data.MeshSendStatus
@@ -46,6 +47,9 @@ class MeshRepository(context: Context) {
     private val _telemetry = MutableStateFlow(MeshTelemetryState())
     val telemetry = _telemetry.asStateFlow()
 
+    private val _nearbyDevices = MutableStateFlow<List<MeshDevice>>(emptyList())
+    val nearbyDevices = _nearbyDevices.asStateFlow()
+
     private val localDeviceId by lazy { cache.getOrCreateDeviceId() }
 
     init {
@@ -66,11 +70,26 @@ class MeshRepository(context: Context) {
         }
 
         override fun onEndpointDiscovered(deviceId: String, deviceName: String, signalStrength: Int?) {
-            // Device discovery handled via cache from MeshMessageCache if needed
+            val device = MeshDevice(
+                deviceId = deviceId,
+                deviceName = deviceName,
+                signalStrength = signalStrength,
+                isActive = true,
+                lastSeen = System.currentTimeMillis()
+            )
+            val currentList = _nearbyDevices.value.toMutableList()
+            currentList.removeAll { it.deviceId == deviceId }
+            currentList.add(device)
+            _nearbyDevices.value = currentList.sortedByDescending { it.signalStrength ?: -100 }
         }
 
         override fun onEndpointLost(deviceId: String) {
-            // no-op for now
+            val currentList = _nearbyDevices.value.toMutableList()
+            val index = currentList.indexOfFirst { it.deviceId == deviceId }
+            if (index != -1) {
+                currentList[index] = currentList[index].copy(isActive = false)
+                _nearbyDevices.value = currentList
+            }
         }
 
         override fun onMessageReceived(message: MeshMessage) {
