@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="What is this disaster?"
-                        android:textColor="#0F172A"
+                        android:textColor="@color/sr_text_primary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -102,7 +102,7 @@
                         android:fontFamily="sans-serif"
                         android:lineSpacingExtra="7dp"
                         android:text="Select a chapter below to start the lesson."
-                        android:textColor="#334155"
+                        android:textColor="@color/sr_text_secondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -112,7 +112,7 @@
                         android:layout_marginTop="14dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="Tap a chapter below to choose audio language and start the video."
-                        android:textColor="#475569"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
                 </LinearLayout>

@@ -5,9 +5,9 @@
     <!-- Subtle warm surface for cards with soft gradient and rounded corners -->
     <gradient
         android:angle="90"
-        android:startColor="#FFFFFFFF"
-        android:endColor="#FFF8F5EF"
-        android:centerColor="#FFFCFBFA" />
+        android:startColor="@color/white"
+        android:endColor="@color/color_cream_100"
+        android:centerColor="@color/color_cream_50" />
 
     <corners android:radius="24dp" />
     <stroke

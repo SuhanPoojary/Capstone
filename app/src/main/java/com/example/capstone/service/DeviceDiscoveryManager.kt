@@ -2,46 +2,57 @@ package com.example.capstone.service
 
 import com.example.capstone.data.MeshDevice
 import com.example.capstone.data.MeshLocationEstimate
-import com.example.capstone.data.local.mesh.MeshMessageCache
+import com.example.capstone.data.local.mesh.MeshDeviceDao
+import com.example.capstone.data.local.mesh.MeshDeviceEntity
+import com.example.capstone.data.local.mesh.MeshRoomMigrationPlan
 import com.example.capstone.util.LocationEstimationHelper
 
 /**
  * Tracks nearby devices and maintains a stable, sorted list for the mesh layer.
  *
- * Phase 5 keeps this intentionally light: device discovery state + proximity ranking.
+ * Phase 8: Migrated to Room (MeshDeviceDao) for stabilization.
  */
 class DeviceDiscoveryManager(
-    private val cache: MeshMessageCache,
+    private val deviceDao: MeshDeviceDao,
 ) {
-    fun onDeviceSeen(
+    suspend fun onDeviceSeen(
         deviceId: String,
         deviceName: String,
         signalStrength: Int? = null,
     ): MeshDevice {
-        cache.markDeviceSeen(deviceId, deviceName, signalStrength)
-        return cache.getDevices().first { it.deviceId == deviceId }
+        val existing = deviceDao.getById(deviceId)
+        val entity = MeshDeviceEntity(
+            deviceId = deviceId,
+            deviceName = deviceName,
+            userId = existing?.userId,
+            lastSeen = System.currentTimeMillis(),
+            signalStrength = signalStrength ?: existing?.signalStrength,
+            estimatedDistanceMeters = existing?.estimatedDistanceMeters,
+            isActive = true
+        )
+        deviceDao.upsert(entity)
+        return MeshRoomMigrationPlan.toDomain(entity)
     }
 
-    fun onDeviceLost(deviceId: String) {
-        cache.markDeviceInactive(deviceId)
+    suspend fun onDeviceLost(deviceId: String) {
+        deviceDao.markInactive(deviceId)
     }
 
-    fun getNearbyDevices(): List<MeshDevice> {
-        return cache.getActiveDevices().sortedWith(
+    suspend fun getNearbyDevices(): List<MeshDevice> {
+        return deviceDao.getActive().map { MeshRoomMigrationPlan.toDomain(it) }.sortedWith(
             compareByDescending<MeshDevice> { it.signalStrength ?: Int.MIN_VALUE }
                 .thenByDescending { it.lastSeen }
         )
     }
 
-    fun getBestEstimate(lastKnownRegion: String? = null): MeshLocationEstimate {
+    suspend fun getBestEstimate(lastKnownRegion: String? = null): MeshLocationEstimate {
         return LocationEstimationHelper.estimateLocationLabel(
             lastKnownRegion = lastKnownRegion,
             devices = getNearbyDevices(),
         )
     }
 
-    fun clear() {
-        cache.clearAll()
+    suspend fun clear() {
+        deviceDao.clearAll()
     }
 }
-

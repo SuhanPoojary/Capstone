@@ -32,6 +32,8 @@ import com.example.capstone.data.repository.MeshRepository
 import com.example.capstone.data.remote.firebase.FirebaseAuthDataSource
 import com.example.capstone.data.remote.firebase.FirebaseUserDataSource
 import com.example.capstone.data.repository.AuthRepository
+import com.example.capstone.data.repository.RiskRepository
+import com.example.capstone.data.remote.risk.RiskSummary
 
 
 data class HomeState(
@@ -46,7 +48,8 @@ data class HomeState(
     val weather: String = "--°C",
     val riskLevel: String = "No Active Alerts",
     val riskDescription: String = "Your region is currently stable",
-    val medReadyReadiness: Int = -1
+    val medReadyReadiness: Int = -1,
+    val locationProfile: Map<String, RiskSummary> = emptyMap()
 )
 
 data class TrainingState(
@@ -113,6 +116,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val locationRepository = LocationRepository(application.applicationContext)
     private val weatherRepository = WeatherRepository()
     private val newsRepository = NewsRepository()
+    private val riskRepository = RiskRepository()
     private val medReadyRepository = com.example.capstone.data.repository.MedReadyRepository(
         com.example.capstone.data.remote.groq.GroqVisionDataSource(),
         prefs
@@ -147,9 +151,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             progressSnapshot = ProgressSnapshot(overall, snapshot),
             isEmergencyModeEnabled = emergencyMode,
             weather = state.value?.weather ?: "--°C",
-            riskLevel = if (emergencyMode) "High Risk Alert" else "Low Risk Level",
-            riskDescription = if (emergencyMode) "Active disaster detected in your area" else "No immediate threats identified",
-            medReadyReadiness = medReadyScore
+            riskLevel = state.value?.riskLevel ?: (if (emergencyMode) "High Risk Alert" else "Low Risk Level"),
+            riskDescription = state.value?.riskDescription ?: (if (emergencyMode) "Active disaster detected in your area" else "No immediate threats identified"),
+            medReadyReadiness = medReadyScore,
+            locationProfile = state.value?.locationProfile ?: emptyMap()
         ))
     }
 
@@ -163,6 +168,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 refresh()
                 fetchWeather(targetState)
                 fetchRiskAlerts(targetState)
+                fetchLocationProfile(targetState)
             } else {
                 // If no state available anywhere, try to refresh with defaults
                 refresh()
@@ -207,6 +213,32 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         riskDescription = "Could not fetch local risk data"
                     ))
                 }
+            }
+        }
+    }
+
+    private fun fetchLocationProfile(stateName: String) {
+        viewModelScope.launch {
+            try {
+                val calendar = java.util.Calendar.getInstance()
+                val month = calendar.get(java.util.Calendar.MONTH) + 1
+                val profile = riskRepository.getLocationProfile(stateName, month)
+                state.value?.let { current ->
+                    val topRisk = profile.maxByOrNull { it.value.probability }
+                    val visualProb = topRisk?.let { Math.pow(it.value.probability, 2.5) } ?: 0.0
+                    val newRiskLevel = topRisk?.let { "${it.key} Risk: ${it.value.riskLevel}" } ?: current.riskLevel
+                    val newRiskDesc = topRisk?.let { 
+                        "Risk Likelihood: ${String.format(java.util.Locale.US, "%.1f", visualProb * 100)}% for this month." 
+                    } ?: current.riskDescription
+                    
+                    state.postValue(current.copy(
+                        locationProfile = profile,
+                        riskLevel = newRiskLevel,
+                        riskDescription = newRiskDesc
+                    ))
+                }
+            } catch (e: Exception) {
+                // Silently fail for background enrichment
             }
         }
     }

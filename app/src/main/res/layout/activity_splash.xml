@@ -17,19 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/bg_logo_container"
-            android:foregroundGravity="center"
-            android:padding="18dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/safeready_logo"
-                android:src="@drawable/ic_shield_gradient" />
-        </FrameLayout>
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/safeready_logo"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_icon" />
 
         <TextView
             android:id="@+id/title"
@@ -68,7 +61,7 @@
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:layout_marginStart="8dp"
-                android:background="@drawable/dot_inactive" />
+                android:background="@drawable/bg_disaster_art_blue" />
 
             <View
                 android:layout_width="8dp"

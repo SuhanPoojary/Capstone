@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed state -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="12dp" />
-            <solid android:color="#16314F" />
+            <corners android:radius="@dimen/corner_lg" />
+            <solid android:color="#081D3E" />
         </shape>
     </item>
+
+    <!-- Default state: Navy Primary #0B2856 -->
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="12dp" />
-            <solid android:color="#1E3A5F" />
+            <corners android:radius="@dimen/corner_lg" />
+            <solid android:color="@color/text_primary" />
         </shape>
     </item>
 </selector>

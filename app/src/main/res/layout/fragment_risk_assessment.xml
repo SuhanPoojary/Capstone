@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sr_bg_main"
+    android:fillViewport="true"
+    android:paddingBottom="@dimen/fragment_bottom_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_lg">
+
+        <!-- Input Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inputCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/corner_lg"
+            app:cardElevation="@dimen/elevation_light"
+            app:cardBackgroundColor="@color/bg_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <TextView
+                    style="@style/TextStyle.Heading.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Risk Assessment"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    style="@style/TextStyle.Body.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="Check disaster probability for your location"
+                    android:textColor="@color/text_secondary" />
+
+                <!-- State Selector -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:hint="Select State">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/stateSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- District Autocomplete -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:hint="Enter District (Optional)">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/districtSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:completionThreshold="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Disaster Type -->
+                <TextView
+                    style="@style/TextStyle.Label.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="Disaster Type"
+                    android:textColor="@color/text_secondary" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/disasterChipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFlood"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Flood" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipEarthquake"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Earthquake" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipLandslide"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Landslide" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCyclone"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cyclone" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <!-- Month Selector -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:hint="Select Month">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/monthSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/checkRiskButton"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xl"
+                    android:text="Check Risk"
+                    app:backgroundTint="@color/sr_primary_navy" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Loading View -->
+        <ProgressBar
+            android:id="@+id/riskLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:visibility="gone" />
+
+        <!-- Result Section -->
+        <LinearLayout
+            android:id="@+id/resultSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                app:cardCornerRadius="@dimen/corner_lg"
+                app:cardElevation="@dimen/elevation_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_2xl">
+
+                    <FrameLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/bg_circle_outline">
+
+                        <TextView
+                            android:id="@+id/riskLevelText"
+                            style="@style/TextStyle.Heading.Large"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="HIGH"
+                            android:textColor="@color/status_danger" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/riskEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:textSize="32sp"
+                        android:text="🔴" />
+
+                    <TextView
+                        android:id="@+id/probabilityText"
+                        style="@style/TextStyle.Label.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:text="Probability: 99.5%"
+                        android:textColor="@color/text_primary" />
+
+                    <ProgressBar
+                        android:id="@+id/probabilityBar"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:max="100"
+                        android:progress="99"
+                        android:progressTint="@color/status_danger" />
+
+                    <TextView
+                        android:id="@+id/adviceText"
+                        style="@style/TextStyle.Body.Medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_lg"
+                        android:gravity="center"
+                        android:text="Strong historical record of Flood here. Take precautions seriously."
+                        android:textColor="@color/text_primary" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Stats Grid -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:columnCount="2"
+                android:rowCount="1">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="@dimen/spacing_xs"
+                    app:cardCornerRadius="@dimen/corner_md"
+                    app:cardElevation="@dimen/elevation_light">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_md">
+                        <TextView style="@style/TextStyle.Label.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="District Events" />
+                        <TextView android:id="@+id/districtEventsCount" style="@style/TextStyle.Heading.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="11" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="@dimen/spacing_xs"
+                    app:cardCornerRadius="@dimen/corner_md"
+                    app:cardElevation="@dimen/elevation_light">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_md">
+                        <TextView style="@style/TextStyle.Label.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="State Events" />
+                        <TextView android:id="@+id/stateEventsCount" style="@style/TextStyle.Heading.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="144" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </GridLayout>
+
+            <!-- AI Explanation -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                app:cardCornerRadius="@dimen/corner_lg"
+                app:cardElevation="@dimen/elevation_light"
+                app:cardBackgroundColor="@color/ai_card_bg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_quick_robot"
+                            app:tint="@color/sr_primary_navy" />
+                        <TextView
+                            style="@style/TextStyle.Label.Large"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_xs"
+                            android:text="AI Expert Explanation"
+                            android:textColor="@color/sr_primary_navy" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/aiExplanationText"
+                        style="@style/TextStyle.Body.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:text="Analyzing data..."
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/resetButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:text="Check Another Location" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

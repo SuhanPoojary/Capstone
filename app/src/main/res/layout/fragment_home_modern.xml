@@ -135,7 +135,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/home_preparedness_title"
-                        android:textColor="#D8E7FF"
+                        android:textColor="@color/color_navy_100"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/prepInfoIcon" />
@@ -144,7 +144,7 @@
                         android:id="@+id/prepInfoIcon"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:cardBackgroundColor="#1AFFFFFF"
+                        app:cardBackgroundColor="@color/white_10"
                         app:cardCornerRadius="14dp"
                         app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_lg"
                         android:text="@string/home_preparedness_desc"
-                        android:textColor="#E4EEFF"
+                        android:textColor="@color/color_navy_50"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/homeProgressBar" />
@@ -323,7 +323,7 @@
                     android:textColor="@color/sr_primary_navy"
                     app:backgroundTint="@android:color/transparent"
                     app:iconTint="@color/sr_primary_navy"
-                    app:rippleColor="#1A22355B"
+                    app:rippleColor="@color/navy_10"
                     style="@style/Widget.Material3.Button.TextButton" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -433,6 +433,7 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <FrameLayout
+                            android:id="@+id/homeMapNavigateButton"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:background="@drawable/bg_quick_icon_blue"
@@ -651,6 +652,5 @@
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
-
 
 

@@ -48,7 +48,7 @@ class NotificationHelper(private val context: Context) {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ALERTS)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.logo_icon)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
@@ -65,7 +65,7 @@ class NotificationHelper(private val context: Context) {
      */
     fun postSyncNotification(message: String) {
         val notification = NotificationCompat.Builder(context, CHANNEL_SYNC)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.logo_icon)
             .setContentTitle("Sync Status")
             .setContentText(message)
             .setAutoCancel(true)

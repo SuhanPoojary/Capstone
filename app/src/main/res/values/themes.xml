@@ -1,16 +1,17 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Capstone" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Capstone" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+        <item name="android:windowBackground">@color/bg_app</item>
     </style>
 
     <style name="Theme.Capstone" parent="Base.Theme.Capstone" />
 
     <!-- Splash theme (launcher) -->
-    <style name="Theme.Capstone.Splash" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowBackground">@color/safeready_navy</item>
-        <item name="android:statusBarColor">@color/safeready_navy</item>
-        <item name="android:navigationBarColor">@color/safeready_navy</item>
+    <style name="Theme.Capstone.Splash" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg_app</item>
+        <item name="android:statusBarColor">@color/sr_primary_navy</item>
+        <item name="android:navigationBarColor">@color/sr_primary_navy</item>
     </style>
 </resources>

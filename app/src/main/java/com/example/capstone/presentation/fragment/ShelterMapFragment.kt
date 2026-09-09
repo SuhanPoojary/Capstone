@@ -10,13 +10,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.capstone.data.local.database.AppDatabase
 import com.example.capstone.data.repository.ShelterRepository
+import com.example.capstone.data.repository.HospitalRepository
 import com.example.capstone.presentation.viewmodel.ShelterViewModel
 import com.example.capstone.util.ShelterClusterer
 import com.example.capstone.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.preference.PreferenceManager
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import com.example.capstone.data.SafeReadyPreferences
+import com.example.capstone.data.local.database.entity.HospitalEntity
+import com.example.capstone.data.local.database.entity.ShelterEntity
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
@@ -29,12 +34,13 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
+import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.File
 
 /**
- * ShelterMapFragment displays shelter locations on an offline-capable map.
+ * ShelterMapFragment displays shelter and hospital locations on an offline-capable map.
  * Implements custom grid-based clustering for high-density marker rendering.
  */
 class ShelterMapFragment : Fragment() {
@@ -42,11 +48,13 @@ class ShelterMapFragment : Fragment() {
     private lateinit var myLocationOverlay: MyLocationNewOverlay
     private lateinit var poiMarkers: FolderOverlay
     private lateinit var shelterClusterer: ShelterClusterer
+    private lateinit var prefs: SafeReadyPreferences
 
     private val viewModel: ShelterViewModel by viewModels {
         val database = AppDatabase.getDatabase(requireContext())
-        val repository = ShelterRepository(database.shelterDao(), requireContext())
-        ShelterViewModel.Factory(repository)
+        val shelterRepo = ShelterRepository(database.shelterDao(), requireContext())
+        val hospitalRepo = HospitalRepository(database.hospitalDao(), requireContext())
+        ShelterViewModel.Factory(shelterRepo, hospitalRepo)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +72,11 @@ class ShelterMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val map = mapView ?: return
         val ctx = requireContext().applicationContext
+        prefs = SafeReadyPreferences(ctx)
         
         // 1. CONFIGURE TILE SOURCE WITH FALLBACK
         setupTileSource(map)
+        applyEmergencyFilter(map)
         map.setMultiTouchControls(true)
         
         // 2. KEEP ZOOM BOUNDARIES SAFE
@@ -105,15 +115,42 @@ class ShelterMapFragment : Fragment() {
         // Add MapListener to re-cluster on zoom or scroll
         map.addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                updateClusters()
+                // Only re-cluster if we aren't currently showing an info window
+                // to prevent the bubble from disappearing immediately after tap
+                if (!isAnyInfoWindowOpen()) {
+                    updateClusters()
+                    
+                    // Fetch more hospitals for the current visible area
+                    val box = map.boundingBox
+                    lifecycleScope.launch {
+                        viewModel.fetchHospitalsInArea(
+                            box.latSouth, box.lonWest,
+                            box.latNorth, box.lonEast
+                        )
+                    }
+                }
                 return true
             }
 
             override fun onZoom(event: ZoomEvent?): Boolean {
                 updateClusters()
+                val box = map.boundingBox
+                lifecycleScope.launch {
+                    viewModel.fetchHospitalsInArea(
+                        box.latSouth, box.lonWest,
+                        box.latNorth, box.lonEast
+                    )
+                }
                 return true
             }
-        }, 200)) // 200ms delay to avoid excessive clustering
+        }, 500)) // Increased delay to 500ms
+    }
+
+    private fun isAnyInfoWindowOpen(): Boolean {
+        for (item in poiMarkers.items) {
+            if (item is Marker && item.isInfoWindowShown) return true
+        }
+        return false
     }
 
     private fun setupTileSource(map: MapView) {
@@ -143,19 +180,50 @@ class ShelterMapFragment : Fragment() {
         }
     }
 
+    private fun applyEmergencyFilter(map: MapView) {
+        if (prefs.getEmergencyModeEnabled()) {
+            val inverseMatrix = ColorMatrix(floatArrayOf(
+                -1.0f, 0.0f, 0.0f, 0.0f, 255.0f,
+                0.0f, -1.0f, 0.0f, 0.0f, 255.0f,
+                0.0f, 0.0f, -1.0f, 0.0f, 255.0f,
+                0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+            ))
+
+            val destinationMatrix = ColorMatrix()
+            destinationMatrix.setSaturation(0f)
+
+            val shiftMatrix = ColorMatrix(floatArrayOf(
+                0.5f, 0f, 0f, 0f, 0f,
+                0f, 0.5f, 0f, 0f, 0f,
+                0f, 0f, 0.5f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+            ))
+
+            destinationMatrix.postConcat(inverseMatrix)
+            destinationMatrix.postConcat(shiftMatrix)
+
+            val filter = ColorMatrixColorFilter(destinationMatrix)
+            map.overlayManager.tilesOverlay.setColorFilter(filter)
+        }
+    }
+
     private fun observeShelters() {
         viewModel.allShelters.observe(viewLifecycleOwner) {
+            updateClusters()
+        }
+        viewModel.allHospitals.observe(viewLifecycleOwner) {
             updateClusters()
         }
     }
 
     private fun updateClusters() {
         val map = mapView ?: return
-        val shelters = viewModel.allShelters.value ?: return
+        val shelters = viewModel.allShelters.value ?: emptyList()
+        val hospitals = viewModel.allHospitals.value ?: emptyList()
         
         // Run clustering in a coroutine to keep UI responsive
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
-            val markers = shelterClusterer.cluster(map, shelters)
+            val markers = shelterClusterer.cluster(map, shelters, hospitals)
             
             withContext(Dispatchers.Main) {
                 poiMarkers.items.clear()

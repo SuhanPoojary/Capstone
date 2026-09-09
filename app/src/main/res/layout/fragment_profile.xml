@@ -90,7 +90,7 @@
                                 android:layout_marginTop="4dp"
                                 android:fontFamily="@font/plus_jakarta_sans"
                                 android:text="alex.chen@email.com"
-                                android:textColor="#CCFFFFFF"
+                                android:textColor="@color/white_80"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -100,7 +100,7 @@
                                 android:layout_marginTop="4dp"
                                 android:fontFamily="@font/plus_jakarta_sans"
                                 android:text="Institution"
-                                android:textColor="#CCFFFFFF"
+                                android:textColor="@color/white_80"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -110,7 +110,7 @@
                                 android:layout_marginTop="4dp"
                                 android:fontFamily="@font/plus_jakarta_sans"
                                 android:text="Region"
-                                android:textColor="#CCFFFFFF"
+                                android:textColor="@color/white_80"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -119,7 +119,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="32dp"
                             android:layout_marginStart="8dp"
-                            android:backgroundTint="#33FFFFFF"
+                            android:backgroundTint="@color/white_20"
                             android:fontFamily="@font/plus_jakarta_sans"
                             android:includeFontPadding="false"
                             android:paddingStart="12dp"
@@ -143,7 +143,7 @@
                             android:layout_height="72dp"
                             android:layout_marginEnd="6dp"
                             android:layout_weight="1"
-                            app:cardBackgroundColor="#33FFFFFF"
+                            app:cardBackgroundColor="@color/white_20"
                             app:cardCornerRadius="12dp"
                             app:cardElevation="4dp">
 
@@ -169,7 +169,7 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/plus_jakarta_sans"
                                     android:text="Level"
-                                    android:textColor="#CCFFFFFF"
+                                    android:textColor="@color/white_80"
                                     android:textSize="11sp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -180,7 +180,7 @@
                             android:layout_marginStart="3dp"
                             android:layout_marginEnd="3dp"
                             android:layout_weight="1"
-                            app:cardBackgroundColor="#33FFFFFF"
+                            app:cardBackgroundColor="@color/white_20"
                             app:cardCornerRadius="12dp"
                             app:cardElevation="4dp">
 
@@ -206,7 +206,7 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/plus_jakarta_sans"
                                     android:text="Day Streak"
-                                    android:textColor="#CCFFFFFF"
+                                    android:textColor="@color/white_80"
                                     android:textSize="11sp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -216,7 +216,7 @@
                             android:layout_height="72dp"
                             android:layout_marginStart="6dp"
                             android:layout_weight="1"
-                            app:cardBackgroundColor="#33FFFFFF"
+                            app:cardBackgroundColor="@color/white_20"
                             app:cardCornerRadius="12dp"
                             app:cardElevation="4dp">
 
@@ -242,7 +242,7 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/plus_jakarta_sans"
                                     android:text="Badges"
-                                    android:textColor="#CCFFFFFF"
+                                    android:textColor="@color/white_80"
                                     android:textSize="11sp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -594,6 +594,12 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_light"
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/themeItem"
                     android:layout_width="match_parent"
@@ -604,7 +610,8 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="0dp"

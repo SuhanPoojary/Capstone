@@ -715,7 +715,7 @@
             android:text="@string/emergency_exit_mode"
             android:textColor="@color/text_inverse"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            app:backgroundTint="#2A2A3A"
+            app:backgroundTint="@color/emergency_exit_bg"
             app:cornerRadius="@dimen/corner_full"
             android:fontFamily="@font/plus_jakarta_sans"
             android:textStyle="bold" />

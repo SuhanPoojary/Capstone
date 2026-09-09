@@ -211,7 +211,7 @@
         android:focusable="true"
         android:elevation="12dp"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:translationY="@dimen/floating_nav_overlap"
+        app:layout_constraintTop_toTopOf="@id/floatingNavCard"
         app:layout_constraintBottom_toTopOf="@id/floatingNavCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

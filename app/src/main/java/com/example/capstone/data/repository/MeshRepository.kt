@@ -10,6 +10,7 @@ import com.example.capstone.data.MeshTelemetryState
 import com.example.capstone.data.SafeReadyPreferences
 import com.example.capstone.data.local.mesh.MeshDatabase
 import com.example.capstone.data.local.mesh.MeshMessageEntity
+import com.example.capstone.data.local.mesh.MeshDeviceEntity
 import com.example.capstone.data.local.mesh.MeshRoomMigrationPlan
 import com.example.capstone.data.local.mesh.MeshMessageCache
 import com.example.capstone.service.MeshService
@@ -34,6 +35,7 @@ class MeshRepository(context: Context) {
     private val cache = MeshMessageCache(context)
     private val database = MeshDatabase.getInstance(context)
     private val dao = database.meshMessageDao()
+    private val deviceDao = database.meshDeviceDao()
     private val service = MeshService(context)
     private val prefs = SafeReadyPreferences(context)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -59,6 +61,11 @@ class MeshRepository(context: Context) {
                 _messages.value = entities.map { it.toDomain() }
             }
         }
+        scope.launch {
+            deviceDao.observeAll().collectLatest { entities ->
+                _nearbyDevices.value = entities.map { MeshRoomMigrationPlan.toDomain(it) }
+            }
+        }
     }
 
     private val listener = object : MeshService.Listener {
@@ -70,25 +77,24 @@ class MeshRepository(context: Context) {
         }
 
         override fun onEndpointDiscovered(deviceId: String, deviceName: String, signalStrength: Int?) {
-            val device = MeshDevice(
-                deviceId = deviceId,
-                deviceName = deviceName,
-                signalStrength = signalStrength,
-                isActive = true,
-                lastSeen = System.currentTimeMillis()
-            )
-            val currentList = _nearbyDevices.value.toMutableList()
-            currentList.removeAll { it.deviceId == deviceId }
-            currentList.add(device)
-            _nearbyDevices.value = currentList.sortedByDescending { it.signalStrength ?: -100 }
+            scope.launch {
+                val existing = deviceDao.getById(deviceId)
+                val device = MeshDeviceEntity(
+                    deviceId = deviceId,
+                    deviceName = deviceName,
+                    userId = existing?.userId,
+                    lastSeen = System.currentTimeMillis(),
+                    signalStrength = signalStrength,
+                    estimatedDistanceMeters = existing?.estimatedDistanceMeters,
+                    isActive = true
+                )
+                deviceDao.upsert(device)
+            }
         }
 
         override fun onEndpointLost(deviceId: String) {
-            val currentList = _nearbyDevices.value.toMutableList()
-            val index = currentList.indexOfFirst { it.deviceId == deviceId }
-            if (index != -1) {
-                currentList[index] = currentList[index].copy(isActive = false)
-                _nearbyDevices.value = currentList
+            scope.launch {
+                deviceDao.markInactive(deviceId)
             }
         }
 
@@ -308,8 +314,13 @@ class MeshRepository(context: Context) {
     private suspend fun seedRoomFromLegacyCacheIfNeeded() {
         if (dao.countMessages() > 0) return
         val legacyMessages = cache.getMessages()
-        if (legacyMessages.isEmpty()) return
-        dao.upsertAll(MeshRoomMigrationPlan.toEntities(legacyMessages))
+        if (legacyMessages.isNotEmpty()) {
+            dao.upsertAll(MeshRoomMigrationPlan.toEntities(legacyMessages))
+        }
+        val legacyDevices = cache.getDevices()
+        if (legacyDevices.isNotEmpty()) {
+            deviceDao.upsertAll(MeshRoomMigrationPlan.toDeviceEntities(legacyDevices))
+        }
     }
 
     private fun MeshMessage.toEntity(): MeshMessageEntity {

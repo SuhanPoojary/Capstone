@@ -7,13 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [MeshMessageEntity::class],
-    version = 1,
+    entities = [MeshMessageEntity::class, MeshDeviceEntity::class],
+    version = 2,
     exportSchema = false,
 )
 @TypeConverters(MeshRoomConverters::class)
 abstract class MeshDatabase : RoomDatabase() {
     abstract fun meshMessageDao(): MeshMessageDao
+    abstract fun meshDeviceDao(): MeshDeviceDao
 
     companion object {
         @Volatile
@@ -25,7 +26,9 @@ abstract class MeshDatabase : RoomDatabase() {
                     context.applicationContext,
                     MeshDatabase::class.java,
                     MeshRoomMigrationPlan.DATABASE_NAME,
-                ).build().also { INSTANCE = it }
+                )
+                .fallbackToDestructiveMigration()
+                .build().also { INSTANCE = it }
             }
         }
     }

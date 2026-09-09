@@ -14,6 +14,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.ImageView
 import android.widget.Toast
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.cardview.widget.CardView
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +33,7 @@ import com.example.capstone.R
 import com.example.capstone.presentation.fragment.EmergencyFragment
 import com.google.android.material.button.MaterialButton
 import com.example.capstone.presentation.viewmodel.MeshViewModel
+import com.example.capstone.presentation.viewmodel.RiskViewModel
 import com.example.capstone.data.MeshMessage
 import com.example.capstone.data.MeshMessageType
 
@@ -108,6 +111,17 @@ class HomeFragment : Fragment() {
             (activity as? MainActivity)?.selectTab(R.id.nav_lab)
         }
 
+        val openShelterMap = {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, ShelterMapFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        view.findViewById<View>(R.id.disasterMapCard)?.setOnClickListener { openShelterMap() }
+        view.findViewById<View>(R.id.homeMapNavigateButton)?.setOnClickListener { openShelterMap() }
+        view.findViewById<View>(R.id.expandMapButton)?.setOnClickListener { openShelterMap() }
+
         view.findViewById<CardView>(R.id.assistantLaunchCard)?.setOnClickListener {
             startActivity(Intent(requireContext(), AssistantActivity::class.java))
         }
@@ -120,7 +134,10 @@ class HomeFragment : Fragment() {
         }
 
         view.findViewById<com.google.android.material.button.MaterialButton>(R.id.riskViewButton)?.setOnClickListener {
-            (activity as? MainActivity)?.selectTab(R.id.nav_lab)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, RiskAssessmentFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -416,7 +433,7 @@ class AssistantFragment : Fragment() {
             this.text = text
             setPadding(20, 16, 20, 16)
             textSize = 14f
-            setTextColor(resources.getColor(R.color.dashboard_name, null))
+            setTextColor(if (isUser) ContextCompat.getColor(context, R.color.text_inverse) else ContextCompat.getColor(context, R.color.text_primary))
             setBackgroundResource(if (isUser) R.drawable.bg_chip_active else R.drawable.bg_white_card)
         }
         val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
@@ -452,7 +469,7 @@ class ProfileFragment : Fragment() {
         val pointsValue = view.findViewById<TextView>(R.id.stat3Value)
         val pointsLabel = view.findViewById<TextView>(R.id.stat3Label)
         val signOutItem = view.findViewById<View>(R.id.signOutItem)
-        val themeItem = view.findViewById<View>(R.id.themeItem)
+        // val themeItem = view.findViewById<View>(R.id.themeItem)
         val currentThemeText = view.findViewById<TextView>(R.id.currentThemeText)
         val emergencyModeItem = view.findViewById<View>(R.id.emergencyModeItem)
         val currentEmergencyModeText = view.findViewById<TextView>(R.id.currentEmergencyModeText)
@@ -468,6 +485,7 @@ class ProfileFragment : Fragment() {
         val drillProgress = view.findViewById<View>(R.id.drillsProgress)
         val contactsContainer = view.findViewById<LinearLayout>(R.id.emergencyContactsContainer)
 
+        /* Theme selection removed - Light mode only
         themeItem?.setOnClickListener {
             val themes = arrayOf(
                 getString(R.string.profile_theme_auto),
@@ -484,6 +502,7 @@ class ProfileFragment : Fragment() {
                 }
                 .show()
         }
+        */
 
         emergencyModeItem?.setOnClickListener {
             val enabled = viewModel.toggleEmergencyMode()
@@ -623,12 +642,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateTheme(mode: Int) {
-        val appCompatMode = when(mode) {
-            1 -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-            2 -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-            else -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(appCompatMode)
+        // Light mode only
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     private fun createContactView(contact: com.example.capstone.data.EmergencyContact): View {
@@ -658,7 +673,7 @@ class ProfileFragment : Fragment() {
                 (40 * resources.displayMetrics.density).toInt(),
                 (40 * resources.displayMetrics.density).toInt()
             ).apply { marginEnd = (12 * resources.displayMetrics.density).toInt() }
-            setBackgroundColor(android.graphics.Color.parseColor("#F3F4F6"))
+            setBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
         }
 
         val info = LinearLayout(requireContext()).apply {
@@ -852,5 +867,127 @@ class MedReadyFragment : Fragment() {
             .setView(dialogView)
             .setPositiveButton("Dismiss", null)
             .show()
+    }
+}
+
+class RiskAssessmentFragment : Fragment() {
+    private lateinit var viewModel: RiskViewModel
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_risk_assessment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this)[RiskViewModel::class.java]
+
+        val stateSelector = view.findViewById<AutoCompleteTextView>(R.id.stateSelector)
+        val districtSelector = view.findViewById<AutoCompleteTextView>(R.id.districtSelector)
+        val monthSelector = view.findViewById<AutoCompleteTextView>(R.id.monthSelector)
+        val disasterChipGroup = view.findViewById<com.google.android.material.chip.ChipGroup>(R.id.disasterChipGroup)
+        val checkButton = view.findViewById<MaterialButton>(R.id.checkRiskButton)
+        val loading = view.findViewById<ProgressBar>(R.id.riskLoading)
+        val resultSection = view.findViewById<LinearLayout>(R.id.resultSection)
+        val inputCard = view.findViewById<CardView>(R.id.inputCard)
+
+        // Month setup
+        val months = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+        val monthAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, months)
+        monthSelector.setAdapter(monthAdapter)
+
+        viewModel.states.observe(viewLifecycleOwner) { states ->
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, states)
+            stateSelector.setAdapter(adapter)
+        }
+
+        viewModel.districts.observe(viewLifecycleOwner) { districts ->
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, districts)
+            districtSelector.setAdapter(adapter)
+        }
+
+        districtSelector.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.isNullOrBlank()) {
+                    viewModel.searchDistricts(s.toString())
+                }
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
+        checkButton.setOnClickListener {
+            val state = stateSelector.text.toString()
+            val district = districtSelector.text.toString()
+            val monthIdx = months.indexOf(monthSelector.text.toString()) + 1
+            val selectedChipId = disasterChipGroup.checkedChipId
+            val disasterType = when (selectedChipId) {
+                R.id.chipFlood -> "Flood"
+                R.id.chipEarthquake -> "Earthquake"
+                R.id.chipLandslide -> "Landslide"
+                R.id.chipCyclone -> "Cyclone"
+                else -> ""
+            }
+
+            if (state.isEmpty() || disasterType.isEmpty() || monthIdx == 0) {
+                Toast.makeText(requireContext(), "Please select State, Disaster, and Month", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            viewModel.checkRisk(state, district.ifBlank { null }, disasterType, monthIdx)
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            loading.visibility = if (isLoading) View.VISIBLE else View.GONE
+            checkButton.isEnabled = !isLoading
+        }
+
+        viewModel.prediction.observe(viewLifecycleOwner) { prediction ->
+            if (prediction != null) {
+                resultSection.visibility = View.VISIBLE
+                inputCard.visibility = View.GONE
+                
+                view.findViewById<TextView>(R.id.riskLevelText).text = prediction.prediction.riskLevel
+                view.findViewById<TextView>(R.id.riskEmoji).text = prediction.prediction.emoji
+                
+                // Dampen the probability visually (p^2.5) to avoid alarmism
+                // 0.35 raw prob -> ~0.073 (7.3%) visual likelihood
+                val visualProbability = Math.pow(prediction.prediction.probability, 2.5)
+                
+                view.findViewById<TextView>(R.id.probabilityText).text = "Risk Likelihood: ${String.format(Locale.US, "%.1f", visualProbability * 100)}%"
+
+                val probBar = view.findViewById<ProgressBar>(R.id.probabilityBar)
+                probBar.progress = (visualProbability * 100).toInt()
+                
+                val textColor = when(prediction.prediction.riskLevel.uppercase()) {
+                    "HIGH" -> ContextCompat.getColor(requireContext(), R.color.status_danger)
+                    "MODERATE" -> ContextCompat.getColor(requireContext(), R.color.status_warning_text)
+                    else -> ContextCompat.getColor(requireContext(), R.color.status_success)
+                }
+                val barColor = when(prediction.prediction.riskLevel.uppercase()) {
+                    "HIGH" -> ContextCompat.getColor(requireContext(), R.color.status_danger)
+                    "MODERATE" -> ContextCompat.getColor(requireContext(), R.color.status_warning)
+                    else -> ContextCompat.getColor(requireContext(), R.color.status_success)
+                }
+                probBar.progressTintList = android.content.res.ColorStateList.valueOf(barColor)
+                view.findViewById<TextView>(R.id.riskLevelText).setTextColor(textColor)
+
+                view.findViewById<TextView>(R.id.districtEventsCount).text = prediction.breakdown.districtEvents.toString()
+                view.findViewById<TextView>(R.id.stateEventsCount).text = prediction.breakdown.stateEvents.toString()
+                view.findViewById<TextView>(R.id.adviceText).text = "Historical data indicates ${prediction.prediction.riskLevel} risk of disaster here."
+            }
+        }
+
+        viewModel.explanation.observe(viewLifecycleOwner) { explanation ->
+            view.findViewById<TextView>(R.id.aiExplanationText).text = explanation
+        }
+
+        view.findViewById<MaterialButton>(R.id.resetButton).setOnClickListener {
+            resultSection.visibility = View.GONE
+            inputCard.visibility = View.VISIBLE
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            error?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show() }
+        }
     }
 }

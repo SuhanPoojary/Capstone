@@ -46,12 +46,26 @@ object MeshRoomMigrationPlan {
                 signalStrength = message.signalStrength,
                 ttl = message.ttl,
                 hopCount = message.hopCount,
-                expiresAt = message.expiresAt,
                 acknowledgedBy = message.acknowledgedBy,
                 relayedBy = message.relayedBy,
+                expiresAt = message.expiresAt,
                 sendStatus = message.sendStatus,
                 retryCount = message.retryCount,
                 lastAttemptAt = message.lastAttemptAt,
+            )
+        }
+    }
+
+    fun toDeviceEntities(devices: List<com.example.capstone.data.MeshDevice>): List<MeshDeviceEntity> {
+        return devices.map { device ->
+            MeshDeviceEntity(
+                deviceId = device.deviceId,
+                deviceName = device.deviceName,
+                userId = device.userId,
+                lastSeen = device.lastSeen,
+                signalStrength = device.signalStrength,
+                estimatedDistanceMeters = device.estimatedDistanceMeters,
+                isActive = device.isActive
             )
         }
     }
@@ -81,6 +95,18 @@ object MeshRoomMigrationPlan {
 
     fun asFailed(message: MeshMessage): MeshMessage {
         return message.copy(sendStatus = MeshSendStatus.FAILED)
+    }
+
+    fun toDomain(entity: MeshDeviceEntity): com.example.capstone.data.MeshDevice {
+        return com.example.capstone.data.MeshDevice(
+            deviceId = entity.deviceId,
+            deviceName = entity.deviceName,
+            userId = entity.userId,
+            lastSeen = entity.lastSeen,
+            signalStrength = entity.signalStrength,
+            estimatedDistanceMeters = entity.estimatedDistanceMeters,
+            isActive = entity.isActive
+        )
     }
 }
 

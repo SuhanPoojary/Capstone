@@ -6,13 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.capstone.data.local.database.dao.ShelterDao
 import com.example.capstone.data.local.database.dao.ChatDao
+import com.example.capstone.data.local.database.dao.HospitalDao
 import com.example.capstone.data.local.database.entity.ShelterEntity
 import com.example.capstone.data.local.database.entity.ChatMessageEntity
+import com.example.capstone.data.local.database.entity.HospitalEntity
 
-@Database(entities = [ShelterEntity::class, ChatMessageEntity::class], version = 2, exportSchema = false)
+@Database(entities = [ShelterEntity::class, ChatMessageEntity::class, HospitalEntity::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun shelterDao(): ShelterDao
     abstract fun chatDao(): ChatDao
+    abstract fun hospitalDao(): HospitalDao
 
     companion object {
         @Volatile

@@ -53,6 +53,9 @@ class SafeReadyApp : Application() {
         // Initialize notification channels
         NotificationHelper(this)
 
+        // Force Light Mode
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO)
+
         // Schedule Disaster Monitor
         scheduleDisasterMonitoring()
 

@@ -3,8 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- SafeReady splash palette -->
-    <color name="safeready_navy">#22355B</color>
+    <!-- SafeReady splash palette (Legacy - being merged) -->
+    <color name="safeready_navy">@color/sr_primary_navy</color>
     <color name="safeready_subtitle">#D1D5DB</color>
     <color name="safeready_powered_by">#C7CDD9</color>
 
@@ -14,20 +14,22 @@
     <color name="onboarding_title">#24344F</color>
     <color name="onboarding_desc">#6B7280</color>
 
-    <!-- Signup palette -->
-    <color name="signup_bg">#F7F2EA</color>
-    <color name="signup_label">#6B7280</color>
-    <color name="signup_input">#374151</color>
-    <color name="signup_hint">#9CA3AF</color>
+    <!-- Signup palette (Legacy - being merged) -->
+    <color name="signup_bg">@color/bg_app</color>
+    <color name="signup_label">@color/text_secondary</color>
+    <color name="signup_input">@color/color_gray_800</color>
+    <color name="signup_hint">@color/text_tertiary</color>
 
-    <!-- Dashboard palette -->
-    <color name="dashboard_bg">#FAF9F6</color>
-    <color name="dashboard_greeting">#6B7280</color>
-    <color name="dashboard_name">#1F2937</color>
+    <!-- Dashboard palette (Legacy - being merged) -->
+    <color name="dashboard_bg">@color/color_cream_50</color>
+    <color name="dashboard_greeting">@color/text_secondary</color>
+    <color name="dashboard_name">@color/color_gray_900</color>
     <color name="dashboard_nav_selected">#1E3A5F</color>
-    <color name="dashboard_nav_unselected">#9CA3AF</color>
-    <color name="dashboard_progress_bg">#E5E7EB</color>
-    <color name="dashboard_primary">#22355B</color>
+    <color name="dashboard_nav_unselected">@color/text_tertiary</color>
+    <color name="dashboard_progress_bg">@color/color_gray_300</color>
+    <color name="dashboard_primary">@color/sr_primary_navy</color>
+    <color name="dashboard_input">@color/color_gray_800</color>
+    <color name="dashboard_hint">@color/text_tertiary</color>
 
     <!-- ====== MODERN DESIGN SYSTEM ====== -->
 
@@ -81,17 +83,17 @@
     <color name="color_red_700">#B91C1C</color>
 
     <!-- Semantic Colors -->
-    <color name="bg_app">#FAF9F6</color>
+    <color name="bg_app">#F7F2EA</color>
     <color name="bg_card">#FFFFFF</color>
     <color name="bg_card_elevated">#F9FAFB</color>
-    <color name="bg_hero">#22355B</color>
+    <color name="bg_hero">#123F78</color>
     <color name="bg_emergency">#1A2847</color>
     <color name="bg_emergency_dark">#041631</color>
     <color name="bg_card_emergency">#0D2137</color>
     <color name="border_emergency">#1A3A5C</color>
     <color name="text_secondary_emergency">#A0AEC0</color>
 
-    <color name="text_primary">#1F2937</color>
+    <color name="text_primary">#0B2856</color>
     <color name="text_secondary">#6B7280</color>
     <color name="text_tertiary">#9CA3AF</color>
     <color name="text_inverse">#FFFFFF</color>
@@ -100,14 +102,22 @@
     <color name="border_medium">#D1D5DB</color>
     <color name="border_dark">#9CA3AF</color>
 
-    <color name="status_success">#10B981</color>
-    <color name="status_warning">#F59E0B</color>
-    <color name="status_danger">#EF4444</color>
+    <color name="status_success">#2EA58D</color>
+    <color name="status_warning">#F2A65A</color>
+    <color name="status_danger">#D91F32</color>
     <color name="status_info">#3B82F6</color>
+    <color name="status_warning_text">#92400E</color> <!-- High-contrast warning text -->
+
+    <!-- Opacity Tokens -->
+    <color name="white_10">#1AFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_80">#CCFFFFFF</color>
+    <color name="white_90">#E6FFFFFF</color>
+    <color name="navy_10">#1A22355B</color>
 
     <!-- Navigation Tokens -->
-    <color name="nav_active">#0E4B93</color>
-    <color name="nav_inactive">#8E9AB3</color>
+    <color name="nav_active">#0B2856</color>
+    <color name="nav_inactive">#9CA3AF</color>
     <color name="nav_sos">#D91F32</color>
 
     <!-- Emergency Design Tokens -->
@@ -116,6 +126,7 @@
     <color name="emergency_accent">#EF4444</color>
     <color name="emergency_text_primary">#FFFFFF</color>
     <color name="emergency_text_secondary">#A0AEC0</color>
+    <color name="emergency_exit_bg">#2A2A3A</color>
 
     <!-- Strict design system additions (SafeReady Profile) -->
     <!-- Backgrounds -->
@@ -139,4 +150,8 @@
     <!-- Text overrides for this screen -->
     <color name="sr_text_primary">#1B1B1B</color>
     <color name="sr_text_secondary">#5C5C5C</color>
+    <!-- AI Explanation Card Background -->
+    <color name="ai_card_bg">#F0F7FF</color>
+    <color name="status_badge_offline_bg">#FFFFFF</color>
+    <color name="status_badge_offline_border">#E5E7EB</color>
 </resources>
